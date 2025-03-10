@@ -9,13 +9,14 @@ import { controlCenterPage } from "../index";
 const settingsFile = `${GLib.get_home_dir()}/.config/ags/theme-settings.json`;
 const menuName = "advancedthemes";
 
+// Read settings from disk
 const loadSettings = () => {
   try {
     const file = Gio.File.new_for_path(settingsFile);
     const [ok, contents] = file.load_contents(null);
     if (ok) {
       const settings = JSON.parse(new TextDecoder().decode(contents));
-      console.log(settings);
+      console.log("Loaded settings:", settings);
       return settings;
     }
   } catch (e) {
@@ -33,15 +34,16 @@ const loadSettings = () => {
   };
 };
 
+// Save settings to disk
 const saveSettings = (
-  theme: string,
-  mode: string,
-  slideshow: boolean,
-  wallpaper: string,
-  wallpaperDirectory: string,
-  workspaces: number,
-  numbers: boolean,
-  hideEmptyWorkspaces: boolean,
+  theme,
+  mode,
+  slideshow,
+  wallpaper,
+  wallpaperDirectory,
+  workspaces,
+  numbers,
+  hideEmptyWorkspaces,
 ) => {
   try {
     const file = Gio.File.new_for_path(settingsFile);
@@ -55,13 +57,7 @@ const saveSettings = (
       numbers,
       hideEmptyWorkspaces,
     });
-    file.replace_contents(
-      contents,
-      null,
-      false,
-      Gio.FileCreateFlags.NONE,
-      null,
-    );
+    file.replace_contents(contents, null, false, Gio.FileCreateFlags.NONE, null);
   } catch (e) {
     console.error("Failed to save settings:", e);
   }
@@ -69,64 +65,54 @@ const saveSettings = (
 
 const settings = loadSettings();
 
+// Reactive variables
 export const currentTheme = Variable(settings.theme);
-console.log(currentTheme);
 export const currentMode = Variable(settings.mode);
-console.log(currentMode);
 export const slideshow = Variable(settings.slideshow);
 export const wallpaperImage = Variable(settings.wallpaper);
 export const wallpaperFolder = Variable(settings.wallpaperDirectory);
 export const totalWorkspaces = Variable(settings.workspaces);
 export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
 export const settingsChanged = Variable(0); // Signal to trigger workspace updates
-console.log(totalWorkspaces);
 export const showNumbers = Variable(settings.numbers);
-console.log(showNumbers);
 
-const setTheme = (theme: string, mode: string) => {
-  currentTheme.set(theme);
-  currentMode.set(mode);
-  saveSettings(
-    theme,
-    mode,
-    slideshow.get(),
-    wallpaperImage.get(),
-    wallpaperFolder.get(),
-    totalWorkspaces.get(),
-    showNumbers.get(),
-    hideEmptyWorkspaces.get(),
-  );
+// Central update helper which updates reactive variables and disk settings.
+const updateSettings = (updates) => {
+  const theme = updates.theme ?? currentTheme.get();
+  const mode = updates.mode ?? currentMode.get();
+  const slide = updates.slideshow ?? slideshow.get();
+  const wp = updates.wallpaper ?? wallpaperImage.get();
+  const folder = updates.wallpaperDirectory ?? wallpaperFolder.get();
+  const workspaces = updates.workspaces ?? totalWorkspaces.get();
+  const numbers = updates.numbers ?? showNumbers.get();
+  const hideEmpty = updates.hideEmptyWorkspaces ?? hideEmptyWorkspaces.get();
+
+  if (updates.theme !== undefined) currentTheme.set(theme);
+  if (updates.mode !== undefined) currentMode.set(mode);
+  if (updates.slideshow !== undefined) slideshow.set(slide);
+  if (updates.wallpaper !== undefined) wallpaperImage.set(wp);
+  if (updates.wallpaperDirectory !== undefined) wallpaperFolder.set(folder);
+  if (updates.workspaces !== undefined) totalWorkspaces.set(workspaces);
+  if (updates.numbers !== undefined) showNumbers.set(numbers);
+  if (updates.hideEmptyWorkspaces !== undefined) hideEmptyWorkspaces.set(hideEmpty);
+
+  saveSettings(theme, mode, slide, wp, folder, workspaces, numbers, hideEmpty);
 };
 
-const setSlideshow = (isSlideshow: boolean) => {
-  slideshow.set(isSlideshow);
-  saveSettings(
-    currentTheme.get(),
-    currentMode.get(),
-    isSlideshow,
-    wallpaperImage.get(),
-    wallpaperFolder.get(),
-    totalWorkspaces.get(),
-    showNumbers.get(),
-    hideEmptyWorkspaces.get(),
-  );
+const setTheme = (theme, mode) => {
+  updateSettings({ theme, mode });
 };
 
-const setWallpaper = (wallpaper: string) => {
-  wallpaperImage.set(wallpaper);
-  saveSettings(
-    currentTheme.get(),
-    currentMode.get(),
-    slideshow.get(),
-    wallpaper,
-    wallpaperFolder.get(),
-    totalWorkspaces.get(),
-    showNumbers.get(),
-    hideEmptyWorkspaces.get(),
-  );
+const setSlideshow = (isSlideshow) => {
+  updateSettings({ slideshow: isSlideshow });
+};
+
+const setWallpaper = (wallpaper) => {
+  updateSettings({ wallpaper });
   console.log(`New Wallpaper: ${wallpaper}`);
 
-  const wallpaperImagePath = `${wallpaperFolder.get()}/${wallpaper}`;
+  const wpFolder = wallpaperFolder.get();
+  const wallpaperImagePath = `${wpFolder}/${wallpaper}`;
   const destinationPath = `/usr/share/sddm/themes/frolic/Backgrounds/wallpaper.jpg`;
 
   try {
@@ -140,18 +126,8 @@ const setWallpaper = (wallpaper: string) => {
   }
 };
 
-const setWallpaperDirectory = (wallpaperDirectory: string) => {
-  wallpaperFolder.set(wallpaperDirectory);
-  saveSettings(
-    currentTheme.get(),
-    currentMode.get(),
-    slideshow.get(),
-    wallpaperImage.get(),
-    wallpaperDirectory,
-    totalWorkspaces.get(),
-    showNumbers.get(),
-    hideEmptyWorkspaces.get(),
-  );
+const setWallpaperDirectory = (folder) => {
+  updateSettings({ wallpaperDirectory: folder });
 };
 
 const chooseWallpaperDirectory = () => {
@@ -166,94 +142,96 @@ const chooseWallpaperDirectory = () => {
   chooser.set_transient_for(null);
   chooser.set_skip_taskbar_hint(true);
   chooser.set_skip_pager_hint(true);
-  chooser.connect("response", (chooser, response) => {
+  chooser.connect("response", (dialog, response) => {
     if (response === Gtk.ResponseType.ACCEPT) {
-      const file = chooser.get_filename();
+      const file = dialog.get_filename();
       setWallpaperDirectory(file);
+      // Reload wallpapers after folder selection.
+      loadWallpaperImagesAsync();
     }
-    chooser.destroy();
+    dialog.destroy();
   });
   chooser.show_all();
 };
 
-const setWorkspaces = (workspaces: number) => {
+const setWorkspaces = (workspaces) => {
   const newValue = Math.max(1, Math.min(20, workspaces));
-  totalWorkspaces.set(newValue);
-  saveSettings(
-    currentTheme.get(),
-    currentMode.get(),
-    slideshow.get(),
-    wallpaperImage.get(),
-    wallpaperFolder.get(),
-    newValue,
-    showNumbers.get(),
-    hideEmptyWorkspaces.get(),
-  );
-  settingsChanged.set(settingsChanged.get() + 1); // Notify subscribers
+  updateSettings({ workspaces: newValue });
+  settingsChanged.set(settingsChanged.get() + 1);
 };
 
-const setShowNumbers = (numbers: boolean) => {
-  showNumbers.set(numbers);
-  saveSettings(
-    currentTheme.get(),
-    currentMode.get(),
-    slideshow.get(),
-    wallpaperImage.get(),
-    wallpaperFolder.get(),
-    totalWorkspaces.get(),
-    numbers,
-    hideEmptyWorkspaces.get(),
-  );
-  settingsChanged.set(settingsChanged.get() + 1); // Notify subscribers
+const setShowNumbers = (numbers) => {
+  updateSettings({ numbers });
+  settingsChanged.set(settingsChanged.get() + 1);
 };
 
-const setHideEmptyWorkspaces = (hide: boolean) => {
-  hideEmptyWorkspaces.set(hide);
-  saveSettings(
-    currentTheme.get(),
-    currentMode.get(),
-    slideshow.get(),
-    wallpaperImage.get(),
-    wallpaperFolder.get(),
-    totalWorkspaces.get(),
-    showNumbers.get(),
-    hide,
-  );
-  settingsChanged.set(settingsChanged.get() + 1); // Trigger workspace update
+const setHideEmptyWorkspaces = (hide) => {
+  updateSettings({ hideEmptyWorkspaces: hide });
+  settingsChanged.set(settingsChanged.get() + 1);
 };
 
-const getWallpaperImages = () => {
-  const images = [];
-  if (wallpaperFolder.get()) {
-    const directory = Gio.File.new_for_path(wallpaperFolder.get());
-    const enumerator = directory.enumerate_children(
-      "standard::*",
-      Gio.FileQueryInfoFlags.NONE,
-      null,
-    );
-    while (true) {
-      const info = enumerator.next_file(null);
-      if (!info) break;
-      if (info.get_file_type() === Gio.FileType.REGULAR) {
-        const mimeType = info.get_content_type();
-        if (mimeType.startsWith("image/")) {
-          images.push(info.get_name());
+// --- Asynchronous Wallpaper Loading ---
+
+// Reactive variable for the list of wallpaper images.
+const wallpaperImages = Variable([]);
+
+// Improved asynchronous function to load wallpaper images.
+const loadWallpaperImagesAsync = () => {
+  const folderPath = wallpaperFolder.get();
+  if (!folderPath) {
+    console.error("Wallpaper folder is not set.");
+    return;
+  }
+
+  const directory = Gio.File.new_for_path(folderPath);
+  directory.enumerate_children_async(
+    "standard::*",
+    Gio.FileQueryInfoFlags.NONE,
+    GLib.PRIORITY_DEFAULT,
+    null,
+    (source, result) => {
+      try {
+        const enumerator = directory.enumerate_children_finish(result);
+        const images = [];
+        let info = null;
+        // Iterate over directory entries.
+        while ((info = enumerator.next_file(null)) !== null) {
+          if (info.get_file_type() === Gio.FileType.REGULAR) {
+            const mimeType = info.get_content_type();
+            if (mimeType && mimeType.startsWith("image/")) {
+              images.push(info.get_name());
+            }
+          }
         }
+        // Close the enumerator.
+        enumerator.close(null);
+        console.log(`Loaded ${images.length} wallpaper(s) from ${folderPath}`);
+        wallpaperImages.set(images);
+      } catch (e) {
+        console.error("Failed to load wallpapers asynchronously:", e);
       }
     }
-  }
-  return images;
+  );
 };
 
+// Defer wallpaper loading until after the UI has rendered.
+timeout(100, () => {
+  loadWallpaperImagesAsync();
+  return false;
+});
+
+// Utility function to chunk an array.
 const chunkArray = (arr, size) => {
-  return arr.reduce((acc, _, i) => {
-    if (i % size === 0) acc.push(arr.slice(i, i + size));
-    return acc;
-  }, []);
+  const ret = [];
+  for (let i = 0; i < arr.length; i += size) {
+    ret.push(arr.slice(i, i + size));
+  }
+  return ret;
 };
 
 export default () => {
-  const images = getWallpaperImages();
+  const images = wallpaperImages.get() || [];
+  console.log("Render component called, wallpaperImages =", images);
   const rows = chunkArray(images, 2);
 
   return (
@@ -269,7 +247,7 @@ export default () => {
             onClick={() => setTheme(currentTheme.get(), "Light")}
             className={bind(currentMode).as(
               (mode) =>
-                `mode-settings__button_left ${mode === "Light" ? "active" : ""}`,
+                `mode-settings__button_left ${mode === "Light" ? "active" : ""}`
             )}
           >
             <label label="Light" />
@@ -278,7 +256,7 @@ export default () => {
             onClick={() => setTheme(currentTheme.get(), "Dark")}
             className={bind(currentMode).as(
               (mode) =>
-                `mode-settings__button_right ${mode === "Dark" ? "active" : ""}`,
+                `mode-settings__button_right ${mode === "Dark" ? "active" : ""}`
             )}
           >
             <label label="Dark" />
@@ -298,7 +276,7 @@ export default () => {
               onClick={() => setTheme("Verdant", currentMode.get())}
               className={bind(currentTheme).as(
                 (theme) =>
-                  `theme-buttons ${theme === "Verdant" ? "active" : ""}`,
+                  `theme-buttons ${theme === "Verdant" ? "active" : ""}`
               )}
             >
               <icon icon={icons.seasons.spring} className="icon" />
@@ -310,7 +288,7 @@ export default () => {
               onClick={() => setTheme("Zephyr", currentMode.get())}
               className={bind(currentTheme).as(
                 (theme) =>
-                  `theme-buttons ${theme === "Zephyr" ? "active" : ""}`,
+                  `theme-buttons ${theme === "Zephyr" ? "active" : ""}`
               )}
             >
               <icon icon={icons.seasons.summer} />
@@ -322,7 +300,7 @@ export default () => {
               onClick={() => setTheme("Frolic", currentMode.get())}
               className={bind(currentTheme).as(
                 (theme) =>
-                  `theme-buttons ${theme === "Frolic" ? "active" : ""}`,
+                  `theme-buttons ${theme === "Frolic" ? "active" : ""}`
               )}
             >
               <icon icon={icons.seasons.fall} />
@@ -334,7 +312,7 @@ export default () => {
               onClick={() => setTheme("Glaciara", currentMode.get())}
               className={bind(currentTheme).as(
                 (theme) =>
-                  `theme-buttons ${theme === "Glaciara" ? "active" : ""}`,
+                  `theme-buttons ${theme === "Glaciara" ? "active" : ""}`
               )}
             >
               <icon icon={icons.seasons.winter} />
@@ -343,12 +321,11 @@ export default () => {
           </box>
         </box>
 
-
         <box className="buttons-container" halign={Gtk.Align.CENTER}>
           <button
             className="primary-button"
-            onClickRelease={(_, event: Astal.ClickEvent) => {
-              if (event.button == 1 && menuName) {
+            onClickRelease={(_, event) => {
+              if (event.button === 1 && menuName) {
                 controlCenterPage.set(menuName);
               }
             }}
@@ -361,37 +338,39 @@ export default () => {
 
         {/* Wallpaper Section */}
         <label label="Wallpaper" className="h2" halign={Gtk.Align.CENTER} />
-        <button onClick={chooseWallpaperDirectory} className="wallpaper-button">
+        <button
+          onClick={chooseWallpaperDirectory}
+          className="wallpaper-button"
+        >
           <label label="Choose Wallpaper Directory" />
         </button>
-        <box
-          vertical
-          className="wallpaper-thumbnails-container"
-          halign={Gtk.Align.CENTER}
-        >
-          {rows.map((row, rowIndex) => (
-            <box key={rowIndex} horizontal>
-              {row.map((image) => {
-                const imagePath = `${wallpaperFolder.get()}/${image}`;
-                return (
-                  <button
-                    key={image}
-                    className="thumbnail-box"
-                    css={`
-                      background-image: url("${imagePath}");
-                      min-width: 160px;
-                      min-height: 160px;
-                      background-size: cover;
-                      background-position: center;
-                    `}
-                    onClick={() => setWallpaper(image)}
-                  />
-                );
-              })}
-            </box>
-          ))}
+
+        <box vertical className="wallpaper-thumbnails-container" halign={Gtk.Align.CENTER}>
+          {rows.length > 0 ? (
+            rows.map((row, rowIndex) => (
+              <box key={rowIndex} horizontal spacing={8}>
+                {row.map((image) => {
+                  const currentFolder = wallpaperFolder.get();
+                  const imagePath = `${currentFolder}/${image}`;
+                  const url = `file://${imagePath}`;
+                  console.log("Thumbnail URL inside loop:", url);
+
+                  return (
+                    <box key={image} vertical spacing={4}>
+                      <Gtk.Image src={url} width_request={160} height_request={160} />
+                      <button onClick={() => setWallpaper(image)}>
+                        <label label={image} />
+                      </button>
+                    </box>
+                  );
+                })}
+              </box>
+            ))
+          ) : (
+            <label label="No wallpapers to display." />
+          )}
         </box>
       </box>
-    </Page >
+    </Page>
   );
 };

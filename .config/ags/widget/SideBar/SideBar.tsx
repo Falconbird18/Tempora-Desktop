@@ -768,7 +768,7 @@ export default () => {
             {StartOllamaButton}
             {bind(showGreeting).as((visible) =>
               visible ? (
-                <box horizontal spacing={spacing} className="sidebar-prompt-container">
+                <box horizontal spacing={spacing} className="sidebar-prompt-container" halign={Gtk.Align.FILL}>
                   <button className="sidebar-prompt-button" onClicked={() => { Entry.set_text("Tell me what you can do"); submitPrompt(); }}>
                     <box vertical className="sidebar-prompt-example">
                       <label className="paragraph" label="Tell me what" />
