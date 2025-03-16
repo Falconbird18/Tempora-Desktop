@@ -353,8 +353,16 @@
 
 .eWZOJQ:hover,
 .search-searchCategory-categoryGrid.eRKQSDqbcx0NSAApALFA .bdT2hWuSLE4HMyJ1ziC8>*:hover {
-    background-color: $background;
-    border-radius: $primary-border
+    background-color: $background !important;
+    border-radius: $primary-radius;
+}
+
+.BoxComponent-group-card-naked-isInteractive-draggable{
+    background-color: $background-2;
+}
+
+.Box__BoxComponent-sc-y4nds-0 .BoxComponent-group-card-naked-isInteractive-draggable .Box-sc-1njtxi4-0 .Box-group-naked-card-md-isInteractive-draggable main-card-cardContainer:hover{
+    background-color: $background-3;
 }
 
 /*Play buttons*/
@@ -590,6 +598,7 @@ a:not([data-encore-id]) {
 
 .main-card-card:hover {
     background-color: $background-3;
+    border-radius: $secondary-radius;
 }
 
 .marketplace-card-desc {

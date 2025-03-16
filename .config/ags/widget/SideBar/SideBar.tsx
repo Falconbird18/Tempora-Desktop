@@ -27,7 +27,7 @@ type ChatMessage = {
 
 const models: ModelDefinition[] = [
   { type: "llm", name: "llama3.2" },
-  { type: "llm", name: "gemma2:2b" },
+  { type: "llm", name: "gemma3" },
   { type: "llm", name: "phi3" },
   { type: "llm", name: "gemini" },
   { type: "web", name: "chatgpt", url: "https://chat.openai.com" },
@@ -36,7 +36,7 @@ const models: ModelDefinition[] = [
 
 const modelIcons = {
   "llama3.2": icons.models.llama || "dialog-information-symbolic",
-  "gemma2:2b": icons.models.gemma || "dialog-question-symbolic",
+  "gemma3": icons.models.gemma || "dialog-question-symbolic",
   phi3: icons.models.phi3 || "dialog-warning-symbolic",
   gemini: icons.models.gemini || "dialog-question-symbolic",
   chatgpt: icons.models.chatgpt || "dialog-chat-symbolic",

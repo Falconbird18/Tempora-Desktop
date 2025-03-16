@@ -161,6 +161,12 @@
     box-shadow: $inset, $border-shadow;
 }
 
+@mixin secondary-circular-button-active {
+    background: $primary;
+    box-shadow: $inset_primary;
+    background-size: $background-size;
+}
+
 @mixin secondary-button-hover {
     background-size: $background-size;
     background-image: $background-image;
@@ -283,6 +289,7 @@ icon {
     text-shadow: $text-shadow;
     color: $text;
     -gtk-icon-shadow: $text-shadow;
+    font-size: $h2_size;
 }
 
 image {
@@ -293,7 +300,7 @@ image {
     text-shadow: $text-shadow;
     color: $text;
     -gtk-icon-shadow: $text-shadow;
-    font-size: $h1_size;
+    font-size: $h2_size;
 }
 
 slider {
@@ -594,7 +601,6 @@ switch:checked slider {
         box-shadow: $outset, $border-shadow;
     }
 
-    &.active,
     &:active {
         @include primary-button;
         padding: 0;
@@ -1791,14 +1797,24 @@ switch:checked slider {
     padding: 20px;
 }
 
-.setting-box{
+.setting-box {
     min-width: 360px;
     padding: 20px 0;
 }
+
 .add-icon-button {
     @include secondary-circular-button;
-    background-color: $background-3;
+    background-color: $background;
+
+    &:hover {
+        @include secondary-circular-button-hover;
+    }
+
+    :active {
+        @include secondary-circular-button-active;
+    }
 }
+
 
 .add-icon-form {
     @include card;
@@ -1838,34 +1854,22 @@ switch:checked slider {
 
 .icon-card {
     @include card;
-    padding: 20px;
-    min-width: 320px;
+    // min-width: 320px;
 }
 
 .delete-button-hidden {
-    padding: 2px 6px;
-    background-color: #ff4444;
-    color: white;
-    border-radius: 50%;
-    margin-left: 8px;
-    min-width: 20px;
-    min-height: 20px;
+    @include primary-button;
     opacity: 0;
-    transition: opacity 0.2s ease;
-    /* Optional: adds a smooth fade effect */
+
+    &:hover{
+        @include primary-button-hover;
+        opacity: 1;
+    }
 }
 
 .delete-button-visible {
-    padding: 2px 6px;
-    background-color: #ff4444;
-    color: white;
-    border-radius: 50%;
-    margin-left: 8px;
-    min-width: 20px;
-    min-height: 20px;
+    @include primary-button;
     opacity: 1;
-    transition: opacity 0.2s ease;
-    /* Optional: adds a smooth fade effect */
 }
 
 /*Weather*/
@@ -2083,14 +2087,16 @@ switch:checked slider {
 
 
 
-  .wallpaper-thumbnails-container {
+.wallpaper-thumbnails-container {
     transition: all 0.2s ease-out;
-  }
-  .thumbnail-box {
+}
+
+.thumbnail-box {
     margin: 4px;
     border-radius: 8px;
-  }
-  .load-more-button {
+}
+
+.load-more-button {
     margin: 8px;
     padding: 8px;
-  }
+}

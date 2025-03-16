@@ -148,6 +148,7 @@ icon {
   text-shadow: none;
   color: #233885;
   -gtk-icon-shadow: none;
+  font-size: 18px;
 }
 
 image {
@@ -158,7 +159,7 @@ image {
   text-shadow: none;
   color: #233885;
   -gtk-icon-shadow: none;
-  font-size: 24px;
+  font-size: 18px;
 }
 
 slider {
@@ -489,7 +490,7 @@ switch:checked slider {
 .bar__workspaces-indicator:hover {
   box-shadow: 0 0 0 transparent, 0px 0px 0px #E76EAB;
 }
-.bar__workspaces-indicator.active, .bar__workspaces-indicator:active {
+.bar__workspaces-indicator:active {
   font-size: 18px;
   font-weight: 300;
   padding-left: 16px;
@@ -2021,7 +2022,6 @@ switch:checked slider {
   border: 0.25px solid rgba(236, 237, 238, 0.3098039216);
   background-size: unset;
   border-radius: 100%;
-  background-color: rgba(244, 246, 251, 0.3098039216);
   min-width: 21px;
   min-height: 21px;
 }
@@ -2064,6 +2064,18 @@ switch:checked slider {
   border: 0.25px solid rgba(236, 237, 238, 0.3098039216);
   background-size: unset;
   border-radius: 100%;
+  background-color: rgba(226, 228, 233, 0.3098039216);
+}
+.add-icon-button:hover {
+  background-size: unset;
+  background-image: linear-gradient(-45deg, #6E9BE7, #E76EAB);
+  text-shadow: none;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #E76EAB;
+}
+.add-icon-button :active {
+  background: #6E9BE7;
+  box-shadow: 0 0 0 transparent;
+  background-size: unset;
 }
 
 .add-icon-form {
@@ -2157,34 +2169,51 @@ switch:checked slider {
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  padding: 20px;
-  min-width: 320px;
 }
 
 .delete-button-hidden {
-  padding: 2px 6px;
-  background-color: #ff4444;
-  color: white;
-  border-radius: 50%;
-  margin-left: 8px;
-  min-width: 20px;
-  min-height: 20px;
+  font-size: 18px;
+  font-weight: 300;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(-45deg, #6E9BE7, #E76EAB);
+  color: #233885;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #E76EAB;
+  font-family: "Roboto";
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 1px;
+  margin-left: 1px;
+  border: 0.25px solid rgba(236, 237, 238, 0.3098039216);
+  background-size: unset;
+  border-radius: 30px;
+  text-shadow: none;
   opacity: 0;
-  transition: opacity 0.2s ease;
-  /* Optional: adds a smooth fade effect */
+}
+.delete-button-hidden:hover {
+  background-color: rgba(236, 237, 238, 0.3098039216);
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  opacity: 1;
 }
 
 .delete-button-visible {
-  padding: 2px 6px;
-  background-color: #ff4444;
-  color: white;
-  border-radius: 50%;
-  margin-left: 8px;
-  min-width: 20px;
-  min-height: 20px;
+  font-size: 18px;
+  font-weight: 300;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(-45deg, #6E9BE7, #E76EAB);
+  color: #233885;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #E76EAB;
+  font-family: "Roboto";
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 1px;
+  margin-left: 1px;
+  border: 0.25px solid rgba(236, 237, 238, 0.3098039216);
+  background-size: unset;
+  border-radius: 30px;
+  text-shadow: none;
   opacity: 1;
-  transition: opacity 0.2s ease;
-  /* Optional: adds a smooth fade effect */
 }
 
 /*Weather*/
@@ -2475,6 +2504,20 @@ switch:checked slider {
 .description {
   font-size: 11px;
   color: #666;
+}
+
+.wallpaper-thumbnails-container {
+  transition: all 0.2s ease-out;
+}
+
+.thumbnail-box {
+  margin: 4px;
+  border-radius: 8px;
+}
+
+.load-more-button {
+  margin: 8px;
+  padding: 8px;
 }
 
 /*# sourceMappingURL=main.css.map */

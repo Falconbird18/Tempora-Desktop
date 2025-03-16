@@ -2021,7 +2021,6 @@ switch:checked slider {
   border: none;
   background-size: 8px 8px;
   border-radius: 100%;
-  background-color: #f5f6f9;
   min-width: 21px;
   min-height: 21px;
 }
@@ -2064,6 +2063,7 @@ switch:checked slider {
   border: none;
   background-size: 8px 8px;
   border-radius: 100%;
+  background-color: #f5f6f9;
 }
 
 .add-icon-form {
@@ -2475,6 +2475,20 @@ switch:checked slider {
 .description {
   font-size: 11px;
   color: #666;
+}
+
+.wallpaper-thumbnails-container {
+  transition: all 0.2s ease-out;
+}
+
+.thumbnail-box {
+  margin: 4px;
+  border-radius: 8px;
+}
+
+.load-more-button {
+  margin: 8px;
+  padding: 8px;
 }
 
 /*# sourceMappingURL=main.css.map */

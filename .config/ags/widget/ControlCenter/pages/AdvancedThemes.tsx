@@ -3,6 +3,7 @@ import { App, Gtk, Gdk, Widget } from "astal/gtk3";
 import { bind, execAsync, timeout, Variable, exec } from "astal";
 const { GLib, Gio } = imports.gi;
 import { spacing } from "../../../lib/variables";
+import icons from "../../../lib/icons";
 
 const settingsFile = `${GLib.get_home_dir()}/.config/ags/theme-settings.json`;
 
@@ -283,8 +284,9 @@ export default () => {
               onClick={() => showAddIconForm.set(true)}
               className="add-icon-button"
               hexpand="false"
+              halign={Gtk.Align.END}
             >
-              <label label="+"/>
+              <label label="+" />
             </button>
           </box>
 
@@ -347,8 +349,8 @@ export default () => {
             </box>
           </box>
           {/* Icon Cards */}
-          {bind(workspaceIcons).as((icons) =>
-            Object.entries(icons).map(([id, icon]) => {
+          {bind(workspaceIcons).as((Icons) =>
+            Object.entries(Icons).map(([id, icon]) => {
               let deleteClass = null;
               const deleteButton = (
                 <button
@@ -357,8 +359,10 @@ export default () => {
                   setup={(self) => {
                     deleteClass = self;
                   }}
+                  halign={Gtk.Align.END}
+                  hexpand="true"
                 >
-                  <label label="x" className="paragraph" />
+                  <icon icon={icons.ui.close} className="icon" />
                 </button>
               );
 
@@ -367,7 +371,6 @@ export default () => {
                   key={`icon-card-${id}`}
                   horizontal
                   spacing={8}
-                  className="icon-card"
                   halign={Gtk.Align.FILL}
                   onEnterNotifyEvent={(self) => {
                     if (deleteClass) {
@@ -384,10 +387,11 @@ export default () => {
                     }
                   }}
                 >
-                  <box>
+                  <box className="icon-card">
                     <label
                       label={`Workspace ${id}: ${icon}`}
                       className="paragraph"
+                      halign={Gtk.Align.START}
                     />
                     {deleteButton}
                   </box>

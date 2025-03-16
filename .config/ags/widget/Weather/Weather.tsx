@@ -155,7 +155,7 @@ export default () => {
             valign={Gtk.Align.CENTER}
             onClicked={() => isEntryVisible.set(!isEntryVisible.value)}
           >
-            <icon icon={icon} className="location" />
+            <icon icon={icon} className="icon" />
           </button>
         </box>
         {Entry}

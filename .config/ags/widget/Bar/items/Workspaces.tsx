@@ -20,8 +20,8 @@ export default function Workspaces() {
   let containers = new Map<number, any>();
 
   const createWorkspaceButton = (id: number) => {
-    const icons = workspaceIcons.get();
-    const icon = icons[id];
+    const Icons = workspaceIcons.get();
+    const icon = Icons[id];
 
     return (
       <button
@@ -70,8 +70,8 @@ export default function Workspaces() {
     SHOW_NUMBERS: boolean,
     HIDE_EMPTY: boolean,
   ) => {
-    const icons = workspaceIcons.get();
-    const icon = icons[id];
+    const Icons = workspaceIcons.get();
+    const icon = Icons[id];
 
     let baseClass = icon || SHOW_NUMBERS
       ? "bar__workspaces-indicator-number"

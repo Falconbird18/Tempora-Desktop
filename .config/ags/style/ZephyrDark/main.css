@@ -158,6 +158,7 @@ image {
   text-shadow: none;
   color: #f5decc;
   -gtk-icon-shadow: none;
+  font-size: 24px;
 }
 
 slider {
@@ -474,9 +475,11 @@ switch:checked slider {
 
 .bar__workspaces-indicator {
   padding: 0;
-  min-width: 8px;
-  min-height: 8px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+.bar__workspaces-indicator.dot {
+  min-width: 11px;
+  min-height: 11px;
   border-radius: 20px;
   background-color: #706B43;
   box-shadow: 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000;
@@ -487,8 +490,6 @@ switch:checked slider {
   box-shadow: 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000, 0 0 0 transparent;
 }
 .bar__workspaces-indicator.active, .bar__workspaces-indicator:active {
-  min-height: 12px;
-  min-width: 40px;
   font-size: 18px;
   font-weight: normal;
   padding-left: 16px;
@@ -506,7 +507,155 @@ switch:checked slider {
   border-radius: 20px;
   text-shadow: none;
   padding: 0;
-  min-height: 10px;
+  min-height: 14px;
+  min-width: 28px;
+}
+
+/* Number mode */
+.bar__workspaces-indicator-number {
+  min-width: 14px;
+  min-height: 14px;
+  background-color: transparent;
+  font-family: "Open sans";
+  font-weight: normal;
+  font-size: 18px;
+  color: #f5decc;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.bar__workspaces-indicator-number.active {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(45deg, #E0CB12 25%, #E0CB12 25%, #E0CB12 50%, #E0CB12 50%, #E0CB12 75%, #E0CB12 75%, #E0CB12);
+  color: #f5decc;
+  box-shadow: 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 20px;
+  text-shadow: none;
+  min-width: 21px;
+  min-height: 14px;
+  padding: 0;
+  margin: 0;
+}
+
+.bar-workspaces {
+  min-height: 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+}
+
+/* Box around workspaces with windows */
+.bar-workspaces-active {
+  background-color: #43423D;
+  box-shadow: 0 0 0 transparent, 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  min-height: 21px;
+  min-width: 21px;
+  padding: 0;
+  margin: 0;
+  background-color: #505049;
+}
+
+.bar__workspaces-indicator {
+  padding: 0;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+.bar__workspaces-indicator.dot {
+  min-width: 11px;
+  min-height: 11px;
+  border-radius: 20px;
+  background-color: #706B43;
+  box-shadow: 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000;
+  border: none;
+  background-size: 8px 8px;
+}
+.bar__workspaces-indicator:hover {
+  box-shadow: 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000, 0 0 0 transparent;
+}
+.bar__workspaces-indicator.active, .bar__workspaces-indicator:active {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(45deg, #E0CB12 25%, #E0CB12 25%, #E0CB12 50%, #E0CB12 50%, #E0CB12 75%, #E0CB12 75%, #E0CB12);
+  color: #f5decc;
+  box-shadow: 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 20px;
+  text-shadow: none;
+  padding: 0;
+  min-height: 14px;
+  min-width: 28px;
+}
+
+/* Number mode */
+.bar__workspaces-indicator-number {
+  min-width: 14px;
+  min-height: 14px;
+  background-color: transparent;
+  font-family: "Open sans";
+  font-weight: normal;
+  font-size: 18px;
+  color: #f5decc;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.bar__workspaces-indicator-number.active {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(45deg, #E0CB12 25%, #E0CB12 25%, #E0CB12 50%, #E0CB12 50%, #E0CB12 75%, #E0CB12 75%, #E0CB12);
+  color: #f5decc;
+  box-shadow: 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 20px;
+  text-shadow: none;
+  min-width: 21px;
+  min-height: 14px;
+  padding: 0;
+  margin: 0;
+}
+
+/* Box around workspaces with windows */
+.bar__workspaces-active {
+  background-color: #43423D;
+  box-shadow: 0 0 0 transparent, 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  min-height: 21px;
+  min-width: 21px;
+  padding: 0;
+  background-color: #505049;
 }
 
 .bar__active-app {
@@ -885,35 +1034,32 @@ switch:checked slider {
   font-size: 16px;
 }
 
-.control-center__brightness-slider *,
-.control-center__volume-slider * {
+.control-center-slider-container * {
   padding: 0;
   margin: 0;
   border: none;
 }
-.control-center__brightness-slider .control-center__slider-icon,
-.control-center__volume-slider .control-center__slider-icon {
+
+.control-center-slider-icon {
   color: #f5decc;
   margin-left: 0;
-  font-size: 20px;
+  font-size: 24px;
 }
-.control-center__brightness-slider slider,
-.control-center__volume-slider slider {
+
+.control-center-slider slider {
   min-width: 30px;
   border-radius: 100px;
   background-color: transparent;
   box-shadow: none;
   transition: background-color 0.2s cubic-bezier(0.85, 0, 0.15, 1), color 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
-.control-center__brightness-slider slider trough,
-.control-center__volume-slider slider trough {
+.control-center-slider trough {
   border-radius: 20px;
-  background-color: #706B43;
+  background-color: red;
   box-shadow: inset 0px 3px 5px #000000, inset 0px -5px 3px rgba(255, 255, 255, 0.4941176471);
   min-height: 15px;
 }
-.control-center__brightness-slider slider highlight,
-.control-center__volume-slider slider highlight {
+.control-center-slider highlight {
   background: linear-gradient(45deg, #E0CB12 25%, #E0CB12 25%, #E0CB12 50%, #E0CB12 50%, #E0CB12 75%, #E0CB12 75%, #E0CB12);
   background-size: 8px 8px;
   min-width: 15px;
@@ -923,6 +1069,13 @@ switch:checked slider {
   box-shadow: inset 0px 1px 2px #5eff4c, inset 0px -1px 2px #0e974a, 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000;
   padding: 2px 0px;
   margin: -2px 0px;
+}
+
+.control-center-slider trough {
+  border-radius: 20px;
+  background-color: #706B43;
+  box-shadow: inset 0px 3px 5px #000000, inset 0px -5px 3px rgba(255, 255, 255, 0.4941176471);
+  min-height: 15px;
 }
 
 .muted .control-center__volume-slider highlight {
@@ -1751,7 +1904,7 @@ switch:checked slider {
   padding-left: 0;
   padding-right: 0;
 }
-.mode-settings__button_right.hover {
+.mode-settings__button_right:hover {
   background-size: 8px 8px;
   background-image: linear-gradient(45deg, #E0CB12 25%, #E0CB12 25%, #E0CB12 50%, #E0CB12 50%, #E0CB12 75%, #E0CB12 75%, #E0CB12);
   text-shadow: none;
@@ -1807,6 +1960,17 @@ switch:checked slider {
   min-width: 75px;
   padding: 0;
 }
+.theme-buttons:hover {
+  background-size: 8px 8px;
+  background-image: linear-gradient(45deg, #E0CB12 25%, #E0CB12 25%, #E0CB12 50%, #E0CB12 50%, #E0CB12 75%, #E0CB12 75%, #E0CB12);
+  text-shadow: none;
+  box-shadow: inset 0px 3px 5px #000000, inset 0px -5px 3px rgba(255, 255, 255, 0.4941176471), 0 0 0 transparent;
+}
+.theme-buttons.active {
+  background: #E0CB12;
+  box-shadow: inset 0px 3px 5px #0e974a, inset 0px -5px 3px #5eff4c;
+  background-size: 8px 8px;
+}
 
 .label {
   font-family: "Open sans";
@@ -1829,6 +1993,198 @@ switch:checked slider {
 .thumbnail-box {
   border-radius: 10px;
   margin: 10px;
+}
+
+.workspace-container {
+  background-color: #43423D;
+  box-shadow: 0 0 0 transparent, 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  background-color: #505049;
+}
+
+.workspace-button {
+  font-size: 18px;
+  font-weight: normal;
+  min-width: 42px;
+  min-height: 42px;
+  background: #43423D;
+  color: #f5decc;
+  box-shadow: 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 100%;
+  min-width: 21px;
+  min-height: 21px;
+}
+.workspace-button:hover {
+  background-size: 8px 8px;
+  background-image: linear-gradient(45deg, #E0CB12 25%, #E0CB12 25%, #E0CB12 50%, #E0CB12 50%, #E0CB12 75%, #E0CB12 75%, #E0CB12);
+  text-shadow: none;
+  box-shadow: inset 0px 3px 5px #000000, inset 0px -5px 3px rgba(255, 255, 255, 0.4941176471), 0 0 0 transparent;
+}
+
+.advanced-container {
+  background-color: #43423D;
+  box-shadow: 0 0 0 transparent, 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  min-width: 360px;
+  padding: 20px;
+}
+
+.setting-box {
+  min-width: 360px;
+  padding: 20px 0;
+}
+
+.add-icon-button {
+  font-size: 18px;
+  font-weight: normal;
+  min-width: 42px;
+  min-height: 42px;
+  background: #43423D;
+  color: #f5decc;
+  box-shadow: 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 100%;
+  background-color: #706B43;
+}
+
+.add-icon-form {
+  background-color: #43423D;
+  box-shadow: 0 0 0 transparent, 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  background-color: #505049;
+  min-width: 320px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.workspace-number-entry,
+.icon-entry {
+  background-color: #43423D;
+  border-radius: 10px;
+  border: none;
+  padding: 5px;
+  color: #f5decc;
+  font-family: "Open sans";
+  font-size: 14px;
+  font-weight: 300;
+  box-shadow: inset 0px 3px 5px #000000, inset 0px -5px 3px rgba(255, 255, 255, 0.4941176471);
+  caret-color: #f5decc;
+}
+
+.submit-button {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(45deg, #E0CB12 25%, #E0CB12 25%, #E0CB12 50%, #E0CB12 50%, #E0CB12 75%, #E0CB12 75%, #E0CB12);
+  color: #f5decc;
+  box-shadow: 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 20px;
+  text-shadow: none;
+}
+.submit-button:hover {
+  background-color: #43423D;
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+.submit-button:active {
+  background-color: #E0CB12;
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.cancel-button {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: #43423D;
+  color: #f5decc;
+  box-shadow: 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 20px;
+}
+.cancel-button:hover {
+  background-size: 8px 8px;
+  background-image: linear-gradient(45deg, #E0CB12 25%, #E0CB12 25%, #E0CB12 50%, #E0CB12 50%, #E0CB12 75%, #E0CB12 75%, #E0CB12);
+  text-shadow: none;
+  box-shadow: inset 0px 3px 5px #000000, inset 0px -5px 3px rgba(255, 255, 255, 0.4941176471), 0 0 0 transparent;
+}
+.cancel-button:active {
+  background: #E0CB12;
+  box-shadow: inset 0px 3px 5px #0e974a, inset 0px -5px 3px #5eff4c;
+  background-size: 8px 8px;
+}
+
+.icon-card {
+  background-color: #43423D;
+  box-shadow: 0 0 0 transparent, 0px -3px 5px rgba(255, 255, 255, 0.4941176471), 0px 3px 5px #000000;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  padding: 20px;
+  min-width: 320px;
+}
+
+.delete-button-hidden {
+  padding: 2px 6px;
+  background-color: #ff4444;
+  color: white;
+  border-radius: 50%;
+  margin-left: 8px;
+  min-width: 20px;
+  min-height: 20px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  /* Optional: adds a smooth fade effect */
+}
+
+.delete-button-visible {
+  padding: 2px 6px;
+  background-color: #ff4444;
+  color: white;
+  border-radius: 50%;
+  margin-left: 8px;
+  min-width: 20px;
+  min-height: 20px;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  /* Optional: adds a smooth fade effect */
 }
 
 /*Weather*/
@@ -2119,6 +2475,20 @@ switch:checked slider {
 .description {
   font-size: 11px;
   color: #666;
+}
+
+.wallpaper-thumbnails-container {
+  transition: all 0.2s ease-out;
+}
+
+.thumbnail-box {
+  margin: 4px;
+  border-radius: 8px;
+}
+
+.load-more-button {
+  margin: 8px;
+  padding: 8px;
 }
 
 /*# sourceMappingURL=main.css.map */

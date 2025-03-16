@@ -116,10 +116,10 @@ export default {
     avatar: "avatar-default",
     super: Phi3,
     arrow: {
-      right: "go-next",
-      left: "go-previous",
-      down: "pan-down",
-      up: "pan-up",
+      right: "go-next-symbolic",
+      left: "go-previous-symbolic",
+      down: "pan-down-symbolic",
+      up: "pan-up-symbolic",
     },
   },
   audio: {
