@@ -50,7 +50,7 @@ export default () => {
     return (
         <button
             className={bind(noSleep).as((state) =>
-                state ? "primary-button" : "primary-button-inactive"
+                state ? "primary-button-inactive" : "primary-button"
             )}
             onClicked={() => {
                 console.log("Button clicked");
@@ -67,7 +67,7 @@ export default () => {
                 />
                 <box vertical>
                     <label 
-                        label="Sleep Mode" 
+                        label="Sleep" 
                         className="paragraph" 
                         halign={Gtk.Align.START} 
                     />

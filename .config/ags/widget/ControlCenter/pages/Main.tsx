@@ -134,10 +134,6 @@ export default () => {
         revealMenu={bind(revealScreenRecord)}
         closeMenu={() => revealScreenRecord.set(!revealScreenRecord.get())}
       />
-      <box horizontal spacing={spacing}>
-        {Volume()}
-        {Brightness()}
-      </box>
       <box spacing={16} className="control-center__footer">
         <button
           className="control-center__powermenu-button"
