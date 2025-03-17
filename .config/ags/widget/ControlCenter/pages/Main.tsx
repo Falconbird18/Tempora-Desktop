@@ -71,11 +71,15 @@ export default () => {
     ].filter(Boolean),
   });
 
-  const Container = new Widget.Box({
+  const Performance = new Widget.Box({
     spacing,
     className: "control-center__settings-container",
     vertical: true,
-    children: [DND(), FanProfile].filter(Boolean),
+    children: [
+      new Widget.Label({ label: "Performance", className: "h1" }),
+      DND(),
+      FanProfile
+    ].filter(Boolean),
   });
 
   const Display = new Widget.Box({
@@ -92,15 +96,22 @@ export default () => {
 
   const recordingContainer = new Widget.Box({
     spacing,
-    className: "control-center__wide-settings-container",
+    className: "control-center__settings-container",
     vertical: true,
     children: [
       new Widget.Label({ label: "Capture", className: "h1" }),
       new Widget.Box({
         vertical: false,
+        spacing,
         children: [
           ScreenShot(),
           ScreenSnip(),
+        ],
+      }),
+      new Widget.Box({
+        vertical: false,
+        spacing,
+        children: [
           ScreenRecord({
             onClicked: () => {
               if (ScreenRecordService.recording) {
@@ -116,9 +127,9 @@ export default () => {
   });
 
   fb.add(connectivityContainer);
-  fb.add(Container);
+  fb.add(Performance);
   fb.add(Display);
-  fb.add(Container);
+  fb.add(recordingContainer);
 
   return (
     <box
@@ -128,7 +139,6 @@ export default () => {
       spacing={spacing}
     >
       {fb} {/* FlowBox remains in the vertical box */}
-      {recordingContainer}{" "}
       {/* recordingContainer is now a direct child of the vertical box */}
       <ScreenRecordMenu
         revealMenu={bind(revealScreenRecord)}
