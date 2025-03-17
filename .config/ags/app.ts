@@ -9,6 +9,7 @@ import ControlCenter from "./widget/ControlCenter";
 import AppLauncher from "./widget/AppLauncher";
 import NotificationsPopup from "./widget/Notifications/NotificationsPopup";
 import Weather from "./widget/Weather/Weather";
+import Media from "./widget/media/Media";
 import SideBar from "./widget/SideBar/SideBar";
 import Keybinds from "./widget/Popups/menus/Keybinds";
 import Clipboard from "./widget/Popups/menus/Clipboard";
@@ -101,6 +102,7 @@ function main() {
 
   Notifications();
   Weather();
+  Media();
   SideBar();
   Keybinds();
   Clipboard();

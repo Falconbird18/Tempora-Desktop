@@ -3,7 +3,6 @@ import Workspaces from "./items/Workspaces";
 import { spacing } from "../../lib/variables";
 import ActiveApp from "./items/ActiveApp";
 import Clock from "./items/Clock";
-import Battery from "./items/Battery";
 import Tray from "./items/Tray";
 import SystemIndicators from "./items/SystemIndicators";
 import Notifications from "./items/Notifications";
@@ -11,6 +10,8 @@ import Arch from "./items/Arch";
 import Weather from "./items/Weather";
 import RecordingIndicator from "./items/RecordingIndicator";
 import SideBar from "./items/SideBar";
+import Media from "./items/Media";
+
 
 const Start = () => {
   return (
@@ -36,8 +37,8 @@ const End = () => {
       <RecordingIndicator />
       <Weather />
       <Notifications />
+      <Media />
       <SystemIndicators />
-      <Battery />
       <Tray />
       <Arch />
     </box>

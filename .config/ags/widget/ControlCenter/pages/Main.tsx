@@ -16,11 +16,13 @@ import ScreenRecordService from "../../../service/ScreenRecord";
 import BluetoothButton from "../items/Bluetooth";
 import ScreenSnip from "../items/ScreenSnip";
 import ScreenShot from "../items/ScreenShot";
+import Battery from "gi://AstalBattery";
+import BarItem from "../../Bar/BarItem";
 import { controlCenterPage } from "../index";
 import { toggleWindow } from "../../../lib/utils";
 
-
 const menuName = "themes";
+const bat = Battery.get_default();
 
 class FlowBox extends astalify(Gtk.FlowBox) {
   static {
@@ -162,7 +164,15 @@ export default () => {
           <icon icon={icons.powermenu.shutdown} iconSize={16} />
         </button>
         <box hexpand />
-        <label className="control-center__time-to-empty" label={bind(uptime)} />
+          <box className="secondary-button" spacing={4}>
+            <icon icon={bind(bat, "battery_icon_name").as(String)} />
+            <label
+              label={bind(bat, "percentage").as(
+                (p) => `${Math.floor(p * 100)}%`,
+              )}
+              className="h2"
+            />
+          </box>
         <button
           className="control-center__settings-button"
           // onClick={() => toggleWindow("popup-theme-settings")}
