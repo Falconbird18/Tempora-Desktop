@@ -170,6 +170,10 @@ export default {
     logout: "system-log-out",
     shutdown: "system-shutdown",
   },
+  power: {
+    sleep: "system-suspend-symbolic",
+    nosleep: "system-suspend-hibernate-symbolic"
+  },
   brightness: {
     indicator: "display-brightness-symbolic",
     keyboard: "keyboard-brightness-symbolic",

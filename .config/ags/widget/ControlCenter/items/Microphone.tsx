@@ -1,6 +1,5 @@
 import { bind } from "astal";
 import { Gtk } from "astal/gtk3";
-import ControlCenterButton from "../../../common/WideButton";
 import AstalWp from "gi://AstalWp?version=0.1";
 import icons from "../../../lib/icons";
 
@@ -9,9 +8,12 @@ export default () => {
 
 	return (
 		<button
-			className="primary-button"
+			className={bind(mic, "mute").as((muted) =>
+				muted ? "primary-button-inactive" : "primary-button",
+			)}
 			connection={[bind(mic, "mute"), () => !mic.mute]}
 			onClick={() => (mic.mute = !mic.mute)}
+			hexpand={true}
 		>
 			<box horizontal >
 
@@ -25,7 +27,7 @@ export default () => {
 					<label label="Microphone" className="paragraph" halign={Gtk.Align.START} />
 					<label
 						label={bind(mic, "mute").as((muted) =>
-							muted ? "On" : "Off",
+							muted ? "Off" : "On",
 						)}
 						className="subtext"
 						halign={Gtk.Align.START}
@@ -33,14 +35,5 @@ export default () => {
 				</box>
 			</box>
 		</button>
-
-		// <ControlCenterButton
-		// 	label={bind(mic, "mute").as((muted) =>
-		// 		muted ? "Muted" : "Unmuted",
-		// 	)}
-		// 	icon={bind(mic, "mute").as(
-		// 		(muted) => icons.audio.mic[muted ? "muted" : "high"],
-		// 	)}
-		// />
 	);
 };

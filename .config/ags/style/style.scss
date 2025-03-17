@@ -96,11 +96,16 @@
 
 
 @mixin primary-button-inactive {
+    font-size: $h2_size;
+    font-weight: $h2_weight;
+    padding-left: 16px;
+    padding-right: 16px;
+    min-height: 42px;
     background: $background-3;
     color: $text;
     box-shadow: $outset, $border-shadow;
     font-family: $h2_font;
-    transition: all $transition;
+    transition: background $transition;
     margin-right: $outset_margin;
     margin-left: $outset_margin;
     border: $primary-border;
@@ -445,6 +450,17 @@ switch:checked slider {
     }
 }
 
+.primary-button-inactive {
+    @include primary-button-inactive;
+
+    &:hover{
+        @include primary-button;
+    }
+
+    &:active{
+        @include primary-button-active;
+    }
+}
 
 .material-button {
     border-radius: $primary-radius;

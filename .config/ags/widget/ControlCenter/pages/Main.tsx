@@ -5,6 +5,7 @@ import NetworkButton from "../items/Network";
 import Volume from "../items/Volume";
 import DND from "../items/DND";
 import Microphone from "../items/Microphone";
+import NoSleep from "../items/NoSleep";
 import icons from "../../../lib/icons";
 import Brightness from "../items/Brightness";
 import FanProfileButton from "../items/FanProfile";
@@ -85,7 +86,7 @@ export default () => {
       new Widget.Label({ label: "Display & Audio", className: "h1" }),
       Volume(),
       Brightness(),
-      new Widget.Box({ vertical: false, children: [Microphone()] })
+      new Widget.Box({ vertical: true, spacing, children: [Microphone(), NoSleep()] })
     ].filter(Boolean),
   });
 
