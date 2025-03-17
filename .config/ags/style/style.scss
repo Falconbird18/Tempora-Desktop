@@ -453,11 +453,11 @@ switch:checked slider {
 .primary-button-inactive {
     @include primary-button-inactive;
 
-    &:hover{
+    &:hover {
         @include primary-button;
     }
 
-    &:active{
+    &:active {
         @include primary-button-active;
     }
 }
@@ -1014,7 +1014,7 @@ switch:checked slider {
 }
 
 .control-center-slider {
-    slider {
+    & slider {
         min-width: 30px;
         border-radius: 100px;
         background-color: transparent;
@@ -1022,14 +1022,14 @@ switch:checked slider {
         transition: background-color $transition, color $transition;
     }
 
-    trough {
+    & trough {
         border-radius: $primary-radius;
-        background-color: red;
+        background: $background-3;
         box-shadow: $inset;
         min-height: 15px;
     }
 
-    highlight {
+    & highlight {
         background: $background-image;
         background-size: $background-size;
         min-width: 15px;
@@ -1040,14 +1040,6 @@ switch:checked slider {
         padding: 2px 0px;
         margin: -2px 0px;
     }
-}
-
-.control-center-slider trough {
-    border-radius: $primary-radius;
-    background-color: $background-3;
-
-    box-shadow: $inset;
-    min-height: 15px;
 }
 
 .muted {
@@ -1877,7 +1869,7 @@ switch:checked slider {
     @include primary-button;
     opacity: 0;
 
-    &:hover{
+    &:hover {
         @include primary-button-hover;
         opacity: 1;
     }

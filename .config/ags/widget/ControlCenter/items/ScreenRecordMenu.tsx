@@ -3,7 +3,6 @@ import { Binding, Variable, bind, exec, execAsync, timeout } from "astal";
 import icons from "../../../lib/icons";
 import { spacing } from "../../../lib/variables";
 import Button from "../../../common/Button";
-import GLib from "gi://GLib?version=2.0";
 import ScreenRecordService from "../../../service/ScreenRecord";
 
 const recordMicrophone = Variable(false);
