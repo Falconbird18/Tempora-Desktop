@@ -1,87 +1,85 @@
 import { exec, execAsync, GObject, Variable } from "astal";
 import { dependencies } from "../lib/utils";
 
-const FAN_REGISTER = 0x61;
-
 export enum FanProfile {
-	Silent = 1,
-	Standart = 0,
-	Performance = 2,
+    Silent = "power-saver",    // Maps to battery saver
+    Standart = "balanced",     // Maps to balanced
+    Performance = "performance", // Maps to performance
 }
 
 const profileBinding = {
-	1: "battery",
-	0: "balanced",
-	2: "performance",
+    "power-saver": "battery",
+    "balanced": "balanced",
+    "performance": "performance",
 };
 
-const available = dependencies(["ec_probe"]);
+const available = dependencies(["powerprofilesctl"]);
 
-export const profileName = (profile: FanProfile) => {
-	const profileName = profileBinding[profile];
-	return profileName.charAt(0).toUpperCase() + profileName.slice(1);
+export const profileName = (profile: string) => {
+    const profileName = profileBinding[profile];
+    return profileName.charAt(0).toUpperCase() + profileName.slice(1);
 };
 
 class FanProfileService extends GObject.Object {
-	getProfile = () => {
-		const result = exec(`sudo ec_probe read ${FAN_REGISTER}`);
-		return parseInt(result.split(" ")[0]) as FanProfile;
-	};
+    getProfile = () => {
+        const result = exec(`powerprofilesctl get`);
+        return result.trim() as FanProfile;
+    };
 
-	#profile: FanProfile = this.getProfile();
+    #profile: string = this.getProfile();
 
-	get profile() {
-		return this.#profile;
-	}
+    get profile() {
+        return this.#profile;
+    }
 
-	get profiles(): FanProfile[] {
-		return [1, 0, 2];
-	}
+    get profiles(): string[] {
+        return ["power-saver", "balanced", "performance"];
+    }
 
-	async nextProfile() {
-		this.#profile++;
-		if (this.#profile > 2) this.#profile = 0;
-		exec(`sudo ec_probe write ${FAN_REGISTER} ${this.#profile}`);
-		this.notify("profile");
-	}
+    async nextProfile() {
+        const profiles = this.profiles;
+        const currentIndex = profiles.indexOf(this.#profile);
+        this.#profile = profiles[(currentIndex + 1) % profiles.length];
+        exec(`powerprofilesctl set ${this.#profile}`);
+        this.notify("profile");
+    }
 
-	async prevProfile() {
-		this.#profile--;
-		if (this.#profile < 0) this.#profile = 2;
-		exec(`sudo ec_probe write ${FAN_REGISTER} ${this.#profile}`);
-		this.notify("profile");
-	}
+    async prevProfile() {
+        const profiles = this.profiles;
+        const currentIndex = profiles.indexOf(this.#profile);
+        this.#profile = profiles[(currentIndex - 1 + profiles.length) % profiles.length];
+        exec(`powerprofilesctl set ${this.#profile}`);
+        this.notify("profile");
+    }
 
-	async setProfile(profile: FanProfile) {
-		exec(`sudo ec_probe write ${FAN_REGISTER} ${profile}`);
-		this.#profile = profile;
-		this.notify("profile");
-	}
+    async setProfile(profile: string) {
+        exec(`powerprofilesctl set ${profile}`);
+        this.#profile = profile;
+        this.notify("profile");
+    }
 }
 
 const FanProfileServiceRegister = GObject.registerClass(
-	{
-		GTypeName: "FanProffileService",
-		Properties: {
-			profile: GObject.ParamSpec.int(
-				"profile",
-				"Profile",
-				"A fan-profile property",
-				GObject.ParamFlags.READWRITE,
-				0,
-				2,
-				0,
-			),
-		},
-		Signals: {},
-	},
-	FanProfileService,
+    {
+        GTypeName: "FanProfileService",
+        Properties: {
+            profile: GObject.ParamSpec.string(
+                "profile",
+                "Profile",
+                "A fan-profile property",
+                GObject.ParamFlags.READWRITE,
+                "balanced",
+            ),
+        },
+        Signals: {},
+    },
+    FanProfileService,
 );
 
 var service: FanProfileService | null = null;
 
 if (available) {
-	service = new FanProfileServiceRegister();
+    service = new FanProfileServiceRegister();
 }
 
 export default service;
