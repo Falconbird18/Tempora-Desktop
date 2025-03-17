@@ -128,6 +128,7 @@ export default () => {
       keymode={Astal.Keymode.EXCLUSIVE}
       name="media"
       namespace="media"
+      className=""
       exclusivity={Astal.Exclusivity.NORMAL}
       anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT}
       application={App}
