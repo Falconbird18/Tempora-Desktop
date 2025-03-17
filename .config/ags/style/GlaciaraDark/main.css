@@ -148,6 +148,7 @@ icon {
   text-shadow: none;
   color: #cad3f5;
   -gtk-icon-shadow: none;
+  font-size: 18px;
 }
 
 image {
@@ -158,7 +159,7 @@ image {
   text-shadow: none;
   color: #cad3f5;
   -gtk-icon-shadow: none;
-  font-size: 24px;
+  font-size: 18px;
 }
 
 slider {
@@ -318,11 +319,16 @@ switch:checked slider {
 }
 
 .primary-button-circular {
+  font-size: 18px;
+  font-weight: 300;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
   background: rgba(54, 61, 73, 0.3098039216);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
   font-family: "Roboto";
-  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
   margin-right: 1px;
   margin-left: 1px;
   border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
@@ -355,6 +361,47 @@ switch:checked slider {
   padding: 0;
   min-height: 42px;
   min-width: 42px;
+}
+
+.primary-button-inactive {
+  font-size: 18px;
+  font-weight: 300;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: rgba(54, 61, 73, 0.3098039216);
+  color: #cad3f5;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+  font-family: "Roboto";
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 1px;
+  margin-left: 1px;
+  border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
+  background-size: unset;
+  border-radius: 30px;
+  text-shadow: none;
+}
+.primary-button-inactive:hover {
+  font-size: 18px;
+  font-weight: 300;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(-45deg, #3979eb, #eb308f);
+  color: #cad3f5;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+  font-family: "Roboto";
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 1px;
+  margin-left: 1px;
+  border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
+  background-size: unset;
+  border-radius: 30px;
+  text-shadow: none;
+}
+.primary-button-inactive:active {
+  background-color: #3979eb;
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
 }
 
 .material-button {
@@ -489,7 +536,7 @@ switch:checked slider {
 .bar__workspaces-indicator:hover {
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
 }
-.bar__workspaces-indicator.active, .bar__workspaces-indicator:active {
+.bar__workspaces-indicator:active {
   font-size: 18px;
   font-weight: 300;
   padding-left: 16px;
@@ -546,8 +593,16 @@ switch:checked slider {
   margin: 0;
 }
 
+.bar-workspaces {
+  min-height: 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+}
+
 /* Box around workspaces with windows */
-.bar__workspaces-active {
+.bar-workspaces-active {
   background-color: rgba(32, 32, 32, 0.3098039216);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
@@ -1896,7 +1951,7 @@ switch:checked slider {
   padding-left: 0;
   padding-right: 0;
 }
-.mode-settings__button_right.hover {
+.mode-settings__button_right:hover {
   background-size: unset;
   background-image: linear-gradient(-45deg, #3979eb, #eb308f);
   text-shadow: none;
@@ -1952,6 +2007,17 @@ switch:checked slider {
   min-width: 75px;
   padding: 0;
 }
+.theme-buttons:hover {
+  background-size: unset;
+  background-image: linear-gradient(-45deg, #3979eb, #eb308f);
+  text-shadow: none;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+}
+.theme-buttons.active {
+  background: #3979eb;
+  box-shadow: 0 0 0 transparent;
+  background-size: unset;
+}
 
 .label {
   font-family: "Roboto";
@@ -1974,6 +2040,226 @@ switch:checked slider {
 .thumbnail-box {
   border-radius: 30px;
   margin: 10px;
+}
+
+.workspace-container {
+  background-color: rgba(32, 32, 32, 0.3098039216);
+  box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
+  border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
+  padding: 10px;
+  border-radius: 30px;
+  margin-bottom: 1px;
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  background-color: rgba(33, 37, 44, 0.1568627451);
+}
+
+.workspace-button {
+  font-size: 18px;
+  font-weight: 300;
+  min-width: 42px;
+  min-height: 42px;
+  background: rgba(32, 32, 32, 0.3098039216);
+  color: #cad3f5;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+  font-family: "Roboto";
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 1px;
+  margin-left: 1px;
+  border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
+  background-size: unset;
+  border-radius: 100%;
+  min-width: 21px;
+  min-height: 21px;
+}
+.workspace-button:hover {
+  background-size: unset;
+  background-image: linear-gradient(-45deg, #3979eb, #eb308f);
+  text-shadow: none;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+}
+
+.advanced-container {
+  background-color: rgba(32, 32, 32, 0.3098039216);
+  box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
+  border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
+  padding: 10px;
+  border-radius: 30px;
+  margin-bottom: 1px;
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  min-width: 360px;
+  padding: 20px;
+}
+
+.setting-box {
+  min-width: 360px;
+  padding: 20px 0;
+}
+
+.add-icon-button {
+  font-size: 18px;
+  font-weight: 300;
+  min-width: 42px;
+  min-height: 42px;
+  background: rgba(32, 32, 32, 0.3098039216);
+  color: #cad3f5;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+  font-family: "Roboto";
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 1px;
+  margin-left: 1px;
+  border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
+  background-size: unset;
+  border-radius: 100%;
+  background-color: rgba(33, 37, 44, 0.1568627451);
+}
+.add-icon-button:hover {
+  background-size: unset;
+  background-image: linear-gradient(-45deg, #3979eb, #eb308f);
+  text-shadow: none;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+}
+.add-icon-button :active {
+  background: #3979eb;
+  box-shadow: 0 0 0 transparent;
+  background-size: unset;
+}
+
+.add-icon-form {
+  background-color: rgba(32, 32, 32, 0.3098039216);
+  box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
+  border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
+  padding: 10px;
+  border-radius: 30px;
+  margin-bottom: 1px;
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  background-color: rgba(33, 37, 44, 0.1568627451);
+  min-width: 320px;
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+.workspace-number-entry,
+.icon-entry {
+  background-color: rgba(32, 32, 32, 0.3098039216);
+  border-radius: 30px;
+  border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
+  padding: 5px;
+  color: #cad3f5;
+  font-family: "Roboto";
+  font-size: 14px;
+  font-weight: 300;
+  box-shadow: 0 0 0 transparent;
+  caret-color: #cad3f5;
+}
+
+.submit-button {
+  font-size: 18px;
+  font-weight: 300;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(-45deg, #3979eb, #eb308f);
+  color: #cad3f5;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+  font-family: "Roboto";
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 1px;
+  margin-left: 1px;
+  border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
+  background-size: unset;
+  border-radius: 30px;
+  text-shadow: none;
+}
+.submit-button:hover {
+  background-color: rgba(32, 32, 32, 0.3098039216);
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+.submit-button:active {
+  background-color: #3979eb;
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+.cancel-button {
+  font-size: 18px;
+  font-weight: 300;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: rgba(32, 32, 32, 0.3098039216);
+  color: #cad3f5;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+  font-family: "Roboto";
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 1px;
+  margin-left: 1px;
+  border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
+  background-size: unset;
+  border-radius: 30px;
+}
+.cancel-button:hover {
+  background-size: unset;
+  background-image: linear-gradient(-45deg, #3979eb, #eb308f);
+  text-shadow: none;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+}
+.cancel-button:active {
+  background: #3979eb;
+  box-shadow: 0 0 0 transparent;
+  background-size: unset;
+}
+
+.icon-card {
+  background-color: rgba(32, 32, 32, 0.3098039216);
+  box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
+  border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
+  padding: 10px;
+  border-radius: 30px;
+  margin-bottom: 1px;
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+.delete-button-hidden {
+  font-size: 18px;
+  font-weight: 300;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(-45deg, #3979eb, #eb308f);
+  color: #cad3f5;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+  font-family: "Roboto";
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 1px;
+  margin-left: 1px;
+  border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
+  background-size: unset;
+  border-radius: 30px;
+  text-shadow: none;
+  opacity: 0;
+}
+.delete-button-hidden:hover {
+  background-color: rgba(32, 32, 32, 0.3098039216);
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  opacity: 1;
+}
+
+.delete-button-visible {
+  font-size: 18px;
+  font-weight: 300;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(-45deg, #3979eb, #eb308f);
+  color: #cad3f5;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+  font-family: "Roboto";
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 1px;
+  margin-left: 1px;
+  border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
+  background-size: unset;
+  border-radius: 30px;
+  text-shadow: none;
+  opacity: 1;
 }
 
 /*Weather*/
@@ -2264,6 +2550,20 @@ switch:checked slider {
 .description {
   font-size: 11px;
   color: #666;
+}
+
+.wallpaper-thumbnails-container {
+  transition: all 0.2s ease-out;
+}
+
+.thumbnail-box {
+  margin: 4px;
+  border-radius: 8px;
+}
+
+.load-more-button {
+  margin: 8px;
+  padding: 8px;
 }
 
 /*# sourceMappingURL=main.css.map */
