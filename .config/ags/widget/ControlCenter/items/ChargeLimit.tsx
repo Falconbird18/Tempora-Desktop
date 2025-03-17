@@ -13,7 +13,7 @@ export default () => {
 
     // Variable to track if charge limiting is enabled
     const isChargeLimitEnabled = Variable(false);
-    // Variable to store the charge limit percentage (default 80%)
+    // Variable to store the charge limit percentage (default 80)
     const chargeLimit = Variable(80);
 
     // Use the battery's built-in icon name and modify if limit is enabled
@@ -27,37 +27,12 @@ export default () => {
     const label = Variable.derive(
         [bind(isChargeLimitEnabled), bind(chargeLimit), bind(bat, "percentage")],
         (limitEnabled, limit, current) =>
-            limitEnabled
-                ? `Limit: ${limit}%`
-                : "No Limit"
+            limitEnabled ? `Limit: ${limit}%` : "No Limit"
     );
 
     // Button class based on limit status
     const buttonClassName = bind(isChargeLimitEnabled).as((enabled) =>
         enabled ? "primary-button-circular active" : "primary-button-circular"
-    );
-
-    // Dropdown menu component
-    const ChargeLimitMenu = () => (
-        <box
-            className="dropdown-menu"
-            orientation={Gtk.Orientation.VERTICAL}
-            spacing={10}
-        >
-            <slider
-                draw_value={true}
-                min={50}
-                max={100}
-                step={5}
-                value={bind(chargeLimit)}
-                onDragged={({ value }) => {
-                    chargeLimit.set(value);
-                    if (isChargeLimitEnabled.get()) {
-                        bat.set_charge_limit?.(value);
-                    }
-                }}
-            />
-        </box>
     );
 
     return (
@@ -67,6 +42,7 @@ export default () => {
                     onClickRelease={() => {
                         const newState = !isChargeLimitEnabled.get();
                         isChargeLimitEnabled.set(newState);
+                        // When disabling, set battery limit to 100
                         bat.set_charge_limit?.(newState ? chargeLimit.get() : 100);
                     }}
                     className={bind(buttonClassName)}
@@ -81,32 +57,32 @@ export default () => {
 
                 <button
                     onClickRelease={(_, event: Astal.ClickEvent) => {
-                        if (event.button == 1) {
-                            revealMenu.set(!revealMenu.get()); // Corrected line
-                            console.log(revealMenu.get()); //This line is optional now
+                        if (event.button === 1) {
+                            revealMenu.set(!revealMenu.get());
                         }
                     }}
                 >
                     <icon icon={icons.ui.arrow.right} className="h1" />
                 </button>
             </box>
-            <box
-                visible={bind(revealMenu)}
-                vertical
-                spacing={spacing}
-            >
+            <box visible={bind(revealMenu)} vertical spacing={spacing}>
                 <label label="Hi" className="h2" />
+                {/* Force remounting with a key so that binding occurs from scratch */}
                 <slider
+                    key={JSON.stringify(revealMenu.get())}
                     draw_value={true}
                     min={50}
                     max={100}
                     step={10}
-                    value={bind(chargeLimit)}
-					className="control-center-slider"
+                    value={chargeLimit.get()}
+                    className="control-center-slider"
                     onDragged={({ value }) => {
-                        chargeLimit.set(value);
+                        // Round the value to the nearest multiple of 10:
+                        console.log(chargeLimit.get());
+                        const roundedValue = Math.round(value / 10) * 10;
+                        chargeLimit.set(roundedValue);
                         if (isChargeLimitEnabled.get()) {
-                            bat.set_charge_limit?.(value);
+                            bat.set_charge_limit?.(roundedValue);
                         }
                     }}
                 />
