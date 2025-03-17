@@ -7,7 +7,7 @@ import icons from "../../../lib/icons";
 import { controlCenterPage } from "../index";
 
 const settingsFile = `${GLib.get_home_dir()}/.config/ags/theme-settings.json`;
-const menuName = "advancedthemes";
+const menuName = "advancedsettings";
 
 // Read settings from disk
 const loadSettings = () => {

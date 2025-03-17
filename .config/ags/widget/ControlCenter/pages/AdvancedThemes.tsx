@@ -174,7 +174,7 @@ const showAddIconForm = Variable(false);
 
 export default () => {
   return (
-    <Page label={"AdvancedThemes"}>
+    <Page label={"AdvancedSettings"}>
       <box
         vertical
         spacing={8}
