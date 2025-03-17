@@ -1102,7 +1102,7 @@ switch:checked slider {
 }
 .control-center-slider trough {
   border-radius: 20px;
-  background-color: red;
+  background: #f5f6f9;
   box-shadow: inset 0px 3px 5px #999999, inset 0px -5px 3px #ffffff;
   min-height: 15px;
 }
@@ -1116,13 +1116,6 @@ switch:checked slider {
   box-shadow: inset 0px 1px 2px #5eff4c, inset 0px -1px 2px #0e974a, 0px -3px 5px #ffffff, 0px 3px 5px #999999;
   padding: 2px 0px;
   margin: -2px 0px;
-}
-
-.control-center-slider trough {
-  border-radius: 20px;
-  background-color: #f5f6f9;
-  box-shadow: inset 0px 3px 5px #999999, inset 0px -5px 3px #ffffff;
-  min-height: 15px;
 }
 
 .muted .control-center__volume-slider highlight {

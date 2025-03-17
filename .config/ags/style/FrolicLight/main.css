@@ -1102,7 +1102,7 @@ switch:checked slider {
 }
 .control-center-slider trough {
   border-radius: 30px;
-  background-color: red;
+  background: #dad3cd;
   box-shadow: 0 0 0 transparent;
   min-height: 15px;
 }
@@ -1116,13 +1116,6 @@ switch:checked slider {
   box-shadow: 0 0 0 transparent;
   padding: 2px 0px;
   margin: -2px 0px;
-}
-
-.control-center-slider trough {
-  border-radius: 30px;
-  background-color: #dad3cd;
-  box-shadow: 0 0 0 transparent;
-  min-height: 15px;
 }
 
 .muted .control-center__volume-slider highlight {
