@@ -17,7 +17,7 @@ import BluetoothButton from "../items/Bluetooth";
 import ScreenSnip from "../items/ScreenSnip";
 import ScreenShot from "../items/ScreenShot";
 import Battery from "gi://AstalBattery";
-import BarItem from "../../Bar/BarItem";
+import ChargeLimit from "../items/ChargeLimit";
 import { controlCenterPage } from "../index";
 import { toggleWindow } from "../../../lib/utils";
 
@@ -79,8 +79,10 @@ export default () => {
     vertical: true,
     children: [
       new Widget.Label({ label: "Performance", className: "h1" }),
-      DND(),
-      FanProfile
+      // DND(),
+      FanProfile,
+      ChargeLimit(),
+
     ].filter(Boolean),
   });
 

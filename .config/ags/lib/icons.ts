@@ -97,6 +97,7 @@ export default {
   },
   ui: {
     add: "list-add",
+    battery: "battery",
     checked: "checkbox-checked",
     close: "window-close",
     colorpicker: "color-select",
