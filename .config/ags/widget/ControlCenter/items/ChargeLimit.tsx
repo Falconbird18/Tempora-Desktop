@@ -70,11 +70,11 @@ export default () => {
                 <label label="Hi" className="h2" />
 
                 <slider
-                    draw_value={true}
+                    draw_value={false}
                     min={50}
                     max={100}
                     step={10}
-                    value={bind(chargeLimit)}  // use reactive binding so the display updates
+                    value={chargeLimit.get()}  // use reactive binding so the display updates
                     className="control-center-slider"
                     onDragged={({ value }) => {
                         // Round the value to the nearest multiple of 10:
@@ -85,9 +85,6 @@ export default () => {
                         }
                     }}
                 />
-
-                {/* Render tick labels below the slider.
-            Note: Remove the inline style—use your CSS to style .slider-tick-container */}
                 <box horizontal className="slider-tick-container">
                     {sliderTickLabels.map((tick, i) => (
                         <label key={i} label={`${tick}`} className="paragraph" expand={true} />
