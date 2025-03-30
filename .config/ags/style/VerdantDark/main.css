@@ -148,6 +148,7 @@ icon {
   text-shadow: none;
   color: #F5CCED;
   -gtk-icon-shadow: none;
+  font-size: 18px;
 }
 
 image {
@@ -158,6 +159,7 @@ image {
   text-shadow: none;
   color: #F5CCED;
   -gtk-icon-shadow: none;
+  font-size: 18px;
 }
 
 slider {
@@ -317,11 +319,16 @@ switch:checked slider {
 }
 
 .primary-button-circular {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
   background: #704367;
   color: #F5CCED;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
-  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
   margin-right: 5px;
   margin-left: 5px;
   border: none;
@@ -354,6 +361,47 @@ switch:checked slider {
   padding: 0;
   min-height: 42px;
   min-width: 42px;
+}
+
+.primary-button-inactive {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: #704367;
+  color: #F5CCED;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 8px;
+  text-shadow: none;
+}
+.primary-button-inactive:hover {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(45deg, #E012BA 25%, #E012BA 25%, #E012BA 50%, #E012BA 50%, #E012BA 75%, #E012BA 75%, #E012BA);
+  color: #F5CCED;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 8px;
+  text-shadow: none;
+}
+.primary-button-inactive:active {
+  background-color: #E012BA;
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 
 .material-button {
@@ -474,9 +522,11 @@ switch:checked slider {
 
 .bar__workspaces-indicator {
   padding: 0;
-  min-width: 8px;
-  min-height: 8px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+.bar__workspaces-indicator.dot {
+  min-width: 11px;
+  min-height: 11px;
   border-radius: 8px;
   background-color: #704367;
   box-shadow: 0 0 0 transparent;
@@ -486,9 +536,7 @@ switch:checked slider {
 .bar__workspaces-indicator:hover {
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
 }
-.bar__workspaces-indicator.active, .bar__workspaces-indicator:active {
-  min-height: 12px;
-  min-width: 40px;
+.bar__workspaces-indicator:active {
   font-size: 18px;
   font-weight: normal;
   padding-left: 16px;
@@ -506,7 +554,155 @@ switch:checked slider {
   border-radius: 8px;
   text-shadow: none;
   padding: 0;
-  min-height: 10px;
+  min-height: 14px;
+  min-width: 28px;
+}
+
+/* Number mode */
+.bar__workspaces-indicator-number {
+  min-width: 14px;
+  min-height: 14px;
+  background-color: transparent;
+  font-family: "Open sans";
+  font-weight: normal;
+  font-size: 18px;
+  color: #F5CCED;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.bar__workspaces-indicator-number.active {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(45deg, #E012BA 25%, #E012BA 25%, #E012BA 50%, #E012BA 50%, #E012BA 75%, #E012BA 75%, #E012BA);
+  color: #F5CCED;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 8px;
+  text-shadow: none;
+  min-width: 21px;
+  min-height: 14px;
+  padding: 0;
+  margin: 0;
+}
+
+.bar-workspaces {
+  min-height: 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+}
+
+/* Box around workspaces with windows */
+.bar-workspaces-active {
+  background-color: #433D42;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  min-height: 21px;
+  min-width: 21px;
+  padding: 0;
+  margin: 0;
+  background-color: #50494F;
+}
+
+.bar__workspaces-indicator {
+  padding: 0;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+.bar__workspaces-indicator.dot {
+  min-width: 11px;
+  min-height: 11px;
+  border-radius: 8px;
+  background-color: #704367;
+  box-shadow: 0 0 0 transparent;
+  border: none;
+  background-size: 8px 8px;
+}
+.bar__workspaces-indicator:hover {
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+}
+.bar__workspaces-indicator.active, .bar__workspaces-indicator:active {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(45deg, #E012BA 25%, #E012BA 25%, #E012BA 50%, #E012BA 50%, #E012BA 75%, #E012BA 75%, #E012BA);
+  color: #F5CCED;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 8px;
+  text-shadow: none;
+  padding: 0;
+  min-height: 14px;
+  min-width: 28px;
+}
+
+/* Number mode */
+.bar__workspaces-indicator-number {
+  min-width: 14px;
+  min-height: 14px;
+  background-color: transparent;
+  font-family: "Open sans";
+  font-weight: normal;
+  font-size: 18px;
+  color: #F5CCED;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.bar__workspaces-indicator-number.active {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(45deg, #E012BA 25%, #E012BA 25%, #E012BA 50%, #E012BA 50%, #E012BA 75%, #E012BA 75%, #E012BA);
+  color: #F5CCED;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 8px;
+  text-shadow: none;
+  min-width: 21px;
+  min-height: 14px;
+  padding: 0;
+  margin: 0;
+}
+
+/* Box around workspaces with windows */
+.bar__workspaces-active {
+  background-color: #433D42;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  min-height: 21px;
+  min-width: 21px;
+  padding: 0;
+  background-color: #50494F;
 }
 
 .bar__active-app {
@@ -906,7 +1102,7 @@ switch:checked slider {
 }
 .control-center-slider trough {
   border-radius: 8px;
-  background-color: #704367;
+  background: #704367;
   box-shadow: 0 0 0 transparent;
   min-height: 15px;
 }
@@ -1748,7 +1944,7 @@ switch:checked slider {
   padding-left: 0;
   padding-right: 0;
 }
-.mode-settings__button_right.hover {
+.mode-settings__button_right:hover {
   background-size: 8px 8px;
   background-image: linear-gradient(45deg, #E012BA 25%, #E012BA 25%, #E012BA 50%, #E012BA 50%, #E012BA 75%, #E012BA 75%, #E012BA);
   text-shadow: none;
@@ -1804,6 +2000,17 @@ switch:checked slider {
   min-width: 75px;
   padding: 0;
 }
+.theme-buttons:hover {
+  background-size: 8px 8px;
+  background-image: linear-gradient(45deg, #E012BA 25%, #E012BA 25%, #E012BA 50%, #E012BA 50%, #E012BA 75%, #E012BA 75%, #E012BA);
+  text-shadow: none;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+}
+.theme-buttons.active {
+  background: #E012BA;
+  box-shadow: 0 0 0 transparent;
+  background-size: 8px 8px;
+}
 
 .label {
   font-family: "Open sans";
@@ -1826,6 +2033,226 @@ switch:checked slider {
 .thumbnail-box {
   border-radius: 4px;
   margin: 10px;
+}
+
+.workspace-container {
+  background-color: #433D42;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  background-color: #50494F;
+}
+
+.workspace-button {
+  font-size: 18px;
+  font-weight: normal;
+  min-width: 42px;
+  min-height: 42px;
+  background: #433D42;
+  color: #F5CCED;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 100%;
+  min-width: 21px;
+  min-height: 21px;
+}
+.workspace-button:hover {
+  background-size: 8px 8px;
+  background-image: linear-gradient(45deg, #E012BA 25%, #E012BA 25%, #E012BA 50%, #E012BA 50%, #E012BA 75%, #E012BA 75%, #E012BA);
+  text-shadow: none;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+}
+
+.advanced-container {
+  background-color: #433D42;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  min-width: 360px;
+  padding: 20px;
+}
+
+.setting-box {
+  min-width: 360px;
+  padding: 20px 0;
+}
+
+.add-icon-button {
+  font-size: 18px;
+  font-weight: normal;
+  min-width: 42px;
+  min-height: 42px;
+  background: #433D42;
+  color: #F5CCED;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 100%;
+  background-color: #50494F;
+}
+.add-icon-button:hover {
+  background-size: 8px 8px;
+  background-image: linear-gradient(45deg, #E012BA 25%, #E012BA 25%, #E012BA 50%, #E012BA 50%, #E012BA 75%, #E012BA 75%, #E012BA);
+  text-shadow: none;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+}
+.add-icon-button :active {
+  background: #E012BA;
+  box-shadow: 0 0 0 transparent;
+  background-size: 8px 8px;
+}
+
+.add-icon-form {
+  background-color: #433D42;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  background-color: #50494F;
+  min-width: 320px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.workspace-number-entry,
+.icon-entry {
+  background-color: #433D42;
+  border-radius: 4px;
+  border: none;
+  padding: 5px;
+  color: #F5CCED;
+  font-family: "Open sans";
+  font-size: 14px;
+  font-weight: 300;
+  box-shadow: 0 0 0 transparent;
+  caret-color: #F5CCED;
+}
+
+.submit-button {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(45deg, #E012BA 25%, #E012BA 25%, #E012BA 50%, #E012BA 50%, #E012BA 75%, #E012BA 75%, #E012BA);
+  color: #F5CCED;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 8px;
+  text-shadow: none;
+}
+.submit-button:hover {
+  background-color: #433D42;
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+.submit-button:active {
+  background-color: #E012BA;
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.cancel-button {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: #433D42;
+  color: #F5CCED;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 8px;
+}
+.cancel-button:hover {
+  background-size: 8px 8px;
+  background-image: linear-gradient(45deg, #E012BA 25%, #E012BA 25%, #E012BA 50%, #E012BA 50%, #E012BA 75%, #E012BA 75%, #E012BA);
+  text-shadow: none;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+}
+.cancel-button:active {
+  background: #E012BA;
+  box-shadow: 0 0 0 transparent;
+  background-size: 8px 8px;
+}
+
+.icon-card {
+  background-color: #433D42;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.delete-button-hidden {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(45deg, #E012BA 25%, #E012BA 25%, #E012BA 50%, #E012BA 50%, #E012BA 75%, #E012BA 75%, #E012BA);
+  color: #F5CCED;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 8px;
+  text-shadow: none;
+  opacity: 0;
+}
+.delete-button-hidden:hover {
+  background-color: #433D42;
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  opacity: 1;
+}
+
+.delete-button-visible {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: linear-gradient(45deg, #E012BA 25%, #E012BA 25%, #E012BA 50%, #E012BA 50%, #E012BA 75%, #E012BA 75%, #E012BA);
+  color: #F5CCED;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 8px;
+  text-shadow: none;
+  opacity: 1;
 }
 
 /*Weather*/
@@ -2116,6 +2543,20 @@ switch:checked slider {
 .description {
   font-size: 11px;
   color: #666;
+}
+
+.wallpaper-thumbnails-container {
+  transition: all 0.2s ease-out;
+}
+
+.thumbnail-box {
+  margin: 4px;
+  border-radius: 8px;
+}
+
+.load-more-button {
+  margin: 8px;
+  padding: 8px;
 }
 
 /*# sourceMappingURL=main.css.map */

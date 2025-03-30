@@ -2,6 +2,7 @@ import { App, Astal, Gtk, Gdk } from "astal/gtk3";
 import Workspaces from "./items/Workspaces";
 import { spacing } from "../../lib/variables";
 import ActiveApp from "./items/ActiveApp";
+import Submap from "./items/Submap";
 import Clock from "./items/Clock";
 import Tray from "./items/Tray";
 import SystemIndicators from "./items/SystemIndicators";
@@ -18,6 +19,7 @@ const Start = () => {
     <box halign={Gtk.Align.START} spacing={spacing}>
       <SideBar />
       <Workspaces />
+      <Submap />
       <ActiveApp />
     </box>
   );
