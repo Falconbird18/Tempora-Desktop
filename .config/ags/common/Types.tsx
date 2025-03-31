@@ -26,3 +26,19 @@ export class Spinner extends astalify(Gtk.Spinner) {
 		super(props as any);
 	}
 }
+
+export class ComboBoxText extends astalify(Gtk.ComboBoxText) {
+    static {
+        GObject.registerClass(this);
+    }
+
+    constructor(
+        props: ConstructProps<Gtk.ComboBoxText, Gtk.ComboBoxText.ConstructorProps>,
+    ) {
+        super(props as any);
+    }
+
+    appendText(text: string) {
+        this.appendText(null, text); // The first argument is an optional ID
+    }
+}
