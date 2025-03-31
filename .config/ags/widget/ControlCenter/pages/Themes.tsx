@@ -11,9 +11,9 @@ import { controlCenterPage } from "../index";
 const settingsFile = `${GLib.get_home_dir()}/.config/ags/theme-settings.json`;
 const menuName = "advancedsettings";
 
-// --- Thumbnail Configuration ---
 const THUMBNAIL_SIZE = 160; // Desired thumbnail size in pixels
 const THUMBNAIL_CACHE_DIR = `${GLib.get_user_cache_dir()}/ags/thumbnails/wallpapers`;
+const homeDir = GLib.get_home_dir();
 
 // Ensures a directory exists
 const ensureDir = (dirPath: string) => {
@@ -71,12 +71,37 @@ const loadSettings = () => {
   };
 };
 
-const saveSettings = (theme: string, mode: string, slideshow: boolean, wallpaper: string, wallpaperDirectory: string) => {
+const saveSettings = (
+  theme: string,
+  mode: string,
+  slideshow: boolean,
+  wallpaper: string,
+  wallpaperDirectory: string,
+  workspaces: number,
+  numbers: boolean,
+  hideEmptyWorkspaces: boolean,
+  workspaceIcons: { [key: number]: string },
+) => {
   try {
     const file = Gio.File.new_for_path(settingsFile);
-    ensureDir(GLib.path_get_dirname(settingsFile)); // Ensure config dir exists
-    const contents = JSON.stringify({ theme, mode, slideshow, wallpaper, wallpaperDirectory }, null, 2); // Pretty print JSON
-    file.replace_contents(contents, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+    const contents = JSON.stringify({
+      theme,
+      mode,
+      slideshow,
+      wallpaper,
+      wallpaperDirectory,
+      workspaces,
+      numbers,
+      hideEmptyWorkspaces,
+      workspaceIcons,
+    });
+    file.replace_contents(
+      contents,
+      null,
+      false,
+      Gio.FileCreateFlags.NONE,
+      null,
+    );
   } catch (e) {
     console.error("Failed to save settings:", e);
   }
@@ -89,28 +114,33 @@ export const currentMode = Variable(settings.mode);
 export const slideshow = Variable(settings.slideshow);
 export const wallpaperImage = Variable(settings.wallpaper);
 export const wallpaperFolder = Variable(settings.wallpaperDirectory);
+export const totalWorkspaces = Variable(settings.workspaces);
+export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
+export const settingsChanged = Variable(0);
+export const showNumbers = Variable(settings.numbers);
+export const workspaceIcons = Variable(settings.workspaceIcons || {});
 
 
 const setTheme = (theme: string, mode: string) => {
   currentTheme.set(theme);
   currentMode.set(mode);
-  saveSettings(theme, mode, slideshow.get(), wallpaperImage.get(), wallpaperFolder.get());
+  saveSettings(theme, mode, slideshow.get(), wallpaperImage.get(), wallpaperFolder.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
   // Apply theme changes immediately (assuming this is handled elsewhere based on variables)
 };
 
 const setSlideshow = (isSlideshow: boolean) => {
   slideshow.set(isSlideshow);
-  saveSettings(currentTheme.get(), currentMode.get(), isSlideshow, wallpaperImage.get(), wallpaperFolder.get());
+  saveSettings(currentTheme.get(), currentMode.get(), isSlideshow, wallpaperImage.get(), wallpaperFolder.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
   // Handle slideshow logic (start/stop timers etc.)
 };
 
 const setWallpaper = (wallpaperName: string) => { // Expecting just the filename now
   wallpaperImage.set(wallpaperName);
-  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperName, wallpaperFolder.get());
+  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperName, wallpaperFolder.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
   console.log(`Setting Wallpaper to: ${wallpaperName}`);
 
   const wallpaperImagePath = `${wallpaperFolder.get()}/${wallpaperName}`;
-  const destinationDir = "/usr/share/sddm/themes/frolic/Backgrounds"; // Use variable for clarity
+  const destinationDir = `${homeDir}/.config/ags/`
   const destinationPath = `${destinationDir}/wallpaper.jpg`;
 
   // Check if source file exists
@@ -124,11 +154,11 @@ const setWallpaper = (wallpaperName: string) => { // Expecting just the filename
 
   // Use pkexec for privilege escalation if needed, or notify user to run command manually.
   // Direct `exec` might fail due to permissions.
-  const copyCommand = `pkexec cp "${wallpaperImagePath}" "${destinationPath}"`;
+  const copyCommand = `exec cp "${wallpaperImagePath}" "${destinationPath}"`;
   const swwwCommand = `swww img "${destinationPath}" --transition-step 100 --transition-fps 120 --transition-type grow --transition-angle 30 --transition-duration 1`;
 
   // Ensure destination directory exists (needs sudo/pkexec)
-  exec(['pkexec', 'mkdir', '-p', destinationDir])
+  exec([ 'mkdir', '-p', destinationDir])
     .then(() => exec(['bash', '-c', copyCommand])) // Copy the wallpaper
     .then(() => exec(['bash', '-c', swwwCommand])) // Set the wallpaper via swww
     .then(() => console.log("Wallpaper set successfully."))
@@ -145,7 +175,7 @@ const setWallpaperDirectory = (wallpaperDirectory: string) => {
 
   wallpaperFolder.set(wallpaperDirectory);
   // For simplicity, let's keep the current wallpaper setting but it might become invalid.
-  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperImage.get(), wallpaperDirectory);
+  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperImage.get(), wallpaperDirectory, totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
 
   console.log("Wallpaper directory set. UI refresh might be needed manually.");
 
@@ -226,6 +256,8 @@ export default () => {
   ensureDir(THUMBNAIL_CACHE_DIR);
 
   const imagePaths = Variable<string[]>([]);
+
+  generateThumbnailAsync(imagePaths, THUMBNAIL_CACHE_DIR, THUMBNAIL_SIZE);
 
   const updateImageList = () => {
     const currentDir = wallpaperFolder.get();
