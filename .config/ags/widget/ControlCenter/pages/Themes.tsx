@@ -62,8 +62,12 @@ const loadSettings = () => {
     theme: "Frolic",
     mode: "Light",
     slideshow: false,
-    wallpaper: "default.jpg", // Provide a sensible default if needed
-    wallpaperDirectory: GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES) || `${GLib.get_home_dir()}/Pictures`,
+    wallpaper: "747.jpg",
+    wallpaperDirectory: "/home/austin/Pictures/wallpapers",
+    workspaces: 10,
+    numbers: false,
+    hideEmptyWorkspaces: false,
+    workspaceIcons: {},
   };
 };
 
@@ -249,7 +253,7 @@ export default () => {
 
       self.children = rows.map((row, rowIndex) => new Widget.Box({
         key: `row-${rowIndex}`,
-        homogeneous: true,
+        homogeneous: false,
         spacing: spacing / 2,
         className: "wallpaper-thumbnail-row",
         children: row.map((imagePath) => {

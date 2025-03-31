@@ -2,6 +2,10 @@
   "theme": "Frolic",
   "mode": "Light",
   "slideshow": false,
-  "wallpaper": "peter-hammer-v2lJbPVMqr8-unsplash.jpg",
-  "wallpaperDirectory": "/home/austin/Pictures/wallpapers/"
+  "wallpaper": "Iain-small.png",
+  "wallpaperDirectory": "/home/austin/Pictures",
+  "workspaces": 10,
+  "numbers": false,
+  "hideEmptyWorkspaces": false,
+  "workspaceIcons": {}
 }
