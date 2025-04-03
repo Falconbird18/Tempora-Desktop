@@ -1,6 +1,7 @@
 import Gio from "gi://Gio";
 import GLib from "gi://GLib"; // Import GLib for user directories
 import ControlCenterButton from "../../../common/WideButton";
+import { toggleWindow } from "../../../lib/utils";
 import icons from "../../../lib/icons";
 
 const takeScreenshot = () => {
@@ -17,7 +18,7 @@ const takeScreenshot = () => {
     if (!GLib.file_test(`${picturesDir}/Screenshots`, GLib.FileTest.IS_DIR)) {
       GLib.mkdir_with_parents(`${picturesDir}/Screenshot`, 0o755);
     }
-    
+
     // Create a subprocess to run the `grim` command
     const subprocess = Gio.Subprocess.new(
       ["grim", screenshotPath],
@@ -42,7 +43,9 @@ export default () => {
   return (
     <ControlCenterButton
       icon={icons.screenshot}
-      onClick={takeScreenshot} // Trigger the screenshot function on click
+      onClicked={() => {
+        toggleWindow("screenshot");
+      }}
     />
   );
 };

@@ -20,9 +20,6 @@ export default function Workspaces() {
   let containers = new Map<number, any>();
 
   const createWorkspaceButton = (id: number) => {
-    const icons = workspaceIcons.get();
-    const icon = icons[id];
-
     return (
       <button
         key={`workspace-btn-${id}`}
@@ -30,11 +27,7 @@ export default function Workspaces() {
         valign={Gtk.Align.CENTER}
         onClicked={() => focusWorkspace(id)}
       >
-        {icon ? (
-          <label label={icon} />
-        ) : showNumbers.get() ? (
-          <label label={id.toString()} />
-        ) : null}
+        {/* Label will be added/updated in updateButton */}
       </button>
     );
   };
@@ -91,6 +84,10 @@ export default function Workspaces() {
       if (button.child) {
         if (button.child.label !== undefined) {
           button.child.label = icon;
+        } else {
+          // Replace existing child if it's not a label
+          if (button.remove && button.child) button.remove(button.child);
+          button.child = <label label={icon} />;
         }
       } else {
         button.child = <label label={icon} />;
@@ -99,6 +96,10 @@ export default function Workspaces() {
       if (button.child) {
         if (button.child.label !== undefined) {
           button.child.label = id.toString();
+        } else {
+          // Replace existing child if it's not a label
+          if (button.remove && button.child) button.remove(button.child);
+          button.child = <label label={id.toString()} />;
         }
       } else {
         button.child = <label label={id.toString()} />;

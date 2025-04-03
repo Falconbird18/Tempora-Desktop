@@ -99,7 +99,7 @@ export default {
     add: "list-add",
     battery: "battery",
     checked: "checkbox-checked",
-    close: "window-close",
+    close: "window-close-symbolic",
     colorpicker: "color-select",
     edit: "document-edit",
     info: "info",

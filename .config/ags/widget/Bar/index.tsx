@@ -51,13 +51,14 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
   return (
     <window
       vexpand={true}
+      vertical={true}
       className="Bar"
       namespace="bar"
       gdkmonitor={gdkmonitor}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
       anchor={
-        Astal.WindowAnchor.TOP |
         Astal.WindowAnchor.LEFT |
+        Astal.WindowAnchor.TOP |
         Astal.WindowAnchor.RIGHT
       }
       application={App}

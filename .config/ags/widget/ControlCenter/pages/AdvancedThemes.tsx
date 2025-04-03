@@ -1,10 +1,10 @@
 import Page from "../Page";
 import { App, Gtk, Gdk, Widget } from "astal/gtk3";
-import { bind, execAsync, timeout, Variable, exec } from "astal";
+import { bind, execAsync, timeout, Variable, exec, GObject } from "astal";
 const { GLib, Gio } = imports.gi;
 import { spacing } from "../../../lib/variables";
 import icons from "../../../lib/icons";
-import { ComboBox, ComboBoxText } from "../../../common/Types";
+// import { ComboBox, ComboBoxEntry, ComboBoxText } from "../../../common/Types";
 
 const settingsFile = `${GLib.get_home_dir()}/.config/ags/theme-settings.json`;
 
@@ -172,7 +172,6 @@ const removeWorkspaceIcon = (workspaceId: number) => {
 };
 
 const showAddIconForm = Variable(false);
-
 
 export default () => {
   return (
@@ -401,12 +400,6 @@ export default () => {
               );
             }),
           )}
-<ComboBox>
-  <ComboBoxText>
-      <label label="Hi"/>
-      <label label="Hi2"/>
-  </ComboBoxText>
-</ComboBox>
         </box>
       </box>
     </Page >

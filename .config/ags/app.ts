@@ -13,6 +13,7 @@ import Media from "./widget/media/Media";
 import SideBar from "./widget/SideBar/SideBar";
 import Keybinds from "./widget/Popups/menus/Keybinds";
 import Clipboard from "./widget/Popups/menus/Clipboard";
+import Screenshot from "./widget/Screenshot/Screenshot";
 import Notifications from "./widget/Notifications";
 import OSD from "./widget/OSD";
 import { toggleWindow } from "./lib/utils";
@@ -106,6 +107,7 @@ function main() {
   SideBar();
   Keybinds();
   Clipboard();
+  Screenshot();
   ControlCenter();
   Scrim({ scrimType: "opaque", className: "scrim" });
   Scrim({ scrimType: "transparent", className: "transparent-scrim" });
