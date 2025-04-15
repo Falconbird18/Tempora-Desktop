@@ -1195,8 +1195,9 @@ switch:checked slider {
   margin-top: 12px;
   padding: 10px;
   font-family: "Roboto";
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 300;
+  color: red;
 }
 
 .calendar__monthyear * {
@@ -1210,6 +1211,13 @@ switch:checked slider {
   color: #cad3f5;
   color: red;
   font-size: 100px;
+}
+
+.calendar__header-days {
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Roboto";
+  color: #cad3f5;
 }
 
 .calendar__days {

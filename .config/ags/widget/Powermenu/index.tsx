@@ -3,12 +3,12 @@ import { App } from "astal/gtk3";
 import { spacing } from "../../lib/variables";
 import { exec } from "astal";
 import { toggleWindow } from "../../lib/utils";
-import { selectedAction } from "../ControlCenter/items/ShutDownMenu"; // import shared state
+import { Command } from "../ControlCenter/items/ShutDownMenu";
 
 // Mapping action keys to system commands
 const actionCommands: Record<string, string> = {
   reboot: "systemctl reboot",
-  shutdown: "shutdown now",
+  shutdown: "systemctl shutdown",
   sleep: "systemctl suspend",
   logout: "hyprctl dispatch exit",
 };
@@ -32,17 +32,23 @@ const ConfirmationPopup = (
   { onConfirm, onCancel }: ConfirmationPopupProps = {}
 ) => {
   // Retrieve the currently selected action from shared state
-  const actionKey = selectedAction.value;
+  const actionKey = Command.value; // Access the VALUE of Command!
+  console.log(`Command received: ${Command.value}`); // Log the VALUE of Command!
   const labelText = actionKey ? actionLabels[actionKey] : "Confirm";
 
   const confirmAction = () => {
     if (actionKey) {
-      exec(actionCommands[actionKey]).catch((error) => {
+      const command = actionCommands[actionKey];
+      exec(command).catch((error) => {
         console.error(`Error executing ${actionKey} command:`, error);
       });
+      console.log(`Executing Command: ${command}`); // Log the actual command here
+      toggleWindow("confirmationPopup");
+      onConfirm && onConfirm();
+    } else {
+      console.error("No action selected to confirm.");
+      toggleWindow("confirmationPopup");
     }
-    toggleWindow("confirmationPopup");
-    onConfirm && onConfirm();
   };
 
   const cancelAction = () => {

@@ -31,7 +31,9 @@ const models: ModelDefinition[] = [
   { type: "llm", name: "phi3" },
   { type: "llm", name: "gemini" },
   { type: "web", name: "chatgpt", url: "https://chat.openai.com" },
-  { type: "web", name: "claude", url: "https://google.com" },
+  { type: "web", name: "meta", url: "https://meta.ai"},
+  { type: "web", name: "grok", url: "https://grok.com" },
+  { type: "web", name: "copilot", url: "https://copilot.microsoft.com" },
 ];
 
 const modelIcons = {
@@ -40,7 +42,9 @@ const modelIcons = {
   phi3: icons.models.phi3 || "dialog-warning-symbolic",
   gemini: icons.models.gemini || "dialog-question-symbolic",
   chatgpt: icons.models.chatgpt || "dialog-chat-symbolic",
-  claude: icons.models.claude || "dialog-user-symbolic",
+  grok: icons.models.claude || "dialog-user-symbolic",
+  copilot: icons.models.claude || "dialog-user-symbolic",
+  meta: icons.models.claude || "dialog-user-symbolic",
 };
 
 function loadGeminiApiKey(): string {

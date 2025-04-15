@@ -154,7 +154,7 @@ const setWallpaper = (wallpaperName: string) => { // Expecting just the filename
 
   // Use pkexec for privilege escalation if needed, or notify user to run command manually.
   // Direct `exec` might fail due to permissions.
-  const copyCommand = `exec cp "${wallpaperImagePath}" "${destinationPath}"`;
+  const copyCommand = `cp "${wallpaperImagePath}" "${destinationPath}"`;
   const swwwCommand = `swww img "${destinationPath}" --transition-step 100 --transition-fps 120 --transition-type grow --transition-angle 30 --transition-duration 1`;
 
   // Ensure destination directory exists (needs sudo/pkexec)

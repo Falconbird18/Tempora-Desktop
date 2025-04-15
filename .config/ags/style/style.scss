@@ -1105,9 +1105,10 @@ switch:checked slider {
 .calendar__header {
     margin-top: 12px;
     padding: 10px;
-    font-family: $h1_font;
-    font-size: $h1_size;
-    font-weight: $h1_weight;
+    font-family: $h2_font;
+    font-size: $h2_size;
+    font-weight: $h2_weight;
+    color: red;
 }
 
 .calendar__monthyear {
@@ -1125,9 +1126,11 @@ switch:checked slider {
     font-size: 100px;
 }
 
-.calendar__days {
+.calendar__header-days {
+    font-size: $h3_size;
+    font-weight: $h3_weight;
+    font-family: $h3_font;
     color: $text;
-    font-size: 100px;
 }
 
 .calendar__button {

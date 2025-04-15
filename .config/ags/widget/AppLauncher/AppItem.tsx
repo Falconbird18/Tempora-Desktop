@@ -1,4 +1,4 @@
-import { App, Gtk, Widget } from "astal/gtk3"; // Add Utils for clipboard
+import { App, Gtk, Widget } from "astal/gtk3";
 import AstalApps from "gi://AstalApps?version=0.1";
 
 export default (app: AstalApps.Application) => {
