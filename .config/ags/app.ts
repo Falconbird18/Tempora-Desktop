@@ -24,6 +24,7 @@ import Verification from "./widget/Powermenu/Verification";
 import Powermenu from "./widget/Powermenu";
 import ScreenRecordService from "./service/ScreenRecord";
 import Dashboard from "./widget/Dashboard";
+import { initBingImageService } from "./lib/bing";
 
 const applyTheme = async () => {
   const homeDir = GLib.get_home_dir();
@@ -140,6 +141,7 @@ function main() {
   });
 
   applyTheme();
+  initBingImageService();
 
   currentTheme.subscribe(applyTheme);
   currentMode.subscribe(applyTheme);

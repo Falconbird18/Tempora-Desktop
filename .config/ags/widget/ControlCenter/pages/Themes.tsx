@@ -10,6 +10,7 @@ import { controlCenterPage } from "../index";
 
 const settingsFile = `${GLib.get_home_dir()}/.config/ags/theme-settings.json`;
 const menuName = "advancedsettings";
+const bingWallpaperPath = `${GLib.get_home_dir()}/.config/ags/bing.jpg`;
 
 const THUMBNAIL_SIZE = 160; // Desired thumbnail size in pixels
 const THUMBNAIL_CACHE_DIR = `${GLib.get_user_cache_dir()}/ags/thumbnails/wallpapers`;
@@ -64,6 +65,7 @@ const loadSettings = () => {
     slideshow: false,
     wallpaper: "747.jpg",
     wallpaperDirectory: "/home/austin/Pictures/wallpapers",
+    useBingWallpaper: false,
     workspaces: 10,
     numbers: false,
     hideEmptyWorkspaces: false,
@@ -77,6 +79,7 @@ const saveSettings = (
   slideshow: boolean,
   wallpaper: string,
   wallpaperDirectory: string,
+  useBingWallpaper: boolean,
   workspaces: number,
   numbers: boolean,
   hideEmptyWorkspaces: boolean,
@@ -90,6 +93,7 @@ const saveSettings = (
       slideshow,
       wallpaper,
       wallpaperDirectory,
+      useBingWallpaper,
       workspaces,
       numbers,
       hideEmptyWorkspaces,
@@ -114,6 +118,7 @@ export const currentMode = Variable(settings.mode);
 export const slideshow = Variable(settings.slideshow);
 export const wallpaperImage = Variable(settings.wallpaper);
 export const wallpaperFolder = Variable(settings.wallpaperDirectory);
+export const useBing = Variable(settings.useBingWallpaper);
 export const totalWorkspaces = Variable(settings.workspaces);
 export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
 export const settingsChanged = Variable(0);
@@ -124,19 +129,19 @@ export const workspaceIcons = Variable(settings.workspaceIcons || {});
 const setTheme = (theme: string, mode: string) => {
   currentTheme.set(theme);
   currentMode.set(mode);
-  saveSettings(theme, mode, slideshow.get(), wallpaperImage.get(), wallpaperFolder.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
+  saveSettings(theme, mode, slideshow.get(), wallpaperImage.get(), wallpaperFolder.get(), useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
   // Apply theme changes immediately (assuming this is handled elsewhere based on variables)
 };
 
 const setSlideshow = (isSlideshow: boolean) => {
   slideshow.set(isSlideshow);
-  saveSettings(currentTheme.get(), currentMode.get(), isSlideshow, wallpaperImage.get(), wallpaperFolder.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
+  saveSettings(currentTheme.get(), currentMode.get(), isSlideshow, wallpaperImage.get(), wallpaperFolder.get(), useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
   // Handle slideshow logic (start/stop timers etc.)
 };
 
 const setWallpaper = (wallpaperName: string) => { // Expecting just the filename now
   wallpaperImage.set(wallpaperName);
-  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperName, wallpaperFolder.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
+  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperName, wallpaperFolder.get(), useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
   console.log(`Setting Wallpaper to: ${wallpaperName}`);
 
   const wallpaperImagePath = `${wallpaperFolder.get()}/${wallpaperName}`;
@@ -154,7 +159,7 @@ const setWallpaper = (wallpaperName: string) => { // Expecting just the filename
 
   // Use pkexec for privilege escalation if needed, or notify user to run command manually.
   // Direct `exec` might fail due to permissions.
-  const copyCommand = `exec cp "${wallpaperImagePath}" "${destinationPath}"`;
+  const copyCommand = `cp "${wallpaperImagePath}" "${destinationPath}"`;
   const swwwCommand = `swww img "${destinationPath}" --transition-step 100 --transition-fps 120 --transition-type grow --transition-angle 30 --transition-duration 1`;
 
   // Ensure destination directory exists (needs sudo/pkexec)
@@ -167,45 +172,6 @@ const setWallpaper = (wallpaperName: string) => { // Expecting just the filename
       // Optionally show an error notification
       // Notif.notify({ title: "Wallpaper Error", body: "Failed to set wallpaper. Check permissions or logs." });
     });
-};
-
-const setWallpaperDirectory = (wallpaperDirectory: string) => {
-  const oldDirectory = wallpaperFolder.get();
-  if (oldDirectory === wallpaperDirectory) return; // No change
-
-  wallpaperFolder.set(wallpaperDirectory);
-  // For simplicity, let's keep the current wallpaper setting but it might become invalid.
-  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperImage.get(), wallpaperDirectory, totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
-
-  console.log("Wallpaper directory set. UI refresh might be needed manually.");
-
-};
-
-const chooseWallpaperDirectory = () => {
-  const chooser = Gtk.FileChooserDialog.new(
-    "Choose Wallpaper Directory",
-    App.getWindow("control-center"), // Parent window if available
-    Gtk.FileChooserAction.SELECT_FOLDER,
-    null // No buttons initially
-  );
-  chooser.add_button("Cancel", Gtk.ResponseType.CANCEL);
-  chooser.add_button("Select", Gtk.ResponseType.ACCEPT);
-
-  // Set current directory
-  chooser.set_current_folder(wallpaperFolder.get());
-
-  chooser.set_modal(true); // Usually better for dialogs like this
-
-  chooser.connect("response", (dialog, response) => {
-    if (response === Gtk.ResponseType.ACCEPT) {
-      const file = dialog.get_filename();
-      if (file) {
-        setWallpaperDirectory(file);
-      }
-    }
-    dialog.destroy();
-  });
-  chooser.show_all();
 };
 
 // Gets FULL PATHS of valid image files in the directory
@@ -251,74 +217,157 @@ const chunkArray = <T,>(arr: T[], size: number): T[][] => {
   }, []);
 };
 
+const buildThumbnailGridChildren = (paths: string[]) => {
+  console.log("Building thumbnail grid children for paths:", paths);
+  const rows = chunkArray(paths, 2);
+
+  return rows.map((row, rowIndex) => new Widget.Box({
+      key: `row-${rowIndex}`,
+      homogeneous: true,
+      spacing: spacing / 2,
+      className: "wallpaper-thumbnail-row",
+      children: row.map((imagePath) => {
+          const imageName = GLib.path_get_basename(imagePath);
+          const thumbPath = getThumbnailPath(imagePath);
+
+          // Always force thumbnail generation if it doesn't exist
+          if (!GLib.file_test(thumbPath, GLib.FileTest.EXISTS)) {
+              generateThumbnailAsync(imagePath, thumbPath, THUMBNAIL_SIZE)
+                  .catch(e => console.error(`Thumbnail generation failed for ${imageName}:`, e));
+              // Use original image as fallback while thumbnail is generating
+              return new Widget.Button({
+                  key: imageName,
+                  tooltip_text: imageName,
+                  className: bind(wallpaperImage).as(wp => `thumbnail-box ${wp === imageName ? 'active' : ''}`),
+                  css: `
+                      background-image: url("${imagePath}");
+                      min-width: ${THUMBNAIL_SIZE}px;
+                      min-height: ${THUMBNAIL_SIZE}px;
+                      background-size: cover;
+                      background-position: center;
+                      margin: ${spacing / 4}px;
+                      border-radius: ${spacing / 2}px;
+                  `,
+                  on_clicked: () => setWallpaper(imageName),
+              });
+          }
+
+          // Use thumbnail if it exists
+          return new Widget.Button({
+              key: imageName,
+              tooltip_text: imageName,
+              className: bind(wallpaperImage).as(wp => `thumbnail-box ${wp === imageName ? 'active' : ''}`),
+              css: `
+                  background-image: url("${thumbPath}");
+                  min-width: ${THUMBNAIL_SIZE}px;
+                  min-height: ${THUMBNAIL_SIZE}px;
+                  background-size: cover;
+                  background-position: center;
+                  margin: ${spacing / 4}px;
+                  border-radius: ${spacing / 2}px;
+              `,
+              on_clicked: () => setWallpaper(imageName),
+          });
+      }),
+  }));
+};
+
 export default () => {
   // Ensure thumbnail cache directory exists when the component is created
   ensureDir(THUMBNAIL_CACHE_DIR);
 
   const imagePaths = Variable<string[]>([]);
 
-  generateThumbnailAsync(imagePaths, THUMBNAIL_CACHE_DIR, THUMBNAIL_SIZE);
+  // generateThumbnailAsync(imagePaths, THUMBNAIL_CACHE_DIR, THUMBNAIL_SIZE);
 
   const updateImageList = () => {
     const currentDir = wallpaperFolder.get();
     const paths = getWallpaperImagePaths(currentDir);
-    imagePaths.set(paths); // Update the variable
-    console.log("imagePaths in updateImageList:", paths);
+    // Check if the paths actually changed before updating to avoid unnecessary redraws
+    if (JSON.stringify(imagePaths.value) !== JSON.stringify(paths)) {
+        imagePaths.set(paths); // Update the variable, this will trigger the hook below
+        console.log("imagePaths updated in updateImageList:", paths);
+    } else {
+        console.log("imagePaths unchanged in updateImageList.");
+    }
   };
 
+  // --- PASTE setWallpaperDirectory HERE ---
+  const setWallpaperDirectory = (wallpaperDirectory: string) => {
+    const oldDirectory = wallpaperFolder.get();
+    if (oldDirectory === wallpaperDirectory) return; // No change
+
+    // Basic validation: Check if it looks like a valid path and exists
+    // You might want more robust validation depending on needs
+    if (!wallpaperDirectory || !GLib.file_test(wallpaperDirectory, GLib.FileTest.IS_DIR)) {
+        console.warn(`Invalid or non-existent directory entered: ${wallpaperDirectory}`);
+        // Optional: Revert the entry text or show a notification
+        // For now, we'll just not update if it's invalid.
+        // You could potentially reset the entry text back to oldDirectory here.
+        // Example: wallpaperFolder.changed(); // Trigger redraw of entry if bound
+        return;
+    }
+
+
+    wallpaperFolder.set(wallpaperDirectory);
+    // For simplicity, let's keep the current wallpaper setting but it might become invalid.
+    saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperImage.get(), wallpaperDirectory, useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
+
+    console.log(`Wallpaper directory set to: ${wallpaperDirectory}`);
+
+    updateImageList(); // Refresh the list of images shown in the grid
+  };
+  // --- END PASTE ---
+
   updateImageList(); // Load images for the initial directory
-  console.log("Initial imagePaths after updateImageList:", imagePaths.get());
+
 
   const thumbnailGrid = new Widget.Box({
     vertical: true,
-    css: "min-height: 500px;",
+    css: "min-height: 500px;", // Adjust as needed
     halign: Gtk.Align.CENTER,
-    children: [], // Initialize with an empty children array
     setup: self => {
-      const paths = imagePaths.get(); // Get the current value of imagePaths
-      console.log("Initial imagePaths in setup:", paths);
-      console.log("Number of paths received:", paths.length);
-      self.children = [];
+      // --- 1. Initial Population ---
+      const initialPaths = imagePaths.value;
+      console.log("thumbnailGrid setup: Populating with initial paths:", initialPaths);
+      if (Array.isArray(initialPaths)) {
+           self.children = buildThumbnailGridChildren(initialPaths);
+      } else {
+           console.warn("thumbnailGrid setup: Initial imagePaths.value is not an array:", initialPaths);
+           self.children = [];
+      }
 
-      const rows = chunkArray(paths, 2);
-      console.log("Rows array:", rows);
+      // --- 2. Hook for Updates ---
+      // Modify the callback to accept the emitter argument
+      self.hook(imagePaths, (emitter) => {
+          // Keep the timeout for safety, but the main change is using 'emitter'
+          timeout(1, () => {
+              // Log the emitter to see what it is
+              console.log("thumbnailGrid hook (deferred) triggered. Emitter:", emitter);
+              // Try accessing the value via the emitter argument
+              const updatedPaths = emitter?.value; // Use optional chaining for safety
 
-      self.children = rows.map((row, rowIndex) => new Widget.Box({
-        key: `row-${rowIndex}`,
-        homogeneous: false,
-        spacing: spacing / 2,
-        className: "wallpaper-thumbnail-row",
-        children: row.map((imagePath) => {
-          const imageName = GLib.path_get_basename(imagePath);
-          const thumbPath = getThumbnailPath(imagePath);
-          console.log(`Thumbnail path for ${imageName}: ${thumbPath}`);
-          const thumbUrl = `file://${thumbPath}`;
-          const thumbExists = GLib.file_test(thumbPath, GLib.FileTest.EXISTS);
+              console.log("thumbnailGrid hook (deferred) triggered. Updating with emitter.value:", updatedPaths);
 
-          return new Widget.Button({
-            key: imageName,
-            tooltip_text: imageName,
-            className: `thumbnail-box ${wallpaperImage.get() === imageName ? 'active' : ''}`,
-            css: `
-                                background-image: url("${thumbPath}");
-                                min-width: ${THUMBNAIL_SIZE * 0.8}px;
-                                min-height: ${THUMBNAIL_SIZE * 0.8}px;
-                                background-size: cover;
-                                background-position: center;
-                                ${!thumbExists ? 'background-color: rgba(255, 255, 255, 0.1);' : ''}
-                                margin: ${spacing / 4}px;
-                                border-radius: ${spacing / 2}px;
-                            `,
-            on_clicked: () => setWallpaper(imageName),
-            setup: btn => btn.hook(wallpaperImage, () => {
-              btn.toggleClassName('active', wallpaperImage.get() === imageName);
-            }),
+              // Destroy previous children before adding new ones
+              self.children.forEach(child => child.destroy());
+
+              // Get the updated value and ensure it's an array
+              if (Array.isArray(updatedPaths)) {
+                  // Build and assign new children using the *updated* value
+                  self.children = buildThumbnailGridChildren(updatedPaths);
+              } else {
+                  // Log the error using the value we actually tried to use
+                  console.error("thumbnailGrid hook (deferred): Value from emitter is not an array:", updatedPaths);
+                  self.children = []; // Clear children if updated value is bad
+              }
+              // self.show_all(); // Might not be needed if parent calls show_all
           });
-        }),
-      }));
-      self.show_all();
+      }, 'notify::value'); // Use notify::value for Variable changes
     },
   });
+
+
 
   return (
     <Page label={"Themes"}>
@@ -395,20 +444,80 @@ export default () => {
         {/* --- Wallpaper Section --- */}
         <label label="Wallpaper" className="theme" halign={Gtk.Align.CENTER} />
 
+        <box className="settings-row" vertical={false} spacing={spacing}>
+          <label label="Use Bing Wallpaper of the Day" hexpand={true} xalign={0} />
+          <switch
+            active={bind(useBing)} // Correct: Binds the switch's visual state to the variable
+            // Use 'notify::active' signal which fires *after* the state has changed
+            // The handler receives the switch widget itself as 'self'
+            onNotifyActive={(self) => {
+              const isActive = self.active; // Get the new boolean state from the switch
+              useBing.set(isActive); // Update the variable state
+
+              // Call saveSettings with the *correct boolean value* (isActive)
+              saveSettings(
+                currentTheme.get(),
+                currentMode.get(),
+                slideshow.get(),
+                wallpaperImage.get(),
+                wallpaperFolder.get(),
+                isActive, // Pass the boolean value here
+                totalWorkspaces.get(),
+                showNumbers.get(),
+                hideEmptyWorkspaces.get(),
+                workspaceIcons.get()
+              );
+              console.log(`Toggled Use Bing Wallpaper to: ${isActive}`); // Optional logging
+
+              if (isActive) {
+                // When enabling Bing wallpaper
+                const bingPath = `${GLib.get_home_dir()}/.config/ags/bing.jpg`;
+                if (GLib.file_test(bingPath, GLib.FileTest.EXISTS)) {
+                  exec(`swww img "${bingPath}" --transition-step 100 --transition-fps 120 --transition-type grow --transition-angle 30 --transition-duration 1`);
+                }
+              } else {
+                // When disabling Bing wallpaper
+                const selectedWallpaper = wallpaperImage.get();
+                if (selectedWallpaper) {
+                  const fullPath = GLib.build_filenamev([wallpaperFolder.get(), selectedWallpaper]);
+                  if (GLib.file_test(fullPath, GLib.FileTest.EXISTS)) {
+                    exec(`swww img "${fullPath}" --transition-step 100 --transition-fps 120 --transition-type grow --transition-angle 30 --transition-duration 1`);
+                  }
+                }
+              }
+            }}
+          />
+        </box>
+
+
+
         {/* Slideshow switch could go here if uncommented */}
 
-        <button onClick={chooseWallpaperDirectory} className="wallpaper-button">
-          {/* Bind label to show current folder */}
-          <label label={bind(wallpaperFolder).as(f => `Folder: ${GLib.path_get_basename(f || 'None')}`)} />
-        </button>
+        <box vertical={false} spacing={spacing} className="settings-row">
+             <label label="Folder" xalign={0} />
+             <entry
+                hexpand={true}
+                // Bind the text property to the variable
+                text={bind(wallpaperFolder)}
+                // Update the directory when Enter is pressed
+                on_activate={self => {
+                    setWallpaperDirectory(self.text || ""); // Pass the current text
+                }}
+                // Optional: Update when focus is lost
+                on_focus_out_event={self => {
+                    setWallpaperDirectory(self.text || "");
+                    return false; // Allow event propagation
+                }}
+                tooltip_text="Enter the full path to your wallpaper directory and press Enter"
+             />
+        </box>
 
-        {/* --- Thumbnail Grid --- */}
-        {/* Wrap the grid in a ScrolledWindow if it might overflow vertically */}
         <box
           vertical={true}
-          hscrollbar_policy={Gtk.PolicyType.NEVER}
-          vscrollbar_policy={Gtk.PolicyType.AUTOMATIC}
-          // child={new Widget.Label({label:"Hi"})}
+          // Removed ScrolledWindow properties, add back if needed
+          // hscrollbar_policy={Gtk.PolicyType.NEVER}
+          // vscrollbar_policy={Gtk.PolicyType.AUTOMATIC}
+          className="wallpaper-grid-container" // Added class for potential styling
           child={thumbnailGrid}
         />
       </box>

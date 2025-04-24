@@ -26,6 +26,7 @@ const loadSettings = () => {
     slideshow: false,
     wallpaper: "747.jpg",
     wallpaperDirectory: "/home/austin/Pictures/wallpapers",
+    useBingWallpaper: false,
     workspaces: 10,
     numbers: false,
     hideEmptyWorkspaces: false,
@@ -39,6 +40,7 @@ const saveSettings = (
   slideshow: boolean,
   wallpaper: string,
   wallpaperDirectory: string,
+  useBingWallpaper: boolean,
   workspaces: number,
   numbers: boolean,
   hideEmptyWorkspaces: boolean,
@@ -52,6 +54,7 @@ const saveSettings = (
       slideshow,
       wallpaper,
       wallpaperDirectory,
+      useBingWallpaper,
       workspaces,
       numbers,
       hideEmptyWorkspaces,
@@ -76,6 +79,7 @@ export const currentMode = Variable(settings.mode);
 export const slideshow = Variable(settings.slideshow);
 export const wallpaperImage = Variable(settings.wallpaper);
 export const wallpaperFolder = Variable(settings.wallpaperDirectory);
+export const useBing = Variable(settings.useBingWallpaper);
 export const totalWorkspaces = Variable(settings.workspaces);
 export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
 export const settingsChanged = Variable(0);
@@ -91,6 +95,7 @@ const setWorkspaces = (workspaces: number) => {
     slideshow.get(),
     wallpaperImage.get(),
     wallpaperFolder.get(),
+    useBing.get(),
     newValue,
     showNumbers.get(),
     hideEmptyWorkspaces.get(),
@@ -107,6 +112,7 @@ const setShowNumbers = (numbers: boolean) => {
     slideshow.get(),
     wallpaperImage.get(),
     wallpaperFolder.get(),
+    useBing.get(),
     totalWorkspaces.get(),
     numbers,
     hideEmptyWorkspaces.get(),
@@ -123,6 +129,7 @@ const setHideEmptyWorkspaces = (hide: boolean) => {
     slideshow.get(),
     wallpaperImage.get(),
     wallpaperFolder.get(),
+    useBing.get(),
     totalWorkspaces.get(),
     showNumbers.get(),
     hide,
@@ -145,6 +152,7 @@ const setWorkspaceIcon = (workspaceId: number, icon: string) => {
     slideshow.get(),
     wallpaperImage.get(),
     wallpaperFolder.get(),
+    useBing.get(),
     totalWorkspaces.get(),
     showNumbers.get(),
     hideEmptyWorkspaces.get(),
@@ -163,6 +171,7 @@ const removeWorkspaceIcon = (workspaceId: number) => {
     slideshow.get(),
     wallpaperImage.get(),
     wallpaperFolder.get(),
+    useBing.get(),
     totalWorkspaces.get(),
     showNumbers.get(),
     hideEmptyWorkspaces.get(),
