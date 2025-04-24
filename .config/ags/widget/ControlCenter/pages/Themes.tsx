@@ -7,6 +7,7 @@ const { GLib, Gio } = imports.gi;
 import { spacing } from "../../../lib/variables";
 import icons from "../../../lib/icons";
 import { controlCenterPage } from "../index";
+import GdkPixbuf from 'gi://GdkPixbuf';
 
 const settingsFile = `${GLib.get_home_dir()}/.config/ags/theme-settings.json`;
 const menuName = "advancedsettings";
@@ -32,16 +33,21 @@ const getThumbnailPath = (originalImagePath: string): string => {
 };
 
 const generateThumbnailAsync = async (originalPath: string, thumbPath: string, size: number): Promise<void> => {
-  const command = `convert "${originalPath}" -thumbnail ${size}x${size}^ -gravity center -extent ${size}x${size} "${thumbPath}"`;
-  console.log(`Generating thumbnail: ${thumbPath}`);
-  try {
-    await exec(['bash', '-c', command]);
-    console.log(`Successfully generated thumbnail: ${thumbPath}`);
-  } catch (error) {
-    console.error(`Failed to generate thumbnail for ${originalPath}:`, error);
-    // Optionally, copy a placeholder 'error' thumbnail here
-    // Utils.execAsync(['cp', '/path/to/error-thumbnail.png', thumbPath]).catch(e => {});
-  }
+    try {
+        const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+            originalPath,
+            size,
+            size,
+            true // preserve aspect ratio
+        );
+        
+        if (pixbuf) {
+            pixbuf.savev(thumbPath, "jpeg", [], []);
+            console.log(`Successfully generated thumbnail: ${thumbPath}`);
+        }
+    } catch (error) {
+        console.error(`Failed to generate thumbnail for ${originalPath}:`, error);
+    }
 };
 
 
@@ -324,46 +330,90 @@ export default () => {
 
   const thumbnailGrid = new Widget.Box({
     vertical: true,
-    css: "min-height: 500px;", // Adjust as needed
+    css: "min-height: 500px;",
     halign: Gtk.Align.CENTER,
     setup: self => {
-      // --- 1. Initial Population ---
-      const initialPaths = imagePaths.value;
-      console.log("thumbnailGrid setup: Populating with initial paths:", initialPaths);
-      if (Array.isArray(initialPaths)) {
-           self.children = buildThumbnailGridChildren(initialPaths);
-      } else {
-           console.warn("thumbnailGrid setup: Initial imagePaths.value is not an array:", initialPaths);
-           self.children = [];
-      }
+        // Initial setup
+        updateImageList();
+        const paths = imagePaths.get();
+        console.log("Setting up thumbnail grid with paths:", paths);
+        
+        if (Array.isArray(paths)) {
+            const rows = chunkArray(paths, 2);
+            self.children = rows.map((row, rowIndex) => new Widget.Box({
+                key: `row-${rowIndex}`,
+                homogeneous: true,
+                spacing: spacing / 2,
+                className: "wallpaper-thumbnail-row",
+                children: row.map((imagePath) => {
+                    const imageName = GLib.path_get_basename(imagePath);
+                    const thumbPath = getThumbnailPath(imagePath);
+                    
+                    // Generate thumbnail if it doesn't exist
+                    if (!GLib.file_test(thumbPath, GLib.FileTest.EXISTS)) {
+                        generateThumbnailAsync(imagePath, thumbPath, THUMBNAIL_SIZE)
+                            .catch(e => console.error(`Thumbnail generation failed for ${imageName}:`, e));
+                    }
 
-      // --- 2. Hook for Updates ---
-      // Modify the callback to accept the emitter argument
-      self.hook(imagePaths, (emitter) => {
-          // Keep the timeout for safety, but the main change is using 'emitter'
-          timeout(1, () => {
-              // Log the emitter to see what it is
-              console.log("thumbnailGrid hook (deferred) triggered. Emitter:", emitter);
-              // Try accessing the value via the emitter argument
-              const updatedPaths = emitter?.value; // Use optional chaining for safety
+                    return new Widget.Button({
+                        key: imageName,
+                        tooltip_text: imageName,
+                        className: bind(wallpaperImage).as(wp => `thumbnail-box ${wp === imageName ? 'active' : ''}`),
+                        css: `
+                            background-image: url("${thumbPath}");
+                            min-width: ${THUMBNAIL_SIZE}px;
+                            min-height: ${THUMBNAIL_SIZE}px;
+                            background-size: cover;
+                            background-position: center;
+                            margin: ${spacing / 4}px;
+                            border-radius: ${spacing / 2}px;
+                        `,
+                        on_clicked: () => setWallpaper(imageName),
+                    });
+                }),
+            }));
+        }
 
-              console.log("thumbnailGrid hook (deferred) triggered. Updating with emitter.value:", updatedPaths);
+        // Hook for updates
+        self.hook(imagePaths, () => {
+            const paths = imagePaths.get();
+            if (Array.isArray(paths)) {
+                const rows = chunkArray(paths, 2);
+                self.children = rows.map((row, rowIndex) => new Widget.Box({
+                    key: `row-${rowIndex}`,
+                    homogeneous: true,
+                    spacing: spacing / 2,
+                    className: "wallpaper-thumbnail-row",
+                    children: row.map((imagePath) => {
+                        const imageName = GLib.path_get_basename(imagePath);
+                        const thumbPath = getThumbnailPath(imagePath);
+                        
+                        // Generate thumbnail if it doesn't exist
+                        if (!GLib.file_test(thumbPath, GLib.FileTest.EXISTS)) {
+                            generateThumbnailAsync(imagePath, thumbPath, THUMBNAIL_SIZE)
+                                .catch(e => console.error(`Thumbnail generation failed for ${imageName}:`, e));
+                        }
 
-              // Destroy previous children before adding new ones
-              self.children.forEach(child => child.destroy());
-
-              // Get the updated value and ensure it's an array
-              if (Array.isArray(updatedPaths)) {
-                  // Build and assign new children using the *updated* value
-                  self.children = buildThumbnailGridChildren(updatedPaths);
-              } else {
-                  // Log the error using the value we actually tried to use
-                  console.error("thumbnailGrid hook (deferred): Value from emitter is not an array:", updatedPaths);
-                  self.children = []; // Clear children if updated value is bad
-              }
-              // self.show_all(); // Might not be needed if parent calls show_all
-          });
-      }, 'notify::value'); // Use notify::value for Variable changes
+                        return new Widget.Button({
+                            key: imageName,
+                            tooltip_text: imageName,
+                            className: bind(wallpaperImage).as(wp => `thumbnail-box ${wp === imageName ? 'active' : ''}`),
+                            css: `
+                                background-image: url("${thumbPath}");
+                                min-width: ${THUMBNAIL_SIZE}px;
+                                min-height: ${THUMBNAIL_SIZE}px;
+                                background-size: cover;
+                                background-position: center;
+                                margin: ${spacing / 4}px;
+                                border-radius: ${spacing / 2}px;
+                            `,
+                            on_clicked: () => setWallpaper(imageName),
+                        });
+                    }),
+                }));
+            }
+            self.show_all();
+        });
     },
   });
 
