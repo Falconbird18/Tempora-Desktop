@@ -145,39 +145,44 @@ const setSlideshow = (isSlideshow: boolean) => {
   // Handle slideshow logic (start/stop timers etc.)
 };
 
-const setWallpaper = (wallpaperName: string) => { // Expecting just the filename now
+const setWallpaper = async (wallpaperName: string) => {
   wallpaperImage.set(wallpaperName);
   saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperName, wallpaperFolder.get(), useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
   console.log(`Setting Wallpaper to: ${wallpaperName}`);
 
   const wallpaperImagePath = `${wallpaperFolder.get()}/${wallpaperName}`;
-  const destinationDir = `${homeDir}/.config/ags/`
+  const destinationDir = `${homeDir}/.config/ags/`;
   const destinationPath = `${destinationDir}/wallpaper.jpg`;
 
   // Check if source file exists
   const sourceFile = Gio.File.new_for_path(wallpaperImagePath);
   if (!sourceFile.query_exists(null)) {
     console.error(`Wallpaper source file not found: ${wallpaperImagePath}`);
-    // Optionally show an error notification to the user
-    // Notif.notify({ title: "Error", body: `Wallpaper file not found: ${wallpaperName}` });
     return;
   }
 
-  // Use pkexec for privilege escalation if needed, or notify user to run command manually.
-  // Direct `exec` might fail due to permissions.
-  const copyCommand = `cp "${wallpaperImagePath}" "${destinationPath}"`;
-  const swwwCommand = `swww img "${destinationPath}" --transition-step 100 --transition-fps 120 --transition-type grow --transition-angle 30 --transition-duration 1`;
-
-  // Ensure destination directory exists (needs sudo/pkexec)
-  exec([ 'mkdir', '-p', destinationDir])
-    .then(() => exec(['bash', '-c', copyCommand])) // Copy the wallpaper
-    .then(() => exec(['bash', '-c', swwwCommand])) // Set the wallpaper via swww
-    .then(() => console.log("Wallpaper set successfully."))
-    .catch(e => {
-      console.error("Failed to set wallpaper:", e);
-      // Optionally show an error notification
-      // Notif.notify({ title: "Wallpaper Error", body: "Failed to set wallpaper. Check permissions or logs." });
-    });
+  try {
+    // Create destination directory if it doesn't exist
+    await execAsync(['mkdir', '-p', destinationDir]);
+  // Ensure thumbnail cache directory exists when the component is created
+    
+    // Copy the wallpaper file
+    await execAsync(['cp', wallpaperImagePath, destinationPath]);
+    
+    // Set the wallpaper using swww
+    await execAsync([
+      'swww', 'img', destinationPath,
+      '--transition-step', '100',
+      '--transition-fps', '120',
+      '--transition-type', 'grow',
+      '--transition-angle', '30',
+      '--transition-duration', '1'
+    ]);
+    
+    console.log("Wallpaper set successfully.");
+  } catch (error) {
+    console.error("Failed to set wallpaper:", error);
+  }
 };
 
 // Gets FULL PATHS of valid image files in the directory
@@ -279,12 +284,10 @@ const buildThumbnailGridChildren = (paths: string[]) => {
 };
 
 export default () => {
-  // Ensure thumbnail cache directory exists when the component is created
   ensureDir(THUMBNAIL_CACHE_DIR);
 
   const imagePaths = Variable<string[]>([]);
 
-  // generateThumbnailAsync(imagePaths, THUMBNAIL_CACHE_DIR, THUMBNAIL_SIZE);
 
   const updateImageList = () => {
     const currentDir = wallpaperFolder.get();
@@ -298,19 +301,12 @@ export default () => {
     }
   };
 
-  // --- PASTE setWallpaperDirectory HERE ---
   const setWallpaperDirectory = (wallpaperDirectory: string) => {
     const oldDirectory = wallpaperFolder.get();
     if (oldDirectory === wallpaperDirectory) return; // No change
 
-    // Basic validation: Check if it looks like a valid path and exists
-    // You might want more robust validation depending on needs
     if (!wallpaperDirectory || !GLib.file_test(wallpaperDirectory, GLib.FileTest.IS_DIR)) {
         console.warn(`Invalid or non-existent directory entered: ${wallpaperDirectory}`);
-        // Optional: Revert the entry text or show a notification
-        // For now, we'll just not update if it's invalid.
-        // You could potentially reset the entry text back to oldDirectory here.
-        // Example: wallpaperFolder.changed(); // Trigger redraw of entry if bound
         return;
     }
 
@@ -323,7 +319,6 @@ export default () => {
 
     updateImageList(); // Refresh the list of images shown in the grid
   };
-  // --- END PASTE ---
 
   updateImageList(); // Load images for the initial directory
 
