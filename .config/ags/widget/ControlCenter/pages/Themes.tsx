@@ -147,7 +147,8 @@ const setSlideshow = (isSlideshow: boolean) => {
 
 const setWallpaper = async (wallpaperName: string) => {
   wallpaperImage.set(wallpaperName);
-  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperName, wallpaperFolder.get(), useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
+  useBing.set(false); // Disable Bing wallpaper when a custom wallpaper is set
+  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperName, wallpaperFolder.get(), useBing, totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
   console.log(`Setting Wallpaper to: ${wallpaperName}`);
 
   const wallpaperImagePath = `${wallpaperFolder.get()}/${wallpaperName}`;
