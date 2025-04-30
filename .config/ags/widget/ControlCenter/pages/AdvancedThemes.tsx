@@ -4,7 +4,7 @@ import { bind, execAsync, timeout, Variable, exec, GObject } from "astal";
 const { GLib, Gio } = imports.gi;
 import { spacing } from "../../../lib/variables";
 import icons from "../../../lib/icons";
-// import { ComboBox, ComboBoxEntry, ComboBoxText } from "../../../common/Types";
+import { ComboBoxText } from "../../../common/Types";
 
 const settingsFile = `${GLib.get_home_dir()}/.config/ags/theme-settings.json`;
 
@@ -31,6 +31,7 @@ const loadSettings = () => {
     numbers: false,
     hideEmptyWorkspaces: false,
     workspaceIcons: {},
+    barLocation: "top",
   };
 };
 
@@ -59,6 +60,7 @@ const saveSettings = (
       numbers,
       hideEmptyWorkspaces,
       workspaceIcons,
+      barLocation: barLocation.get(),
     });
     file.replace_contents(
       contents,
@@ -85,6 +87,7 @@ export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
 export const settingsChanged = Variable(0);
 export const showNumbers = Variable(settings.numbers);
 export const workspaceIcons = Variable(settings.workspaceIcons || {});
+export const barLocation = Variable(settings.barLocation || "top");
 
 const setWorkspaces = (workspaces: number) => {
   const newValue = Math.max(1, Math.min(20, workspaces));
@@ -180,6 +183,23 @@ const removeWorkspaceIcon = (workspaceId: number) => {
   settingsChanged.set(settingsChanged.get() + 1);
 };
 
+const setBarLocation = (location: string) => {
+  barLocation.set(location);
+  saveSettings(
+    currentTheme.get(),
+    currentMode.get(),
+    slideshow.get(),
+    wallpaperImage.get(),
+    wallpaperFolder.get(),
+    useBing.get(),
+    totalWorkspaces.get(),
+    showNumbers.get(),
+    hideEmptyWorkspaces.get(),
+    workspaceIcons.get(),
+  );
+  settingsChanged.set(settingsChanged.get() + 1);
+};
+
 const showAddIconForm = Variable(false);
 
 export default () => {
@@ -190,6 +210,40 @@ export default () => {
         spacing={8}
         className={"control-center__page_scrollable-content"}
       >
+        {/* Bar Location Control */}
+        <box vertical className="advanced-container" halign={Gtk.Align.CENTER}>
+          <box horizontal halign={Gtk.Align.FILL} className="setting-box">
+            <label
+              label="Bar Location"
+              className="h3"
+              halign={Gtk.Align.START}
+              hexpand={false}
+              valign={Gtk.Align.CENTER}
+            />
+            <box horizontal halign={Gtk.Align.END} hexpand={true}>
+              <ComboBoxText
+                halign={Gtk.Align.END}
+                className="combo-box-text"
+                onChanged={(entry) => {
+                  const selected = entry.get_active_text();
+                  if (selected) {
+                    setBarLocation(selected.toLowerCase());
+                  }
+                }}
+                setup={(combo) => {
+                  const locations = ["Top", "Bottom", "Left", "Right"];
+                  locations.forEach(loc => combo.append_text(loc));
+                  const current = barLocation.get();
+                  const index = locations.findIndex(loc => 
+                    loc.toLowerCase() === current.toLowerCase()
+                  );
+                  combo.set_active(index !== -1 ? index : 0);
+                }}
+              />
+            </box>
+          </box>
+        </box>
+
         {/* Workspace Control */}
         <box vertical className="advanced-container" halign={Gtk.Align.CENTER}>
           <box horizontal halign={Gtk.Align.FILL} className="setting-box">
