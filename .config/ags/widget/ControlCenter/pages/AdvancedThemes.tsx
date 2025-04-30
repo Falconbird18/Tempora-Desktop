@@ -1,10 +1,10 @@
 import Page from "../Page";
-import { App, Gtk, Gdk, Widget } from "astal/gtk3";
+import { App, Astal, Gtk, Gdk, Widget } from "astal/gtk3";
 import { bind, execAsync, timeout, Variable, exec, GObject } from "astal";
 const { GLib, Gio } = imports.gi;
 import { spacing } from "../../../lib/variables";
 import icons from "../../../lib/icons";
-// import { ComboBox, ComboBoxEntry, ComboBoxText } from "../../../common/Types";
+import { ComboBoxText } from "../../../common/Types";
 
 const settingsFile = `${GLib.get_home_dir()}/.config/ags/theme-settings.json`;
 
@@ -26,10 +26,12 @@ const loadSettings = () => {
     slideshow: false,
     wallpaper: "747.jpg",
     wallpaperDirectory: "/home/austin/Pictures/wallpapers",
+    useBingWallpaper: false,
     workspaces: 10,
     numbers: false,
     hideEmptyWorkspaces: false,
     workspaceIcons: {},
+    barLocation: "top",
   };
 };
 
@@ -39,6 +41,7 @@ const saveSettings = (
   slideshow: boolean,
   wallpaper: string,
   wallpaperDirectory: string,
+  useBingWallpaper: boolean,
   workspaces: number,
   numbers: boolean,
   hideEmptyWorkspaces: boolean,
@@ -52,10 +55,12 @@ const saveSettings = (
       slideshow,
       wallpaper,
       wallpaperDirectory,
+      useBingWallpaper,
       workspaces,
       numbers,
       hideEmptyWorkspaces,
       workspaceIcons,
+      barLocation: barLocation.get().name,
     });
     file.replace_contents(
       contents,
@@ -76,11 +81,37 @@ export const currentMode = Variable(settings.mode);
 export const slideshow = Variable(settings.slideshow);
 export const wallpaperImage = Variable(settings.wallpaper);
 export const wallpaperFolder = Variable(settings.wallpaperDirectory);
+export const useBing = Variable(settings.useBingWallpaper);
 export const totalWorkspaces = Variable(settings.workspaces);
 export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
 export const settingsChanged = Variable(0);
 export const showNumbers = Variable(settings.numbers);
 export const workspaceIcons = Variable(settings.workspaceIcons || {});
+
+const BarLocations = {
+  Top: {
+    name: "top",
+    anchor: Astal.WindowAnchor.LEFT | Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT,
+  },
+  Bottom: {
+    name: "bottom",
+    anchor: Astal.WindowAnchor.LEFT | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.RIGHT,
+  },
+  Left: {
+    name: "left",
+    anchor: Astal.WindowAnchor.LEFT | Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM,
+  },
+  Right: {
+    name: "right",
+    anchor: Astal.WindowAnchor.RIGHT | Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM,
+  },
+} as const;
+
+// Update the barLocation type to include anchor
+export const barLocation = Variable({
+  name: settings.barLocation || "top",
+  anchor: BarLocations.Top.anchor,
+});
 
 const setWorkspaces = (workspaces: number) => {
   const newValue = Math.max(1, Math.min(20, workspaces));
@@ -91,6 +122,7 @@ const setWorkspaces = (workspaces: number) => {
     slideshow.get(),
     wallpaperImage.get(),
     wallpaperFolder.get(),
+    useBing.get(),
     newValue,
     showNumbers.get(),
     hideEmptyWorkspaces.get(),
@@ -107,6 +139,7 @@ const setShowNumbers = (numbers: boolean) => {
     slideshow.get(),
     wallpaperImage.get(),
     wallpaperFolder.get(),
+    useBing.get(),
     totalWorkspaces.get(),
     numbers,
     hideEmptyWorkspaces.get(),
@@ -123,6 +156,7 @@ const setHideEmptyWorkspaces = (hide: boolean) => {
     slideshow.get(),
     wallpaperImage.get(),
     wallpaperFolder.get(),
+    useBing.get(),
     totalWorkspaces.get(),
     showNumbers.get(),
     hide,
@@ -145,6 +179,7 @@ const setWorkspaceIcon = (workspaceId: number, icon: string) => {
     slideshow.get(),
     wallpaperImage.get(),
     wallpaperFolder.get(),
+    useBing.get(),
     totalWorkspaces.get(),
     showNumbers.get(),
     hideEmptyWorkspaces.get(),
@@ -163,6 +198,24 @@ const removeWorkspaceIcon = (workspaceId: number) => {
     slideshow.get(),
     wallpaperImage.get(),
     wallpaperFolder.get(),
+    useBing.get(),
+    totalWorkspaces.get(),
+    showNumbers.get(),
+    hideEmptyWorkspaces.get(),
+    workspaceIcons.get(),
+  );
+  settingsChanged.set(settingsChanged.get() + 1);
+};
+
+const setBarLocation = (location: keyof typeof BarLocations) => {
+  barLocation.set(BarLocations[location]);
+  saveSettings(
+    currentTheme.get(),
+    currentMode.get(),
+    slideshow.get(),
+    wallpaperImage.get(),
+    wallpaperFolder.get(),
+    useBing.get(),
     totalWorkspaces.get(),
     showNumbers.get(),
     hideEmptyWorkspaces.get(),
@@ -181,6 +234,39 @@ export default () => {
         spacing={8}
         className={"control-center__page_scrollable-content"}
       >
+        {/* Bar Location Control */}
+        <box vertical className="advanced-container" halign={Gtk.Align.CENTER}>
+          <box horizontal halign={Gtk.Align.FILL} className="setting-box">
+            <label
+              label="Bar Location"
+              className="h3"
+              halign={Gtk.Align.START}
+              hexpand={false}
+              valign={Gtk.Align.CENTER}
+            />
+            <box horizontal halign={Gtk.Align.END} hexpand={true}>
+              <ComboBoxText
+                halign={Gtk.Align.END}
+                className="combo-box-text"
+                onChanged={(entry) => {
+                  const selected = entry.get_active_text();
+                  if (selected && selected in BarLocations) {
+                    setBarLocation(selected as keyof typeof BarLocations);
+                  }
+                }}
+                setup={(combo) => {
+                  Object.keys(BarLocations).forEach(loc => combo.append_text(loc));
+                  const current = barLocation.get().name;
+                  const index = Object.keys(BarLocations).findIndex(
+                    loc => BarLocations[loc as keyof typeof BarLocations].name === current
+                  );
+                  combo.set_active(index !== -1 ? index : 0);
+                }}
+              />
+            </box>
+          </box>
+        </box>
+
         {/* Workspace Control */}
         <box vertical className="advanced-container" halign={Gtk.Align.CENTER}>
           <box horizontal halign={Gtk.Align.FILL} className="setting-box">
@@ -370,25 +456,24 @@ export default () => {
               return (
                 <eventbox
                   key={`icon-card-${id}`}
-                  horizontal
-                  spacing={8}
-                  halign={Gtk.Align.FILL}
                   onEnterNotifyEvent={(self) => {
                     if (deleteClass) {
                       console.log("Hover enter:", id);
-                      deleteClass.className = "delete-button-visible"
+                      deleteClass.toggleClassName("delete-button-visible", true);
+                      deleteClass.toggleClassName("delete-button-hidden", false);
                       console.log("Current className:", deleteClass.className)
                     }
                   }}
                   onLeaveNotifyEvent={(self) => {
                     if (deleteClass) {
                       console.log("Hover leave:", id);
-                      deleteClass.className = "delete-button-hidden";
+                      deleteClass.toggleClassName("delete-button-visible", false);
+                      deleteClass.toggleClassName("delete-button-hidden", true);
                       console.log("Current className:", deleteClass.className)
                     }
                   }}
                 >
-                  <box className="icon-card">
+                  <box className="icon-card" horizontal spacing={8} halign={Gtk.Align.FILL}>
                     <label
                       label={`Workspace ${id}: ${icon}`}
                       className="paragraph"

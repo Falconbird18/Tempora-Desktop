@@ -1,4 +1,4 @@
-import { App, Astal, Gtk, Gdk } from "astal/gtk3";
+import { Astal, App, Gtk, Gdk } from "astal/gtk3";
 import Workspaces from "./items/Workspaces";
 import { spacing } from "../../lib/variables";
 import ActiveApp from "./items/ActiveApp";
@@ -12,7 +12,18 @@ import Weather from "./items/Weather";
 import RecordingIndicator from "./items/RecordingIndicator";
 import SideBar from "./items/SideBar";
 import Media from "./items/Media";
+import { barLocation } from "../ControlCenter/pages/AdvancedThemes";
+import { bind } from "astal";
 
+// declare global {
+//   namespace JSX {
+//     interface IntrinsicElements {
+//       box: ConstructProps<Gtk.Box, Gtk.Box.ConstructorProps> & Ref<Gtk.Box>;
+//       window: ConstructProps<Widget.Window, Widget.Window.ConstructorProps> & Ref<Widget.Window>;
+//       centerbox: ConstructProps<Gtk.Box, Gtk.Box.ConstructorProps> & Ref<Gtk.Box>;
+//     }
+//   }
+// }
 
 const Start = () => {
   return (
@@ -51,23 +62,34 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
   return (
     <window
       vexpand={true}
-      vertical={true}
+      vertical={bind(barLocation).as((loc: { name: string }) => loc.name === "left" || loc.name === "right")}
       className="Bar"
       namespace="bar"
       gdkmonitor={gdkmonitor}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
-      anchor={
-        Astal.WindowAnchor.LEFT |
-        Astal.WindowAnchor.TOP |
-        Astal.WindowAnchor.RIGHT
-      }
+      layer="top"
+      anchor={bind(barLocation).as((loc: { anchor: number }) => loc.anchor)}
       application={App}
     >
-      <centerbox className="bar" valign={Gtk.Align.CENTER}>
-        <Start />
-        <Center />
-        <End />
-      </centerbox>
+      {bind(barLocation).as((loc: { name: string }) => loc.name === "left" || loc.name === "right" ? (
+        <box className="bar" vertical>
+          <box vexpand={false} spacing={spacing}>
+            <Start />
+          </box>
+          <box vexpand={true} valign={Gtk.Align.CENTER} spacing={spacing}>
+            <Center />
+          </box>
+          <box vexpand={false} spacing={spacing}>
+            <End />
+          </box>
+        </box>
+      ) : (
+        <centerbox className="bar" valign={Gtk.Align.CENTER}>
+          <Start />
+          <Center />
+          <End />
+        </centerbox>
+      ))}
     </window>
   );
 }

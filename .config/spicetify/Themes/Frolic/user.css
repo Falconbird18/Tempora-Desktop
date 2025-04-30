@@ -604,7 +604,7 @@ a:not([data-encore-id]) {
 #spicetify-update h3 {
   font-family: "Monaspace Radon";
   font-weight: normal;
-  font-size: 18px;
+  font-size: 18p;
   color: #562f10;
 }
 
@@ -665,7 +665,8 @@ a:not([data-encore-id]) {
   color: #562f10 !important;
 }
 
-#spicetify-update ol > li {
+#spicetify-update ol 
+li {
   font-family: "Monaspace Xenon";
   font-weight: bold;
   font-size: 16px;
