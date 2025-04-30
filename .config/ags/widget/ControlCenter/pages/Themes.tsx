@@ -184,7 +184,7 @@ const setWallpaper = async (wallpaperName: string) => {
   } catch (error) {
     console.error("Failed to set wallpaper:", error);
   }
-=======
+
   // Use pkexec for privilege escalation if needed, or notify user to run command manually.
   // Direct `exec` might fail due to permissions.
   const copyCommand = `cp "${wallpaperImagePath}" "${destinationPath}"`;
