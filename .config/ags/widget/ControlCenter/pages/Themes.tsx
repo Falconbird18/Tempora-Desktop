@@ -229,61 +229,6 @@ const chunkArray = <T,>(arr: T[], size: number): T[][] => {
   }, []);
 };
 
-const buildThumbnailGridChildren = (paths: string[]) => {
-  console.log("Building thumbnail grid children for paths:", paths);
-  const rows = chunkArray(paths, 2);
-
-  return rows.map((row, rowIndex) => new Widget.Box({
-      key: `row-${rowIndex}`,
-      homogeneous: true,
-      spacing: spacing / 2,
-      className: "wallpaper-thumbnail-row",
-      children: row.map((imagePath) => {
-          const imageName = GLib.path_get_basename(imagePath);
-          const thumbPath = getThumbnailPath(imagePath);
-
-          // Always force thumbnail generation if it doesn't exist
-          if (!GLib.file_test(thumbPath, GLib.FileTest.EXISTS)) {
-              generateThumbnailAsync(imagePath, thumbPath, THUMBNAIL_SIZE)
-                  .catch(e => console.error(`Thumbnail generation failed for ${imageName}:`, e));
-              // Use original image as fallback while thumbnail is generating
-              return new Widget.Button({
-                  key: imageName,
-                  tooltip_text: imageName,
-                  className: bind(wallpaperImage).as(wp => `thumbnail-box ${wp === imageName ? 'active' : ''}`),
-                  css: `
-                      background-image: url("${imagePath}");
-                      min-width: ${THUMBNAIL_SIZE}px;
-                      min-height: ${THUMBNAIL_SIZE}px;
-                      background-size: cover;
-                      background-position: center;
-                      margin: ${spacing / 4}px;
-                      border-radius: ${spacing / 2}px;
-                  `,
-                  on_clicked: () => setWallpaper(imageName),
-              });
-          }
-
-          // Use thumbnail if it exists
-          return new Widget.Button({
-              key: imageName,
-              tooltip_text: imageName,
-              className: bind(wallpaperImage).as(wp => `thumbnail-box ${wp === imageName ? 'active' : ''}`),
-              css: `
-                  background-image: url("${thumbPath}");
-                  min-width: ${THUMBNAIL_SIZE}px;
-                  min-height: ${THUMBNAIL_SIZE}px;
-                  background-size: cover;
-                  background-position: center;
-                  margin: ${spacing / 4}px;
-                  border-radius: ${spacing / 2}px;
-              `,
-              on_clicked: () => setWallpaper(imageName),
-          });
-      }),
-  }));
-};
-
 export default () => {
   ensureDir(THUMBNAIL_CACHE_DIR);
 

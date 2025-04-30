@@ -27,20 +27,20 @@ type ChatMessage = {
 
 const models: ModelDefinition[] = [
   { type: "llm", name: "llama3.2" },
-  { type: "llm", name: "gemma3" },
-  { type: "llm", name: "phi3" },
-  { type: "llm", name: "gemini" },
   { type: "web", name: "chatgpt", url: "https://chat.openai.com" },
-  { type: "web", name: "claude", url: "https://google.com" },
+  { type: "web", name: "copilot", url: "https://copilot.microsoft.com" },
+  { type: "web", name: "duck ai", url: "https://duck.ai" },
+  { type: "web", name: "grok", url: "https://grok.com" },
+  { type: "web", name: "gemini", url: "https://gemini.google.com" },
 ];
 
 const modelIcons = {
   "llama3.2": icons.models.llama || "dialog-information-symbolic",
-  "gemma3": icons.models.gemma || "dialog-question-symbolic",
-  phi3: icons.models.phi3 || "dialog-warning-symbolic",
-  gemini: icons.models.gemini || "dialog-question-symbolic",
-  chatgpt: icons.models.chatgpt || "dialog-chat-symbolic",
-  claude: icons.models.claude || "dialog-user-symbolic",
+  chatgpt: icons.models.chatgpt || "dialog-warning-symbolic",
+  copilot: icons.models.copilot || "dialog-question-symbolic",
+  "duck ai": icons.models.duck || "dialog-chat-symbolic",
+  grok: icons.models.grok || "dialog-user-symbolic",
+  gemini: icons.models.gemini || "dialog-user-symbolic",
 };
 
 function loadGeminiApiKey(): string {
@@ -107,11 +107,26 @@ const ModelButtons = () => (
 const WebViewWidget = ({ url }: { url: Variable<string> }) => {
   console.log("WebViewWidget: Start");
 
-  // Create and configure the WebKit2 WebView
-  const webView = new WebKit2.WebView();
+  // Create cookie manager and enable persistent storage
+  const context = new WebKit2.WebContext();
+  const cookieManager = context.get_cookie_manager();
+  cookieManager.set_persistent_storage(
+    GLib.build_filenamev([GLib.get_user_cache_dir(), "ags", "cookies.db"]),
+    WebKit2.CookiePersistentStorage.SQLITE
+  );
+  cookieManager.set_accept_policy(WebKit2.CookieAcceptPolicy.ALWAYS);
+
+  // Create and configure the WebKit2 WebView with the context
+  const webView = new WebKit2.WebView({ web_context: context });
   console.log("WebViewWidget: WebView created");
+  
   const settings = webView.get_settings();
   settings.set_enable_javascript(true);
+  settings.set_enable_html5_database(true);
+  settings.set_enable_html5_local_storage(true);
+  settings.set_enable_javascript_markup(true);
+  settings.set_enable_smooth_scrolling(true);
+  settings.set_enable_write_console_messages_to_stdout(true);
 
   settings.set_user_agent(
     "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 " +
@@ -196,42 +211,7 @@ const WebContent = () => {
       <WebViewWidget url={webUrl} />
     </box>
   );
-};
-// const WebContent = () => {
-//   const currentModel = bind(selectedModel).as((name) => models.find((m) => m.name === name));
-
-//   return (
-//     <box
-//       visible={bind(currentModel).as((m) => m?.type === "web")}
-//       vexpand={true}
-//       hexpand={true}
-//     >
-//       {bind(currentModel).as((m) => {
-//         if (m?.type === "web") {
-//           const webView = new WebKit.WebView();
-//           webView.load_uri(m.url);
-
-//           // Wrap WebView in a ScrolledWindow for better GTK integration
-//           const scrolledWindow = new Gtk.ScrolledWindow({
-//             hscrollbar_policy: Gtk.PolicyType.AUTOMATIC,
-//             vscrollbar_policy: Gtk.PolicyType.AUTOMATIC,
-//           });
-//           scrolledWindow.add(webView);
-
-//           return (
-//             <box
-//               gobject={scrolledWindow} // Use ScrolledWindow instead of WebView directly
-//               vexpand={true}
-//               hexpand={true}
-//               css="min-width: 300px; min-height: 400px;"
-//             />
-//           );
-//         }
-//         return <box visible={false} />;
-//       })}
-//     </box>
-//   );
-// };
+ };
 
 async function startOllama() {
   try {
@@ -275,69 +255,63 @@ const StartOllamaButton = bind(ollamaRunningStatus).as((isRunning) =>
 );
 
 
-function splitMessageParts(text: string): { type: "text" | "code" | "math" | "display_math"; content: string }[] {
-  const parts: { type: "text" | "code" | "math" | "display_math"; content: string }[] = [];
-  const codeBlockRegex = /```([\s\S]*?)```/g;
+function splitMessageParts(text: string): { type: "text" | "code" | "math" | "display_math"; content: string; language?: string }[] {
+  const parts: { type: "text" | "code" | "math" | "display_math"; content: string; language?: string }[] = [];
+  const codeBlockRegex = /```(\w*)\n([\s\S]*?)```/g;
+  const inlineCodeRegex = /`([^`]+)`/g;
   const displayMathRegex = /\$\$([\s\S]*?)\$\$/g;
   const inlineMathRegex = /\$([^$\n]+?)\$/g;
   let remainingText = text;
   let lastIndex = 0;
 
-  function processMatches(regex: RegExp, type: "code" | "math" | "display_math") {
+  function processMatches(regex: RegExp, type: "code" | "math" | "display_math", isCodeBlock: boolean = false) {
     let match;
     regex.lastIndex = 0;
     while ((match = regex.exec(remainingText)) !== null) {
       if (match.index > lastIndex) {
         parts.push({ type: "text", content: remainingText.slice(lastIndex, match.index) });
       }
-      parts.push({ type, content: match[1].trim() });
+      if (isCodeBlock) {
+        const language = match[1]?.trim() || 'text';
+        const code = match[2]?.trim() || '';
+        parts.push({ type, content: code, language });
+      } else if (type === "code") {
+        parts.push({ type, content: match[1].trim(), language: "inline" });
+      } else {
+        parts.push({ type, content: match[1].trim() });
+      }
       lastIndex = regex.lastIndex;
     }
   }
 
+  // Process in order: display math, code blocks, inline code, inline math
   processMatches(displayMathRegex, "display_math");
-  if (parts.length > 0) {
-    remainingText = remainingText.slice(lastIndex);
-    lastIndex = 0;
-    parts.length = 0;
-    processMatches(displayMathRegex, "display_math");
-  }
-
-  let tempText = remainingText.slice(lastIndex);
-  processMatches(codeBlockRegex, "code");
-  if (parts.length > 0) {
-    remainingText = remainingText.slice(lastIndex);
-    lastIndex = 0;
-    parts.length = 0;
-    processMatches(displayMathRegex, "display_math");
-    tempText = remainingText.slice(lastIndex);
-    processMatches(codeBlockRegex, "code");
-  }
-
-  remainingText = tempText;
-  lastIndex = 0;
+  processMatches(codeBlockRegex, "code", true);
+  processMatches(inlineCodeRegex, "code");
   processMatches(inlineMathRegex, "math");
 
-  if (lastIndex < remainingText.length) parts.push({ type: "text", content: remainingText.slice(lastIndex) });
-  if (parts.length === 0) parts.push({ type: "text", content: text });
+  if (lastIndex < remainingText.length) {
+    parts.push({ type: "text", content: remainingText.slice(lastIndex) });
+  }
+
   return parts;
 }
 
 function markdownToPango(text: string): string {
-  let result = text
+  return text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
-    .replace(/__(.+?)__/g, "<b>$1</b>")
     .replace(/\*(.+?)\*/g, "<i>$1</i>")
-    .replace(/_(.+?)_/g, "<i>$1</i>")
-    .replace(/^### (.+)$/gm, '<span size="large"><b>$1</b></span>')
-    .replace(/^## (.+)$/gm, '<span size="x-large"><b>$1</b></span>')
-    .replace(/^# (.+)$/gm, '<span size="xx-large"><b>$1</b></span>')
-    .replace(/^[-*]\s+(.+)$/gm, "• $1")
+    .replace(/~~(.+?)~~/g, "<s>$1</s>")
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<span foreground="#3584e4"><u>$1</u></span>')
+    .replace(/^### (.+)$/gm, '<span size="large" weight="bold">$1</span>')
+    .replace(/^## (.+)$/gm, '<span size="x-large" weight="bold">$1</span>')
+    .replace(/^# (.+)$/gm, '<span size="xx-large" weight="bold">$1</span>')
+    .replace(/^\s*[-*]\s+(.+)$/gm, "• $1")
+    .replace(/^\s*(\d+)\.\s+(.+)$/gm, "$1. $2")
     .replace(/\n/g, "\n");
-  return result;
 }
 
 function formatMath(content: string, isDisplay: boolean = false): string {
@@ -661,7 +635,7 @@ const ChatMessages = () => (
             className="message-sender"
             halign={msg.sender === "user" ? Gtk.Align.END : Gtk.Align.START}
           />
-          <box vertical spacing={2}>
+          <box vertical spacing={4}>
             {splitMessageParts(msg.text).map((part, index) => {
               if (part.type === "text") {
                 return (
@@ -671,34 +645,57 @@ const ChatMessages = () => (
                     use_markup={true}
                     className="message-text"
                     wrap={true}
+                    justify={Gtk.Justification.FILL}
                     halign={msg.sender === "user" ? Gtk.Align.END : Gtk.Align.START}
                     hexpand={false}
-                    max_width_chars={40}
+                    max_width_chars={60}
                   />
                 );
               } else if (part.type === "code") {
+                const isInline = part.language === "inline";
                 return (
-                  <box key={`code-${index}`} className="code-block" spacing={4} css={`background-color: #2e3440; border: 1px solid #4b5563; padding: 8px; border-radius: 4px;`}>
-                    <label label={part.content} className="code-text" css={`font-family: monospace; color: #d8dee9;`} wrap={true} hexpand={false} max_width_chars={40} />
+                  <box 
+                    key={`code-${index}`}
+                    className={isInline ? "inline-code" : "code-block"}
+                    css={isInline ? 
+                      "font-family: monospace; background-color: rgba(127, 127, 127, 0.1); padding: 2px 4px; border-radius: 4px;" :
+                      "background-color: rgba(0, 0, 0, 0.2); padding: 8px; border-radius: 8px; margin: 4px 0;"}
+                  >
+                    <box vertical>
+                      {!isInline && part.language !== "text" && (
+                        <label
+                          label={part.language}
+                          css="font-size: 0.8em; opacity: 0.7; margin-bottom: 4px;"
+                        />
+                      )}
+                      <label
+                        label={part.content}
+                        css="font-family: 'Monaspace Neon', monospace;"
+                        wrap={true}
+                        selectable={true}
+                        hexpand={false}
+                        max_width_chars={58}
+                      />
+                    </box>
                   </box>
                 );
-              } else if (part.type === "math") {
+              } else if (part.type === "math" || part.type === "display_math") {
+                const isDisplay = part.type === "display_math";
                 return (
-                  <label
+                  <box 
                     key={`math-${index}`}
-                    label={formatMath(part.content, false)}
-                    use_markup={true}
-                    className="math-text"
-                    wrap={true}
-                    halign={msg.sender === "user" ? Gtk.Align.END : Gtk.Align.START}
-                    hexpand={false}
-                    max_width_chars={40}
-                  />
-                );
-              } else if (part.type === "display_math") {
-                return (
-                  <box key={`display-math-${index}`} className="display-math" css={`padding: 8px; text-align: center;`}>
-                    <label label={formatMath(part.content, true)} use_markup={true} className="math-text" wrap={true} halign={Gtk.Align.CENTER} hexpand={false} max_width_chars={40} />
+                    className={isDisplay ? "display-math" : "inline-math"}
+                    css={isDisplay ? "padding: 8px 16px; margin: 4px 0;" : "padding: 0 4px;"}
+                  >
+                    <label
+                      label={formatMath(part.content, isDisplay)}
+                      use_markup={true}
+                      wrap={true}
+                      justify={Gtk.Justification.CENTER}
+                      halign={isDisplay ? Gtk.Align.CENTER : (msg.sender === "user" ? Gtk.Align.END : Gtk.Align.START)}
+                      hexpand={false}
+                      max_width_chars={isDisplay ? 60 : 40}
+                    />
                   </box>
                 );
               }

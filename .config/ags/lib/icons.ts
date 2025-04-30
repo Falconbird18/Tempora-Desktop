@@ -15,8 +15,11 @@ const Zephyr = `${GLib.get_home_dir()}/.config/ags/svg/zephyr.svg`;
 const Frolic = `${GLib.get_home_dir()}/.config/ags/svg/frolic.svg`;
 const Glaciara = `${GLib.get_home_dir()}/.config/ags/svg/glaciara.svg`;
 const Llama = `${GLib.get_home_dir()}/.config/ags/svg/llama.svg`;
-const Gemma = `${GLib.get_home_dir()}/.config/ags/svg/google.svg`;
-const Phi3 = `${GLib.get_home_dir()}/.config/ags/svg/microsoft.svg`;
+const Chatgpt = `${GLib.get_home_dir()}/.config/ags/svg/chatgpt.svg`;
+const Copilot = `${GLib.get_home_dir()}/.config/ags/svg/copilot.svg`;
+const Duck = `${GLib.get_home_dir()}/.config/ags/svg/duck.svg`;
+const Grok = `${GLib.get_home_dir()}/.config/ags/svg/grok.svg`;
+const Microsoft = `${GLib.get_home_dir()}/.config/ags/svg/microsoft.svg`;
 const Gemini = `${GLib.get_home_dir()}/.config/ags/svg/gemini.svg`;
 export const substitutions: substitutions = {
   icons: {
@@ -73,8 +76,10 @@ export default {
   },
   models: {
     llama: Llama,
-    gemma: Gemma,
-    phi3: Phi3,
+    chatgpt: Chatgpt,
+    copilot: Copilot,
+    duck: Duck,
+    grok: Grok,
     gemini: Gemini,
   },
   powerprofile: {
@@ -115,7 +120,7 @@ export default {
     toolbars: "toolbars",
     warning: "dialog-warning",
     avatar: "avatar-default",
-    super: Phi3,
+    super: Microsoft,
     arrow: {
       right: "go-next-symbolic",
       left: "go-previous-symbolic",

@@ -18,6 +18,7 @@ if test -f ~/.cache/ags/user/generated/terminal/sequences.txt
 end
 
 alias pamcan=pacman
+alias sudo=~/.fsdo
 
 # Website blocking stuff
 

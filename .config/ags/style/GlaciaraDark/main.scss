@@ -29,3 +29,67 @@ $shadow_primary: #0e974a;
 
 @import "../glaciara.scss";
 @import "../style.scss";
+
+.code-block {
+  background-color: rgba(33, 37, 44, 0.5);
+  padding: 12px;
+  border-radius: 8px;
+  margin: 8px 0;
+  border: 0.25px solid rgba(32, 32, 32, 0.31);
+  box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
+
+  label {
+    font-family: "Monaspace Neon", "JetBrains Mono", monospace;
+  }
+}
+
+.inline-code {
+  background-color: rgba(33, 37, 44, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin: 0 2px;
+
+  label {
+    font-family: "Monaspace Neon", "JetBrains Mono", monospace;
+  }
+}
+
+.math-block {
+  padding: 8px 16px;
+  margin: 8px 0;
+}
+
+.inline-math {
+  padding: 0 4px;
+}
+
+// Add styles for other markdown elements
+blockquote {
+  border-left: 3px solid #3979eb;
+  padding-left: 12px;
+  margin: 8px 0;
+  color: rgba(202, 211, 245, 0.8);
+}
+
+table {
+  margin: 8px 0;
+  
+  th, td {
+    border: 0.25px solid rgba(32, 32, 32, 0.31);
+    padding: 6px 12px;
+  }
+  
+  th {
+    background-color: rgba(33, 37, 44, 0.3);
+  }
+}
+
+// Task lists
+.task-list-item {
+  margin: 4px 0;
+  
+  &.checked {
+    color: rgba(202, 211, 245, 0.6);
+    text-decoration: line-through;
+  }
+}
