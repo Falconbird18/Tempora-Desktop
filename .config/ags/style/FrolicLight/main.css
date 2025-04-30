@@ -1195,8 +1195,9 @@ switch:checked slider {
   margin-top: 12px;
   padding: 10px;
   font-family: "Monaspace Radon";
-  font-size: 24px;
+  font-size: 18px;
   font-weight: normal;
+  color: red;
 }
 
 .calendar__monthyear * {
@@ -1212,9 +1213,11 @@ switch:checked slider {
   font-size: 100px;
 }
 
-.calendar__days {
+.calendar__header-days {
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Monaspace Xenon";
   color: #562f10;
-  font-size: 100px;
 }
 
 .calendar__button {

@@ -184,6 +184,61 @@ const setWallpaper = async (wallpaperName: string) => {
   } catch (error) {
     console.error("Failed to set wallpaper:", error);
   }
+=======
+  // Use pkexec for privilege escalation if needed, or notify user to run command manually.
+  // Direct `exec` might fail due to permissions.
+  const copyCommand = `cp "${wallpaperImagePath}" "${destinationPath}"`;
+  const swwwCommand = `swww img "${destinationPath}" --transition-step 100 --transition-fps 120 --transition-type grow --transition-angle 30 --transition-duration 1`;
+
+  // Ensure destination directory exists (needs sudo/pkexec)
+  exec([ 'mkdir', '-p', destinationDir])
+    .then(() => exec(['bash', '-c', copyCommand])) // Copy the wallpaper
+    .then(() => exec(['bash', '-c', swwwCommand])) // Set the wallpaper via swww
+    .then(() => console.log("Wallpaper set successfully."))
+    .catch(e => {
+      console.error("Failed to set wallpaper:", e);
+      // Optionally show an error notification
+      // Notif.notify({ title: "Wallpaper Error", body: "Failed to set wallpaper. Check permissions or logs." });
+    });
+};
+
+const setWallpaperDirectory = (wallpaperDirectory: string) => {
+  const oldDirectory = wallpaperFolder.get();
+  if (oldDirectory === wallpaperDirectory) return; // No change
+
+  wallpaperFolder.set(wallpaperDirectory);
+  // For simplicity, let's keep the current wallpaper setting but it might become invalid.
+  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperImage.get(), wallpaperDirectory, totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
+
+  console.log("Wallpaper directory set. UI refresh might be needed manually.");
+
+};
+
+const chooseWallpaperDirectory = () => {
+  const chooser = Gtk.FileChooserDialog.new(
+    "Choose Wallpaper Directory",
+    App.getWindow("control-center"), // Parent window if available
+    Gtk.FileChooserAction.SELECT_FOLDER,
+    null // No buttons initially
+  );
+  chooser.add_button("Cancel", Gtk.ResponseType.CANCEL);
+  chooser.add_button("Select", Gtk.ResponseType.ACCEPT);
+
+  // Set current directory
+  chooser.set_current_folder(wallpaperFolder.get());
+
+  chooser.set_modal(true); // Usually better for dialogs like this
+
+  chooser.connect("response", (dialog, response) => {
+    if (response === Gtk.ResponseType.ACCEPT) {
+      const file = dialog.get_filename();
+      if (file) {
+        setWallpaperDirectory(file);
+      }
+    }
+    dialog.destroy();
+  });
+  chooser.show_all();
 };
 
 // Gets FULL PATHS of valid image files in the directory

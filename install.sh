@@ -84,7 +84,7 @@ echo "Yay installed."
 
 # Install packages
 echo "Installing packages..."
-sudo pacman -S --needed hyprland wofi fish starship hyprpicker hyprlock hypridle wl-clipboard brightnessctl bluez-utils cliphist sddm git swww unzip grim libqalculate webkit2gtk-4.1
+sudo pacman -S --needed hyprland wofi fish starship hyprpicker hyprlock hypridle wl-clipboard brightnessctl bluez-utils cliphist sddm git swww unzip grim libqalculate webkit2gtk-4.1 slurp playerctl
 yay -S --needed aylurs-gtk-shell nbfc-linux bibata-cursor-theme-bin wl-screenrec
 echo "Packages installed."
 

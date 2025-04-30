@@ -20,7 +20,11 @@ export default () => {
 				}
 			}}
 		>
-			<box className={"dashboard"} vertical spacing={10}>
+			<box
+				className={"dashboard"}
+				vertical
+				spacing={10}
+			>
 				{Calendar()}
 			</box>
 		</PopupWindow>

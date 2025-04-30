@@ -3,7 +3,8 @@ import { Binding, Variable } from "astal";
 import { spacing } from "../../../lib/variables";
 import { toggleWindow } from "../../../lib/utils";
 
-export const selectedAction = Variable<string | null>(null);
+// Export a Variable to hold the selected command
+export const Command = Variable<string | null>(null);
 
 export default ({
   revealMenu,
@@ -12,10 +13,19 @@ export default ({
   revealMenu: Binding<boolean>;
   closeMenu: () => void;
 }) => {
-
   const openConfirmation = (action: string) => {
-    selectedAction.value = action;
-    toggleWindow("confirmationPopup");
+    Command.value = action; // Set the Command variable's VALUE
+    console.log(`Command: ${Command.value}`); // Log the VALUE, not the Variable object
+    // Delay opening the confirmation popup slightly. This is the fix.
+    setTimeout(() => {
+      toggleWindow("confirmationPopup");
+    }, 10);
+
+    // Delay closing the menu slightly to allow ConfirmationPopup to read the value.
+    setTimeout(() => {
+      closeMenu();
+    }, 50); // Adjust the delay (in milliseconds) if needed.
+
   };
 
   return (

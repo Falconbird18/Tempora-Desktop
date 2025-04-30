@@ -1,11 +1,11 @@
 /* Colors */
-/* background: hsl(27, 15%, 15%)*/
-/* background-2: hsl(0, 0%, 13%)*/
-/* background-3: hsl(0, 0%, 25%)*/
+/* background: hsl(27, 15%, 93%)*/
+/* card: hsl(0, 0%, 95%)*/
+/* background-light: hsl(27, 15%, 83%)*/
 /* primary: hsl(27, 85%, 47%)*/
 /* secondary: hsl(139, 85%, 47%)*/
-/* text: hsl(27, 68%, 88%)*/
-/* subtext: hsl(27, 19%, 69%)*/
+/* text: hsl(27, 69%, 20%)*/
+/* subtext: hsl(27, 19%, 39%)*/
 /* highlight_primary: hsl(114, 85%, 57%)*/
 /* shadow_primary: hsl(114, 85%, 13%)*/
 /*Difference between hue of Primary and Secondary is 112*/
@@ -16,14 +16,14 @@
 #global-nav-bar,
 .Root__top-container,
 .main-navBar-mainNav {
-  background-color: #2c2621;
+  background-color: #f0edea;
 }
 
 /*svgs*/
 .Svg-img-icon-medium,
 .Svg-img-icon-small,
 .Svg-img-icon-xlarge {
-  fill: #f5decc !important;
+  fill: #562f10 !important;
 }
 
 /*Navbar home button*/
@@ -33,56 +33,56 @@
   padding-left: 16px;
   padding-right: 16px;
   min-height: 42px;
-  background: #202020 !important;
-  color: #f5decc;
+  background: #f2f2f2 !important;
+  color: #562f10;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
   font-family: "Monaspace Radon";
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1) !important;
   margin-right: 2px;
   margin-left: 2px;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   background-size: 8px 8px;
   border-radius: 30px;
 }
 
 .Root__globalNav .main-globalNav-navLink:hover {
   background-size: 8px 8px;
-  background-image: linear-gradient(45deg, #e06f12 25%, #202020 25%, #202020 50%, #e06f12 50%, #e06f12 75%, #202020 75%, #202020) !important;
-  text-shadow: 2px 2px 0 #202020, 2px -2px 0 #202020, -2px 2px 0 #202020, -2px -2px 0 #202020, 2px 0px 0 #202020, 0px 2px 0 #202020, -2px 0px 0 #202020, 0px -2px 0 #202020;
+  background-image: linear-gradient(45deg, #de6e12 25%, #f2f2f2 25%, #f2f2f2 50%, #de6e12 50%, #de6e12 75%, #f2f2f2 75%, #f2f2f2) !important;
+  text-shadow: 2px 2px 0 #f2f2f2, 2px -2px 0 #f2f2f2, -2px 2px 0 #f2f2f2, -2px -2px 0 #f2f2f2, 2px 0px 0 #f2f2f2, 0px 2px 0 #f2f2f2, -2px 0px 0 #f2f2f2, 0px -2px 0 #f2f2f2;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
   transform: none;
 }
 
 /*Navbar search*/
 .b7r2WRiu5f9Q99qmyreh .main-topBar-searchBar {
-  background-color: #202020;
+  background-color: #f2f2f2;
   border-radius: 30px;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 5px;
-  color: #f5decc;
+  color: #562f10;
   font-family: "Monaspace Xenon";
   font-size: 14px;
   font-weight: 300;
   box-shadow: 0 0 0 transparent;
-  caret-color: #f5decc;
+  caret-color: #562f10;
 }
 
 .b7r2WRiu5f9Q99qmyreh .main-topBar-searchBar:hover {
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 10px;
   border-radius: 30px;
   margin-bottom: 2px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background-color: #493f36;
+  background-color: #dad3cd;
 }
 
 /*What do you want to play?*/
 .b7r2WRiu5f9Q99qmyreh .main-topBar-searchBar,
 .b7r2WRiu5f9Q99qmyreh .main-topBar-searchBar::placeholder,
 .b7r2WRiu5f9Q99qmyreh .main-topBar-searchBar:placeholder-shown {
-  color: #f5decc !important;
+  color: #562f10 !important;
   padding-left: calc(var(--encore-layout-margin-looser) / 3);
 }
 
@@ -93,14 +93,14 @@
 
 .IYex0sXu8fnCz1FqFbRe kbd {
   border-radius: 30px;
-  border: 2px solid #e06f12;
-  background-color: #202020;
+  border: 2px solid #de6e12;
+  background-color: #f2f2f2;
   outline: none;
   box-shadow: none;
 }
 
 .b7r2WRiu5f9Q99qmyreh .main-topBar-searchBar:focus {
-  background: #493f36;
+  background: #dad3cd;
   box-shadow: none;
 }
 
@@ -112,33 +112,33 @@
   font-family: "Monaspace Radon";
   font-weight: normal;
   font-size: 24px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
 .IEDOUN3mwwZhHVziC03a,
 .IEDOUN3mwwZhHVziC03a,
 .SjhDNg4bQRQmIJAba47Z {
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 10px;
   border-radius: 30px;
   margin-bottom: 2px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background-color: #2c2621 !important;
+  background-color: #f0edea !important;
 }
 
 .IEDOUN3mwwZhHVziC03a:hover,
 .IEDOUN3mwwZhHVziC03a:hover,
 .SjhDNg4bQRQmIJAba47Z:hover {
-  background-color: #493f36;
+  background-color: #dad3cd;
 }
 
 .encore-text-title-medium {
   font-family: "Monaspace Radon";
   font-weight: normal;
   font-size: 24px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
 .Button-buttonSecondary-small-useBrowserDefaultFocusStyle {
@@ -147,23 +147,23 @@
   padding-left: 16px;
   padding-right: 16px;
   min-height: 42px;
-  background: linear-gradient(45deg, #e06f12 25%, #202020 25%, #202020 50%, #e06f12 50%, #e06f12 75%, #202020 75%, #202020);
-  color: #f5decc;
+  background: linear-gradient(45deg, #de6e12 25%, #f2f2f2 25%, #f2f2f2 50%, #de6e12 50%, #de6e12 75%, #f2f2f2 75%, #f2f2f2);
+  color: #562f10;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
   font-family: "Monaspace Radon";
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
   margin-right: 2px;
   margin-left: 2px;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   background-size: 8px 8px;
   border-radius: 30px;
-  text-shadow: 2px 2px 0 #202020, 2px -2px 0 #202020, -2px 2px 0 #202020, -2px -2px 0 #202020, 2px 0px 0 #202020, 0px 2px 0 #202020, -2px 0px 0 #202020, 0px -2px 0 #202020;
+  text-shadow: 2px 2px 0 #f2f2f2, 2px -2px 0 #f2f2f2, -2px 2px 0 #f2f2f2, -2px -2px 0 #f2f2f2, 2px 0px 0 #f2f2f2, 0px 2px 0 #f2f2f2, -2px 0px 0 #f2f2f2, 0px -2px 0 #f2f2f2;
 }
 
 .GimJ6fo6WOYPyWNVpSr1 {
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 10px;
   border-radius: 30px;
   margin-bottom: 2px;
@@ -172,7 +172,7 @@
 
 /*Profile background*/
 .main-userWidget-box {
-  background-color: #2c2621 !important;
+  background-color: #f0edea !important;
 }
 
 .main-userWidget-box:hover {
@@ -186,17 +186,17 @@
   padding-left: 16px;
   padding-right: 16px;
   min-height: 42px;
-  background: linear-gradient(45deg, #e06f12 25%, #202020 25%, #202020 50%, #e06f12 50%, #e06f12 75%, #202020 75%, #202020);
-  color: #f5decc;
+  background: linear-gradient(45deg, #de6e12 25%, #f2f2f2 25%, #f2f2f2 50%, #de6e12 50%, #de6e12 75%, #f2f2f2 75%, #f2f2f2);
+  color: #562f10;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
   font-family: "Monaspace Radon";
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
   margin-right: 2px;
   margin-left: 2px;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   background-size: 8px 8px;
   border-radius: 30px;
-  text-shadow: 2px 2px 0 #202020, 2px -2px 0 #202020, -2px 2px 0 #202020, -2px -2px 0 #202020, 2px 0px 0 #202020, 0px 2px 0 #202020, -2px 0px 0 #202020, 0px -2px 0 #202020;
+  text-shadow: 2px 2px 0 #f2f2f2, 2px -2px 0 #f2f2f2, -2px 2px 0 #f2f2f2, -2px -2px 0 #f2f2f2, 2px 0px 0 #f2f2f2, 0px 2px 0 #f2f2f2, -2px 0px 0 #f2f2f2, 0px -2px 0 #f2f2f2;
   padding-left: 14px;
   padding-right: 14px;
   min-height: 32px;
@@ -205,14 +205,14 @@
 }
 
 .main-avatar-avatar:hover {
-  background-color: #202020 !important;
+  background-color: #f2f2f2 !important;
 }
 
 /*Library*/
 .main-yourLibraryX-entryPoints {
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 10px;
   border-radius: 30px;
   margin-bottom: 2px;
@@ -221,15 +221,15 @@
 }
 
 .main-useDropTarget-base .main-useDropTarget-track .main-useDropTarget-local .main-useDropTarget-album .main-useDropTarget-artist .CU0fvofmxUbTupSDNOQ3 .main-useDropTarget-playlist .main-useDropTarget-show .main-useDropTarget-folder .main-useDropTarget-pseudoPlaylist .main-yourLibraryX-listItem {
-  background-color: #202020 !important;
+  background-color: #f2f2f2 !important;
 }
 
 .rowbutton-sc-xxkq4e-0 .fvljwa {
-  background-color: #202020 !important;
+  background-color: #f2f2f2 !important;
 }
 
 .rowbutton-sc-xxkq4e-0 .fvljwa:hover {
-  background-color: #493f36 !important;
+  background-color: #dad3cd !important;
 }
 
 /*Library playlist button*/
@@ -239,22 +239,22 @@
   padding-left: 16px;
   padding-right: 16px;
   min-height: 42px;
-  background: #202020 !important;
-  color: #f5decc;
+  background: #f2f2f2 !important;
+  color: #562f10;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
   font-family: "Monaspace Radon";
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1) !important;
   margin-right: 2px;
   margin-left: 2px;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   background-size: 8px 8px;
   border-radius: 30px;
 }
 
 .Button-buttonTertiary-small-small-iconOnly-isUsingKeyboard-useBrowserDefaultFocusStyle:hover {
   background-size: 8px 8px;
-  background-image: linear-gradient(45deg, #e06f12 25%, #202020 25%, #202020 50%, #e06f12 50%, #e06f12 75%, #202020 75%, #202020) !important;
-  text-shadow: 2px 2px 0 #202020, 2px -2px 0 #202020, -2px 2px 0 #202020, -2px -2px 0 #202020, 2px 0px 0 #202020, 0px 2px 0 #202020, -2px 0px 0 #202020, 0px -2px 0 #202020;
+  background-image: linear-gradient(45deg, #de6e12 25%, #f2f2f2 25%, #f2f2f2 50%, #de6e12 50%, #de6e12 75%, #f2f2f2 75%, #f2f2f2) !important;
+  text-shadow: 2px 2px 0 #f2f2f2, 2px -2px 0 #f2f2f2, -2px 2px 0 #f2f2f2, -2px -2px 0 #f2f2f2, 2px 0px 0 #f2f2f2, 0px 2px 0 #f2f2f2, -2px 0px 0 #f2f2f2, 0px -2px 0 #f2f2f2;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
 }
 
@@ -264,17 +264,17 @@
   padding-left: 16px;
   padding-right: 16px;
   min-height: 42px;
-  background: linear-gradient(45deg, #e06f12 25%, #202020 25%, #202020 50%, #e06f12 50%, #e06f12 75%, #202020 75%, #202020);
-  color: #f5decc;
+  background: linear-gradient(45deg, #de6e12 25%, #f2f2f2 25%, #f2f2f2 50%, #de6e12 50%, #de6e12 75%, #f2f2f2 75%, #f2f2f2);
+  color: #562f10;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
   font-family: "Monaspace Radon";
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
   margin-right: 2px;
   margin-left: 2px;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   background-size: 8px 8px;
   border-radius: 30px;
-  text-shadow: 2px 2px 0 #202020, 2px -2px 0 #202020, -2px 2px 0 #202020, -2px -2px 0 #202020, 2px 0px 0 #202020, 0px 2px 0 #202020, -2px 0px 0 #202020, 0px -2px 0 #202020;
+  text-shadow: 2px 2px 0 #f2f2f2, 2px -2px 0 #f2f2f2, -2px 2px 0 #f2f2f2, -2px -2px 0 #f2f2f2, 2px 0px 0 #f2f2f2, 0px 2px 0 #f2f2f2, -2px 0px 0 #f2f2f2, 0px -2px 0 #f2f2f2;
 }
 
 /*Filter buttons*/
@@ -284,62 +284,62 @@
   padding-left: 16px;
   padding-right: 16px;
   min-height: 42px;
-  background: #202020 !important;
-  color: #f5decc;
+  background: #f2f2f2 !important;
+  color: #562f10;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
   font-family: "Monaspace Radon";
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1) !important;
   margin-right: 2px;
   margin-left: 2px;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   background-size: 8px 8px;
   border-radius: 30px;
 }
 
 .ChipInnerComponent-sm-isUsingKeyboard:hover {
   background-size: 8px 8px;
-  background-image: linear-gradient(45deg, #e06f12 25%, #202020 25%, #202020 50%, #e06f12 50%, #e06f12 75%, #202020 75%, #202020) !important;
-  text-shadow: 2px 2px 0 #202020, 2px -2px 0 #202020, -2px 2px 0 #202020, -2px -2px 0 #202020, 2px 0px 0 #202020, 0px 2px 0 #202020, -2px 0px 0 #202020, 0px -2px 0 #202020;
+  background-image: linear-gradient(45deg, #de6e12 25%, #f2f2f2 25%, #f2f2f2 50%, #de6e12 50%, #de6e12 75%, #f2f2f2 75%, #f2f2f2) !important;
+  text-shadow: 2px 2px 0 #f2f2f2, 2px -2px 0 #f2f2f2, -2px 2px 0 #f2f2f2, -2px -2px 0 #f2f2f2, 2px 0px 0 #f2f2f2, 0px 2px 0 #f2f2f2, -2px 0px 0 #f2f2f2, 0px -2px 0 #f2f2f2;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
 }
 
 .ChipInnerComponent-sm-selected-isUsingKeyboard {
-  background: #e06f12;
+  background: #de6e12;
   box-shadow: 0 0 0 transparent;
   background-size: 8px 8px;
 }
 
 .encore-internal-color-text-base {
-  color: #f5decc;
+  color: #562f10;
 }
 
 .encore-internal-color-text-bright-accent {
-  color: #e06f12;
+  color: #de6e12;
 }
 
 .encore-text-body-medium-bold {
   font-family: "Monaspace Radon";
   font-weight: normal;
   font-size: 18px;
-  color: #f5decc;
+  color: #562f10;
 }
 
 /*Now Playing*/
 .AAdBM1nhG73supMfnYX7 {
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 10px;
   border-radius: 30px;
   margin-bottom: 2px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background-color: #493f36 !important;
+  background-color: #dad3cd !important;
 }
 
 .main-nowPlayingView-section {
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 10px;
   border-radius: 30px;
   margin-bottom: 2px;
@@ -350,7 +350,7 @@
   font-family: "Monaspace Xenon";
   font-weight: 300;
   font-size: 14px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
 .encore-text-body-small,
@@ -358,7 +358,7 @@
   font-family: "Monaspace Xenon";
   font-weight: 100;
   font-size: 11px;
-  color: #bfaea1;
+  color: #766251;
 }
 
 .encore-text-headline-large,
@@ -366,26 +366,26 @@
   font-family: "Monaspace Radon";
   font-weight: normal;
   font-size: 24px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
 .XVz4BMGP5zAEE5p90mYK,
 .main-actionBar-ActionBar {
-  background-color: #202020;
+  background-color: #f2f2f2;
 }
 
 .eWZOJQ:hover,
 .search-searchCategory-categoryGrid.eRKQSDqbcx0NSAApALFA .bdT2hWuSLE4HMyJ1ziC8 > *:hover {
-  background-color: #2c2621 !important;
+  background-color: #f0edea !important;
   border-radius: 30px;
 }
 
 .BoxComponent-group-card-naked-isInteractive-draggable {
-  background-color: #202020;
+  background-color: #f2f2f2;
 }
 
 .Box__BoxComponent-sc-y4nds-0 .BoxComponent-group-card-naked-isInteractive-draggable .Box-sc-1njtxi4-0 .Box-group-naked-card-md-isInteractive-draggable main-card-cardContainer:hover {
-  background-color: #493f36;
+  background-color: #dad3cd;
 }
 
 /*Play buttons*/
@@ -395,21 +395,21 @@
   font-weight: normal;
   min-width: 42px;
   min-height: 42px;
-  background: linear-gradient(45deg, #e06f12 25%, #202020 25%, #202020 50%, #e06f12 50%, #e06f12 75%, #202020 75%, #202020);
-  color: #f5decc;
+  background: linear-gradient(45deg, #de6e12 25%, #f2f2f2 25%, #f2f2f2 50%, #de6e12 50%, #de6e12 75%, #f2f2f2 75%, #f2f2f2);
+  color: #562f10;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
   font-family: "Monaspace Radon";
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
   margin-right: 2px;
   margin-left: 2px;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   background-size: 8px 8px;
   border-radius: 100%;
-  text-shadow: 2px 2px 0 #202020, 2px -2px 0 #202020, -2px 2px 0 #202020, -2px -2px 0 #202020, 2px 0px 0 #202020, 0px 2px 0 #202020, -2px 0px 0 #202020, 0px -2px 0 #202020;
+  text-shadow: 2px 2px 0 #f2f2f2, 2px -2px 0 #f2f2f2, -2px 2px 0 #f2f2f2, -2px -2px 0 #f2f2f2, 2px 0px 0 #f2f2f2, 0px 2px 0 #f2f2f2, -2px 0px 0 #f2f2f2, 0px -2px 0 #f2f2f2;
 }
 
 .Svg-img-icon-large {
-  fill: #f5decc;
+  fill: #562f10;
 }
 
 /*Add to playlist svgs*/
@@ -420,7 +420,7 @@
 
 .contentSpacing,
 .main-topBar-background {
-  background-color: #202020;
+  background-color: #f2f2f2;
 }
 
 .hV9v6y_uYwdAsoiOHpzk {
@@ -428,7 +428,7 @@
 }
 
 .main-trackList-trackListHeader {
-  border-bottom: 2px solid #e06f12 !important;
+  border-bottom: 2px solid #de6e12 !important;
 }
 
 .main-trackList-rowSectionIndex,
@@ -436,17 +436,17 @@
   font-family: "Monaspace Xenon";
   font-weight: 300;
   font-size: 14px;
-  color: #f5decc !important;
-  color: #e06f12 !important;
+  color: #562f10 !important;
+  color: #de6e12 !important;
 }
 
 .UudGCx16EmBkuFPllvss a {
-  color: #e06f12 !important;
+  color: #de6e12 !important;
 }
 
 .main-trackList-trackListHeaderStuck.main-trackList-trackListHeader,
 .main-home-filterChipsContainer {
-  background: #202020 !important;
+  background: #f2f2f2 !important;
 }
 
 .main-home-filterChipsSection {
@@ -454,36 +454,36 @@
 }
 
 .MGZ4oJmGVPrWsx5cT5hN {
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 10px;
   border-radius: 30px;
   margin-bottom: 2px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background-color: #2c2621;
+  background-color: #f0edea;
 }
 
 .CardTitle__LineClamp-sc-1h38un4-0 .LineClamp {
   font-family: "Monaspace Xenon";
   font-weight: 300;
   font-size: 14px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
 /*Copyright*/
 .TypeElement-type-finale {
-  color: #e06f12;
+  color: #de6e12;
 }
 
 a:not([data-encore-id]) {
-  color: #f5decc;
+  color: #562f10;
 }
 
 .Root__main-view {
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 10px;
   border-radius: 30px;
   margin-bottom: 2px;
@@ -493,14 +493,14 @@ a:not([data-encore-id]) {
 
 /*Spicetify update button*/
 .Button-buttonTertiary-medium-medium-iconOnly-disabled-isUsingKeyboard-useBrowserDefaultFocusStyle-condensed {
-  color: #e06f12;
+  color: #de6e12;
 }
 
 .ListRowTitle__LineClamp-sc-1xe2if1-0 {
   font-family: "Monaspace Radon";
   font-weight: normal;
   font-size: 24px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
 .encore-text-body-medium,
@@ -508,7 +508,7 @@ a:not([data-encore-id]) {
   font-family: "Monaspace Xenon";
   font-weight: 300;
   font-size: 14px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
 /*Album art*/
@@ -527,18 +527,18 @@ a:not([data-encore-id]) {
 }
 
 .a2NTH51fJWzWsds0OYv_:after {
-  background: linear-gradient(-90deg, #202020, transparent);
+  background: linear-gradient(-90deg, #f2f2f2, transparent);
 }
 
 .view-homeShortcutsGrid-shortcut .view-homeShortcutsGrid-draggable {
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 10px;
   border-radius: 30px;
   margin-bottom: 2px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background-color: #2c2621;
+  background-color: #f0edea;
   padding: 0;
 }
 
@@ -552,17 +552,17 @@ a:not([data-encore-id]) {
   font-weight: normal;
   min-width: 42px;
   min-height: 42px;
-  background: linear-gradient(45deg, #e06f12 25%, #202020 25%, #202020 50%, #e06f12 50%, #e06f12 75%, #202020 75%, #202020);
-  color: #f5decc;
+  background: linear-gradient(45deg, #de6e12 25%, #f2f2f2 25%, #f2f2f2 50%, #de6e12 50%, #de6e12 75%, #f2f2f2 75%, #f2f2f2);
+  color: #562f10;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
   font-family: "Monaspace Radon";
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
   margin-right: 2px;
   margin-left: 2px;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   background-size: 8px 8px;
   border-radius: 100%;
-  text-shadow: 2px 2px 0 #202020, 2px -2px 0 #202020, -2px 2px 0 #202020, -2px -2px 0 #202020, 2px 0px 0 #202020, 0px 2px 0 #202020, -2px 0px 0 #202020, 0px -2px 0 #202020;
+  text-shadow: 2px 2px 0 #f2f2f2, 2px -2px 0 #f2f2f2, -2px 2px 0 #f2f2f2, -2px -2px 0 #f2f2f2, 2px 0px 0 #f2f2f2, 0px 2px 0 #f2f2f2, -2px 0px 0 #f2f2f2, 0px -2px 0 #f2f2f2;
 }
 
 .view-homeShortcutsGrid-shortcut .view-homeShortcutsGrid-image,
@@ -573,13 +573,13 @@ a:not([data-encore-id]) {
 
 /*Spicetify update stuff*/
 .GenericModal__overlay {
-  background-color: rgba(44, 38, 33, 0.7);
+  background-color: rgba(240, 237, 234, 0.7);
 }
 
 .main-embedWidgetGenerator-container {
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 10px;
   border-radius: 30px;
   margin-bottom: 2px;
@@ -590,7 +590,7 @@ a:not([data-encore-id]) {
   font-family: "Monaspace Radon";
   font-weight: normal;
   font-size: 24px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
 #spicetify-update p,
@@ -598,26 +598,26 @@ a:not([data-encore-id]) {
   font-family: "Monaspace Xenon";
   font-weight: 300;
   font-size: 14px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
 #spicetify-update h3 {
   font-family: "Monaspace Radon";
   font-weight: normal;
-  font-size: 18px;
-  color: #f5decc;
+  font-size: 18p;
+  color: #562f10;
 }
 
 #spicetify-update ol pre {
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 10px;
   border-radius: 30px;
   margin-bottom: 2px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  color: #f5decc;
-  background-color: #2c2621;
+  color: #562f10;
+  background-color: #f0edea;
   margin-bottom: 10px;
 }
 
@@ -630,25 +630,25 @@ a:not([data-encore-id]) {
   font-weight: normal;
   min-width: 42px;
   min-height: 42px;
-  background: #202020;
-  color: #f5decc;
+  background: #f2f2f2;
+  color: #562f10;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
   font-family: "Monaspace Radon";
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
   margin-right: 2px;
   margin-left: 2px;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   background-size: 8px 8px;
   border-radius: 100%;
-  color: #f5decc;
+  color: #562f10;
 }
 
 #spicetify-update a {
   font-family: "Monaspace Xenon";
   font-weight: 300;
   font-size: 14px;
-  color: #f5decc !important;
-  color: #e06f12 !important;
+  color: #562f10 !important;
+  color: #de6e12 !important;
   text-decoration: underline;
 }
 
@@ -662,21 +662,22 @@ a:not([data-encore-id]) {
   font-family: "Monaspace Xenon";
   font-weight: 300;
   font-size: 14px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
-#spicetify-update ol > li {
+#spicetify-update ol 
+li {
   font-family: "Monaspace Xenon";
   font-weight: bold;
   font-size: 16px;
-  color: #f5decc;
+  color: #562f10;
 }
 
 #spicetify-update details summary {
   font-family: "Monaspace Xenon";
   font-weight: 300;
   font-size: 14px;
-  color: #f5decc !important;
+  color: #562f10 !important;
   margin-left: 1.5rem;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -684,14 +685,14 @@ a:not([data-encore-id]) {
 
 .Q36ugVAb7krhThyRTmJ_ {
   border-radius: 30px;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
 }
 
 .YSflHyCWx4tGL7LrqtLE span {
   font-family: "Monaspace Radon";
   font-weight: normal;
   font-size: 24px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
 /*Erorr page*/
@@ -699,14 +700,14 @@ a:not([data-encore-id]) {
   font-family: "Monaspace Radon";
   font-weight: normal;
   font-size: 24px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
 .main-pageErrorTemplate-errorBody p {
   font-family: "Monaspace Xenon";
   font-weight: 300;
   font-size: 14px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
 .main-pageErrorTemplate-errorBody button span {
@@ -715,45 +716,45 @@ a:not([data-encore-id]) {
   padding-left: 16px;
   padding-right: 16px;
   min-height: 42px;
-  background: linear-gradient(45deg, #e06f12 25%, #202020 25%, #202020 50%, #e06f12 50%, #e06f12 75%, #202020 75%, #202020);
-  color: #f5decc;
+  background: linear-gradient(45deg, #de6e12 25%, #f2f2f2 25%, #f2f2f2 50%, #de6e12 50%, #de6e12 75%, #f2f2f2 75%, #f2f2f2);
+  color: #562f10;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
   font-family: "Monaspace Radon";
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
   margin-right: 2px;
   margin-left: 2px;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   background-size: 8px 8px;
   border-radius: 30px;
-  text-shadow: 2px 2px 0 #202020, 2px -2px 0 #202020, -2px 2px 0 #202020, -2px -2px 0 #202020, 2px 0px 0 #202020, 0px 2px 0 #202020, -2px 0px 0 #202020, 0px -2px 0 #202020;
+  text-shadow: 2px 2px 0 #f2f2f2, 2px -2px 0 #f2f2f2, -2px 2px 0 #f2f2f2, -2px -2px 0 #f2f2f2, 2px 0px 0 #f2f2f2, 0px 2px 0 #f2f2f2, -2px 0px 0 #f2f2f2, 0px -2px 0 #f2f2f2;
 }
 
 .main-pageErrorTemplate-errorBody button span:hover {
-  background-color: #202020 !important;
+  background-color: #f2f2f2 !important;
 }
 
 /*Spicetify marketplace*/
 .marketplace-header-icon-button {
-  color: #e06f12;
+  color: #de6e12;
 }
 
 .marketplace-header {
-  background-color: #202020;
+  background-color: #f2f2f2;
 }
 
 .main-card-card {
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 10px;
   border-radius: 30px;
   margin-bottom: 2px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background-color: #2c2621;
+  background-color: #f0edea;
 }
 
 .main-card-card:hover {
-  background-color: #493f36;
+  background-color: #dad3cd;
   border-radius: 30px;
 }
 
@@ -761,22 +762,22 @@ a:not([data-encore-id]) {
   font-family: "Monaspace Xenon";
   font-weight: 300;
   font-size: 14px;
-  color: #f5decc !important;
+  color: #562f10 !important;
 }
 
 .marketplace-cardSubHeader {
   font-family: "Monaspace Xenon";
   font-weight: 300;
   font-size: 14px;
-  color: #f5decc !important;
-  color: #e06f12 !important;
+  color: #562f10 !important;
+  color: #de6e12 !important;
 }
 
 .main-cardHeader-text {
   font-family: "Monaspace Radon";
   font-weight: normal;
   font-size: 18px;
-  color: #f5decc;
+  color: #562f10;
   margin-top: 10px;
 }
 
@@ -784,14 +785,14 @@ a:not([data-encore-id]) {
   font-family: "Monaspace Xenon";
   font-weight: bold;
   font-size: 16px;
-  color: #f5decc;
+  color: #562f10;
 }
 
 .main-cardImage-imageWrapper,
 .main-cardImage-image,
 .main-card-imagePlaceholder {
   border-radius: 30px;
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: none;
 }
 
@@ -800,36 +801,36 @@ a:not([data-encore-id]) {
   font-weight: normal;
   min-width: 42px;
   min-height: 42px;
-  background: linear-gradient(45deg, #e06f12 25%, #202020 25%, #202020 50%, #e06f12 50%, #e06f12 75%, #202020 75%, #202020);
-  color: #f5decc;
+  background: linear-gradient(45deg, #de6e12 25%, #f2f2f2 25%, #f2f2f2 50%, #de6e12 50%, #de6e12 75%, #f2f2f2 75%, #f2f2f2);
+  color: #562f10;
   box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
   font-family: "Monaspace Radon";
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
   margin-right: 2px;
   margin-left: 2px;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   background-size: 8px 8px;
   border-radius: 100%;
-  text-shadow: 2px 2px 0 #202020, 2px -2px 0 #202020, -2px 2px 0 #202020, -2px -2px 0 #202020, 2px 0px 0 #202020, 0px 2px 0 #202020, -2px 0px 0 #202020, 0px -2px 0 #202020;
+  text-shadow: 2px 2px 0 #f2f2f2, 2px -2px 0 #f2f2f2, -2px 2px 0 #f2f2f2, -2px -2px 0 #f2f2f2, 2px 0px 0 #f2f2f2, 0px 2px 0 #f2f2f2, -2px 0px 0 #f2f2f2, 0px -2px 0 #f2f2f2;
 }
 
 .marketplace-card__bottom-meta {
   font-family: "Monaspace Xenon";
   font-weight: 300;
   font-size: 14px;
-  color: #f5decc !important;
-  color: #e06f12 !important;
+  color: #562f10 !important;
+  color: #de6e12 !important;
 }
 
 .marketplace-grid .main-card-draggable .main-card-cardMetadata li.marketplace-card__tag {
-  background-color: #202020;
+  background-color: #f2f2f2;
   box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  border: 2px solid #de6e12;
   padding: 10px;
   border-radius: 30px;
   margin-bottom: 2px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background-color: #2c2621;
+  background-color: #f0edea;
   padding: 2px;
 }
 
