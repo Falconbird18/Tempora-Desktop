@@ -19,15 +19,15 @@ import Media from "./items/Media";
 import { barLocation } from "../ControlCenter/pages/AdvancedThemes";
 import { bind } from "astal";
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      box: ConstructProps<Gtk.Box, Gtk.Box.ConstructorProps> & Ref<Gtk.Box>;
-      window: ConstructProps<Widget.Window, Widget.Window.ConstructorProps> & Ref<Widget.Window>;
-      centerbox: ConstructProps<Gtk.Box, Gtk.Box.ConstructorProps> & Ref<Gtk.Box>;
-    }
-  }
-}
+// declare global {
+//   namespace JSX {
+//     interface IntrinsicElements {
+//       box: ConstructProps<Gtk.Box, Gtk.Box.ConstructorProps> & Ref<Gtk.Box>;
+//       window: ConstructProps<Widget.Window, Widget.Window.ConstructorProps> & Ref<Widget.Window>;
+//       centerbox: ConstructProps<Gtk.Box, Gtk.Box.ConstructorProps> & Ref<Gtk.Box>;
+//     }
+//   }
+// }
 
 const Start = () => {
   return (
@@ -74,8 +74,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       anchor={bind(barLocation).as((loc: { anchor: number }) => loc.anchor)}
       application={App}
     >
-      <box className="bar" valign={Gtk.Align.CENTER}>
-        <box className="bar-content-container">
+      {/* <centerbox className="bar" valign={Gtk.Align.CENTER}> */}
           {bind(barLocation).as((loc: { name: string }) => loc.name === "left" || loc.name === "right" ? (
             <box vertical>
               <box vexpand={false} spacing={spacing}>
@@ -95,8 +94,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
               <End />
             </centerbox>
           ))}
-        </box>
-      </box>
+      {/* </centerbox> */}
     </window>
   );
 }
