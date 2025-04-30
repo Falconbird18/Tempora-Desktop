@@ -1,8 +1,4 @@
-import { App, Gtk, Gdk } from "astal/gtk3";
-import { astalify, Widget } from "astal/gtk3";
-import { GObject } from "astal";
-import { ConstructProps } from "astal/gtk3";
-import { Ref } from "../../common/Types";
+import { Astal, App, Gtk, Gdk } from "astal/gtk3";
 import Workspaces from "./items/Workspaces";
 import { spacing } from "../../lib/variables";
 import ActiveApp from "./items/ActiveApp";
@@ -70,31 +66,30 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       className="Bar"
       namespace="bar"
       gdkmonitor={gdkmonitor}
-      exclusivity="exclusive"
+      exclusivity={Astal.Exclusivity.EXCLUSIVE}
+      layer="top"
       anchor={bind(barLocation).as((loc: { anchor: number }) => loc.anchor)}
       application={App}
     >
-      {/* <centerbox className="bar" valign={Gtk.Align.CENTER}> */}
-          {bind(barLocation).as((loc: { name: string }) => loc.name === "left" || loc.name === "right" ? (
-            <box vertical>
-              <box vexpand={false} spacing={spacing}>
-                <Start />
-              </box>
-              <box vexpand={true} valign={Gtk.Align.CENTER} spacing={spacing}>
-                <Center />
-              </box>
-              <box vexpand={false} spacing={spacing}>
-                <End />
-              </box>
-            </box>
-          ) : (
-            <centerbox>
-              <Start />
-              <Center />
-              <End />
-            </centerbox>
-          ))}
-      {/* </centerbox> */}
+      {bind(barLocation).as((loc: { name: string }) => loc.name === "left" || loc.name === "right" ? (
+        <box className="bar" vertical>
+          <box vexpand={false} spacing={spacing}>
+            <Start />
+          </box>
+          <box vexpand={true} valign={Gtk.Align.CENTER} spacing={spacing}>
+            <Center />
+          </box>
+          <box vexpand={false} spacing={spacing}>
+            <End />
+          </box>
+        </box>
+      ) : (
+        <centerbox className="bar" valign={Gtk.Align.CENTER}>
+          <Start />
+          <Center />
+          <End />
+        </centerbox>
+      ))}
     </window>
   );
 }
