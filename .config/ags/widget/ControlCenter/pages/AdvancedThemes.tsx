@@ -1,5 +1,5 @@
 import Page from "../Page";
-import { App, Gtk, Gdk, Widget } from "astal/gtk3";
+import { App, Astal, Gtk, Gdk, Widget } from "astal/gtk3";
 import { bind, execAsync, timeout, Variable, exec, GObject } from "astal";
 const { GLib, Gio } = imports.gi;
 import { spacing } from "../../../lib/variables";
@@ -60,7 +60,7 @@ const saveSettings = (
       numbers,
       hideEmptyWorkspaces,
       workspaceIcons,
-      barLocation: barLocation.get(),
+      barLocation: barLocation.get().name,
     });
     file.replace_contents(
       contents,
@@ -87,7 +87,31 @@ export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
 export const settingsChanged = Variable(0);
 export const showNumbers = Variable(settings.numbers);
 export const workspaceIcons = Variable(settings.workspaceIcons || {});
-export const barLocation = Variable(settings.barLocation || "top");
+
+const BarLocations = {
+  Top: {
+    name: "top",
+    anchor: Astal.WindowAnchor.LEFT | Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT,
+  },
+  Bottom: {
+    name: "bottom",
+    anchor: Astal.WindowAnchor.LEFT | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.RIGHT,
+  },
+  Left: {
+    name: "left",
+    anchor: Astal.WindowAnchor.LEFT | Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM,
+  },
+  Right: {
+    name: "right",
+    anchor: Astal.WindowAnchor.RIGHT | Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM,
+  },
+} as const;
+
+// Update the barLocation type to include anchor
+export const barLocation = Variable({
+  name: settings.barLocation || "top",
+  anchor: BarLocations.Top.anchor,
+});
 
 const setWorkspaces = (workspaces: number) => {
   const newValue = Math.max(1, Math.min(20, workspaces));
@@ -183,8 +207,8 @@ const removeWorkspaceIcon = (workspaceId: number) => {
   settingsChanged.set(settingsChanged.get() + 1);
 };
 
-const setBarLocation = (location: string) => {
-  barLocation.set(location);
+const setBarLocation = (location: keyof typeof BarLocations) => {
+  barLocation.set(BarLocations[location]);
   saveSettings(
     currentTheme.get(),
     currentMode.get(),
@@ -226,16 +250,15 @@ export default () => {
                 className="combo-box-text"
                 onChanged={(entry) => {
                   const selected = entry.get_active_text();
-                  if (selected) {
-                    setBarLocation(selected.toLowerCase());
+                  if (selected && selected in BarLocations) {
+                    setBarLocation(selected as keyof typeof BarLocations);
                   }
                 }}
                 setup={(combo) => {
-                  const locations = ["Top", "Bottom", "Left", "Right"];
-                  locations.forEach(loc => combo.append_text(loc));
-                  const current = barLocation.get();
-                  const index = locations.findIndex(loc => 
-                    loc.toLowerCase() === current.toLowerCase()
+                  Object.keys(BarLocations).forEach(loc => combo.append_text(loc));
+                  const current = barLocation.get().name;
+                  const index = Object.keys(BarLocations).findIndex(
+                    loc => BarLocations[loc as keyof typeof BarLocations].name === current
                   );
                   combo.set_active(index !== -1 ? index : 0);
                 }}
@@ -433,25 +456,24 @@ export default () => {
               return (
                 <eventbox
                   key={`icon-card-${id}`}
-                  horizontal
-                  spacing={8}
-                  halign={Gtk.Align.FILL}
                   onEnterNotifyEvent={(self) => {
                     if (deleteClass) {
                       console.log("Hover enter:", id);
-                      deleteClass.className = "delete-button-visible"
+                      deleteClass.toggleClassName("delete-button-visible", true);
+                      deleteClass.toggleClassName("delete-button-hidden", false);
                       console.log("Current className:", deleteClass.className)
                     }
                   }}
                   onLeaveNotifyEvent={(self) => {
                     if (deleteClass) {
                       console.log("Hover leave:", id);
-                      deleteClass.className = "delete-button-hidden";
+                      deleteClass.toggleClassName("delete-button-visible", false);
+                      deleteClass.toggleClassName("delete-button-hidden", true);
                       console.log("Current className:", deleteClass.className)
                     }
                   }}
                 >
-                  <box className="icon-card">
+                  <box className="icon-card" horizontal spacing={8} halign={Gtk.Align.FILL}>
                     <label
                       label={`Workspace ${id}: ${icon}`}
                       className="paragraph"

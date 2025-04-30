@@ -548,7 +548,7 @@ switch:checked slider {
     min-height: 60px;
     padding: 0 12px;
     background-image: $background_gradient;
-    margin: 7px 7px 7px 7px;
+    margin: $outset_margin;
     border-radius: $secondary-radius;
     border: $primary-border;
 }
