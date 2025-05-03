@@ -453,7 +453,7 @@ switch:checked slider {
   min-height: 60px;
   padding: 0 12px;
   background-image: linear-gradient(145deg, rgba(33, 37, 44, 0.1568627451), rgba(33, 37, 44, 0.1568627451));
-  margin: 7px 7px 7px 7px;
+  margin: 1px;
   border-radius: 30px;
   border: 0.25px solid rgba(32, 32, 32, 0.3098039216);
 }
@@ -1218,11 +1218,6 @@ switch:checked slider {
   font-weight: bold;
   font-family: "Roboto";
   color: #cad3f5;
-}
-
-.calendar__days {
-  color: #cad3f5;
-  font-size: 100px;
 }
 
 .calendar__button {

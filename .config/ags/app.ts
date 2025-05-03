@@ -47,6 +47,7 @@ const applyTheme = async () => {
     const ghosttyDest = `${homeDir}/.config/ghostty/config`;
     const hyprctl = "hyprctl reload"
     const spicetify = "spicetify update"
+    const kittyCommand = `kitten themes --reload-in=all ${theme} ${mode}`;
 
 
     console.log("Theme Path CSS:", themePathCss);
@@ -76,6 +77,8 @@ const applyTheme = async () => {
     console.log("Hyprland reloaded");
     await execAsync(spicetify);
     console.log("Spicetify reloaded");
+    await execAsync(kittyCommand);
+    console.log("Kitty reloaded");
   } catch (error) {
     console.error("Error applying theme:", error);
     if (error instanceof Gio.IOError) {
@@ -106,7 +109,7 @@ function main() {
   Weather();
   Media();
   SideBar();
-  Keybinds();
+  //Keybinds();
   Clipboard();
   Screenshot();
   ControlCenter();

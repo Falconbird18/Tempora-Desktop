@@ -51,7 +51,7 @@ const displayLocation = bind(location).as((value) => {
   return value.replace(/,/g, ", "); // Add a space after the comma
 });
 
-const temperature = bind(realTemp).as((value) => value || "N/A");
+const temperature = bind(realTemp).as((value) => `${(value || 'N/A').trim()}`); // Trim whitespace and add quotes
 const feelsTemperature = bind(feelsTemp).as((value) => value || "N/A");
 const uv = bind(uvIndex).as((value) => value || "N/A");
 const Wind = bind(wind).as((value) => value || "N/A");
@@ -159,8 +159,11 @@ export default () => {
           </button>
         </box>
         {Entry}
-        <box horizontal halign={Gtk.Align.FILL}>
-          <icon icon={desc.as((value) => WeatherIcon(value))} className="temperature" />
+        <box horizontal halign={Gtk.Align.START} spacing={spacing}>
+          <icon icon={desc.as((value) => WeatherIcon(value))}
+                  className="temperature"
+                  hexpand={false}
+                />
           <label
             label={temperature}
             className="temperature"

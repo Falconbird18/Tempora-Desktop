@@ -453,7 +453,7 @@ switch:checked slider {
   min-height: 60px;
   padding: 0 12px;
   background-image: linear-gradient(145deg, rgba(226, 228, 233, 0.3098039216), rgba(226, 228, 233, 0.3098039216));
-  margin: 7px 7px 7px 7px;
+  margin: 1px;
   border-radius: 30px;
   border: 0.25px solid rgba(236, 237, 238, 0.3098039216);
 }
@@ -1195,8 +1195,9 @@ switch:checked slider {
   margin-top: 12px;
   padding: 10px;
   font-family: "Roboto";
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 300;
+  color: red;
 }
 
 .calendar__monthyear * {
@@ -1212,9 +1213,11 @@ switch:checked slider {
   font-size: 100px;
 }
 
-.calendar__days {
+.calendar__header-days {
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Roboto";
   color: #233885;
-  font-size: 100px;
 }
 
 .calendar__button {
@@ -2493,6 +2496,67 @@ switch:checked slider {
   /* Comfortable padding */
   transition: height 0.2s ease;
   /* Smooth height expansion */
+}
+
+.code-block {
+  background-color: rgba(236, 237, 238, 0.3098039216);
+  box-shadow: 0px 0px 0px #E76EAB, 0 0 0 transparent;
+  border: 0.25px solid rgba(236, 237, 238, 0.3098039216);
+  padding: 10px;
+  border-radius: 30px;
+  margin-bottom: 1px;
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  background-color: rgba(244, 246, 251, 0.3098039216);
+}
+.code-block label {
+  font-family: "Monaspace Neon";
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.inline-code {
+  background-color: rgba(33, 37, 44, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin: 0 2px;
+}
+.inline-code label {
+  font-family: "Monaspace Neon", "JetBrains Mono", monospace;
+}
+
+.math-block {
+  padding: 8px 16px;
+  margin: 8px 0;
+}
+
+.inline-math {
+  padding: 0 4px;
+}
+
+blockquote {
+  border-left: 3px solid #3979eb;
+  padding-left: 12px;
+  margin: 8px 0;
+  color: rgba(202, 211, 245, 0.8);
+}
+
+table {
+  margin: 8px 0;
+}
+table th, table td {
+  border: 0.25px solid rgba(32, 32, 32, 0.31);
+  padding: 6px 12px;
+}
+table th {
+  background-color: rgba(33, 37, 44, 0.3);
+}
+
+.task-list-item {
+  margin: 4px 0;
+}
+.task-list-item.checked {
+  color: rgba(202, 211, 245, 0.6);
+  text-decoration: line-through;
 }
 
 .message-input.expanded {
