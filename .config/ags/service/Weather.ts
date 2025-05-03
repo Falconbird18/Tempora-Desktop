@@ -1,5 +1,6 @@
 import { Variable } from "astal";
 import icons from "../lib/icons";
+import { Utils } from "astal";
 const { GLib, Gio } = imports.gi;
 
 const settingsFile = `${GLib.get_home_dir()}/.config/ags/service/weather-location.json`;
@@ -44,6 +45,7 @@ export const updateWeatherCommands = () => {
     Wind[1] = `wttr.in/${Location}?format=%w`;
     bar[1] = `wttr.in/${Location}?format=${barFormat}`;
     description[1] = `wttr.in/${Location}?format=%C`;
+    forecastCommand[1] = `wttr.in/${Location}?format=j1`; // Update forecast command URL
 };
 
 const temperature = [
@@ -83,6 +85,12 @@ const barFormat = `%c+%f+%w`;
 const bar = [
   "curl",
   `wttr.in/${Location}?format=${barFormat}`,
+];
+
+// Command to fetch forecast data in JSON format
+const forecastCommand = [
+    "curl",
+    `wttr.in/${Location}?format=j1`,
 ];
 
 /**
@@ -300,3 +308,60 @@ export const WeatherIcon = (description: string | undefined) => {
             return icons.weather.unknown; // Fallback for unknown descriptions
     }
 };
+
+export interface ForecastDay {
+    date: string; // e.g., "Mon"
+    dayOfWeek: string;
+    icon: string;
+    maxTempC: string;
+    minTempC: string;
+    maxTempF: string;
+    minTempF: string;
+    description: string;
+}
+
+// Poll for forecast data (e.g., every hour)
+export const forecast = Variable<ForecastDay[] | null>(null).poll(
+    3_600_000, // Poll every hour
+    forecastCommand,
+    (out) => {
+        try {
+            if (isNetworkError(out)) {
+                console.error("Forecast: Network error or invalid location");
+                return null;
+            }
+            const data = JSON.parse(out);
+            if (!data || !data.weather || !Array.isArray(data.weather)) {
+                console.error("Forecast: Invalid JSON structure", data);
+                return null;
+            }
+
+            // Get today's date to format day names correctly
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            return data.weather.slice(0, 3).map((day: any, index: number): ForecastDay => { // Take next 3 days
+                const date = new Date(day.date);
+                const dayOfWeek = index === 0 ? "Today" : index === 1 ? "Tomorrow" : date.toLocaleDateString('en-US', { weekday: 'short' });
+                // Use noon weather description as representative for the day
+                const representativeHour = day.hourly?.find((h: any) => h.time === "1200") || day.hourly[4] || day.hourly[0]; // Try noon, then ~midday, then first available
+                const description = representativeHour?.weatherDesc?.[0]?.value || "Unknown";
+                return {
+                    date: day.date,
+                    dayOfWeek: dayOfWeek,
+                    icon: WeatherIcon(description),
+                    maxTempC: day.maxtempC,
+                    minTempC: day.mintempC,
+                    maxTempF: day.maxtempF,
+                    minTempF: day.mintempF,
+                    description: description,
+                };
+            });
+        } catch (e) {
+            console.error('Error processing forecast data:', e);
+            console.error('Raw forecast output:', out); // Log raw output on error
+            return null; // Return null or previous value on error
+        }
+    }
+);

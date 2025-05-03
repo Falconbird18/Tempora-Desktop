@@ -17,6 +17,8 @@ import {
   setLocation,
   weatherDescription, 
   WeatherIcon,
+  forecast, // Import the new forecast variable
+  ForecastDay, // Import the forecast type
 } from "../../service/Weather";
 import icons from "../../lib/icons";
 
@@ -117,6 +119,30 @@ const getWeatherIcon = (description: string | undefined) => {
   }
 };
 
+// Helper function to determine temperature unit (simple check based on realTemp format)
+const getTemperatureUnit = () => {
+    const temp = realTemp.value || '';
+    return temp.includes('F') ? 'F' : 'C';
+};
+
+// Widget to display a single day's forecast
+const ForecastDayWidget = (day: ForecastDay) => {
+    const unit = getTemperatureUnit();
+    const maxTemp = unit === 'F' ? day.maxTempF : day.maxTempC;
+    const minTemp = unit === 'F' ? day.minTempF : day.minTempC;
+
+    return (
+        <box vertical className="forecast-day" spacing={4} halign={Gtk.Align.CENTER}>
+            <label className="forecast-day-name" label={day.dayOfWeek} />
+            <icon icon={day.icon} className="forecast-icon" />
+            <label className="forecast-temp" label={`${maxTemp}°/${minTemp}°`} />
+            {/* Optional: Add description */}
+            {/* <label className="forecast-desc" label={day.description} /> */}
+        </box>
+    );
+};
+
+
 export default () => {
   return (
     <PopupWindow
@@ -195,6 +221,18 @@ export default () => {
             <label className="weather-info-title" label="Feels like" />
             <label className="weather-info" label={feelsTemperature} />
           </box>
+        </box>
+        {/* Forecast Section */}
+        <box
+            className="forecast-container"
+            homogeneous={true} // Make columns equal width
+            spacing={spacing * 1.5} // Add some space between days
+            margin_top={spacing} // Add margin above the forecast
+        >
+            {bind(forecast).as(fc => fc
+                ? fc.map(ForecastDayWidget)
+                : [<label label="Loading forecast..." />] // Show loading or error message
+            )}
         </box>
       </box>
     </PopupWindow>
