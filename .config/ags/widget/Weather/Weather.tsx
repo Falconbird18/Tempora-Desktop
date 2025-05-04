@@ -1,6 +1,7 @@
 import { bind, exec, Variable } from "astal";
-import { App, Gtk, Astal, Widget } from "astal/gtk3";
-const { GLib, Gio } = imports.gi;
+import { App, Gtk, Astal, Widget } from "astal/gtk3"; // Import Cairo
+import Cairo from "cairo";
+const { GLib, Gio } = imports.gi; // Import Pango for text layout
 import { spacing } from "../../lib/variables";
 import PopupWindow from "../../common/PopupWindow";
 import {
@@ -18,7 +19,9 @@ import {
   weatherDescription, 
   WeatherIcon,
   forecast, // Import the new forecast variable
-  ForecastDay, // Import the forecast type
+  ForecastDay, // Import @agsthe forecast type
+  hourlyForecast, // Import hourly forecast data
+  HourlyDataPoint, // Import hourly data type
 } from "../../service/Weather";
 import icons from "../../lib/icons";
 
@@ -142,6 +145,158 @@ const ForecastDayWidget = (day: ForecastDay) => {
     );
 };
 
+// --- Forecast Graph ---
+
+type GraphMetricType = 'temp' | 'humidity' | 'wind' | 'precip' | 'pressure' | 'uv';
+const graphMetric = Variable<GraphMetricType>('temp');
+
+const getMetricData = (point: HourlyDataPoint, metric: GraphMetricType, unit: 'C' | 'F'): number => {
+    switch (metric) {
+        case 'temp': return unit === 'F' ? point.tempF : point.tempC;
+        case 'humidity': return point.humidity;
+        case 'wind': return point.windMiles; // Using Miles for now
+        case 'precip': return point.chanceOfRain; // Using chance of rain %
+        case 'pressure': return point.pressure; // Using hPa
+        case 'uv': return point.uvIndex;
+        default: return 0;
+    }
+};
+
+const getMetricLabel = (metric: GraphMetricType, unit: 'C' | 'F'): string => {
+     switch (metric) {
+        case 'temp': return `Temperature (°${unit})`;
+        case 'humidity': return 'Humidity (%)';
+        case 'wind': return 'Wind (mph)';
+        case 'precip': return 'Chance of Rain (%)';
+        case 'pressure': return 'Pressure (hPa)';
+        case 'uv': return 'UV Index';
+        default: return '';
+    }
+}
+
+// Define ForecastGraph using Widget.DrawingArea directly for JSX compatibility
+const ForecastGraph = new Widget.DrawingArea({
+    className: "forecast-graph",
+    vexpand: true,
+    hexpand: true,
+    // Set a minimum height for the graph area
+    setup: self => self.set_size_request(-1, 100),
+    connections: [
+        // Redraw when data, metric, or theme changes
+        [hourlyForecast, self => self.queue_draw()],
+        [graphMetric, self => self.queue_draw()],
+        [Astal.Theme, self => self.queue_draw()],
+        // Draw signal
+        // ['draw', (self, cr: Cairo.Context) => {
+        //     // Clear the background first
+        //     cr.setSourceRGBA(0, 0, 0, 0); // Transparent
+        //     cr.paint();
+
+        //     const data = hourlyForecast.value;
+        //     const metric = graphMetric.value;
+        //     const unit = getTemperatureUnit();
+        //     const allocation = self.get_allocation();
+        //     const width = allocation.width;
+        //     const height = allocation.height;
+        //     const padding = 10; // Padding around the graph
+        //     const graphHeight = height - padding * 2;
+        //     const graphWidth = width - padding * 2;
+
+        //     if (!data || data.length < 2) {
+        //         console.log("Graph: No data or insufficient data:", data); // Insert this line
+        //         // Draw "Loading..." or "Not enough data"
+        //         cr.setSourceRGBA(0.8, 0.8, 0.8, 1); // Light gray, fully opaque
+        //         cr.selectFontFace("sans-serif", Cairo.FontSlant.NORMAL, Cairo.FontWeight.NORMAL);
+        //         cr.setFontSize(12);
+        //         const text = !data ? "Loading graph..." : "Not enough data";
+        //         const te = cr.textExtents(text);
+        //         cr.moveTo(width / 2 - te.width / 2, height / 2);
+        //         cr.showText(text);
+        //         return;
+        //     }
+
+        //     const values = data.map(p => getMetricData(p, metric, unit));
+        //     let minValue = Math.min(...values);
+        //     let maxValue = Math.max(...values);
+
+        //     // Avoid division by zero if all values are the same
+        //     if (minValue === maxValue) {
+        //         minValue -= 1;
+        //         maxValue += 1;
+        //     }
+        //     const valueRange = maxValue - minValue;
+
+        //     // --- Draw the graph line ---
+        //     const theme = Astal.Theme.get_instance();
+        //     const color = theme.get_widget_style_context(self).get_color(Gtk.StateFlags.NORMAL);
+        //     cr.setSourceRGBA(1, 1, 1, 1); // White, fully opaque
+        //     cr.setLineWidth(2);
+        //     cr.setLineCap(Cairo.LineCap.ROUND);
+        //     cr.setLineJoin(Cairo.LineJoin.ROUND);
+
+        //     for (let i = 0; i < data.length; i++) {
+        //         const x = padding + (i / (data.length - 1)) * graphWidth;
+        //         const y = padding + graphHeight - ((values[i] - minValue) / valueRange) * graphHeight;
+
+        //         if (i === 0) {
+        //             cr.moveTo(x, y);
+        //         } else {
+        //             cr.lineTo(x, y);
+        //         }
+        //     }
+        //     cr.stroke();
+
+        //     // --- Draw Labels (Min/Max Value, Time) ---
+        //     cr.setSourceRGBA(1, 1, 1, 0.9); // Almost white, very visible
+        //     cr.selectFontFace("sans-serif", Cairo.FontSlant.NORMAL, Cairo.FontWeight.NORMAL);
+        //     cr.setFontSize(10);
+
+        //     // Max Value Label (top left)
+        //     const maxLabel = `${maxValue.toFixed(0)}`;
+        //     cr.moveTo(padding, padding - 2); // Position slightly above graph area
+        //     cr.showText(maxLabel);
+
+        //     // Min Value Label (bottom left)
+        //     const minLabel = `${minValue.toFixed(0)}`;
+        //     const minTe = cr.textExtents(minLabel);
+        //     cr.moveTo(padding, height - padding + minTe.height + 2); // Position slightly below graph area
+        //     cr.showText(minLabel);
+
+        //     // Time Labels (Start and End Hour)
+        //     const startLabel = `${data[0].time}:00`;
+        //     const startTe = cr.textExtents(startLabel);
+        //     cr.moveTo(padding, height - padding + startTe.height + 2); // Align with min value label
+        //     // cr.showText(startLabel); // Maybe too cluttered?
+
+        //     const endLabel = `${data[data.length - 1].time}:00`;
+        //     const endTe = cr.textExtents(endLabel);
+        //     cr.moveTo(width - padding - endTe.width, height - padding + endTe.height + 2);
+        //     cr.showText(endLabel);
+
+        //     // Current Metric Label (top right)
+        //     const metricLabel = getMetricLabel(metric, unit);
+        //     const metricTe = cr.textExtents(metricLabel);
+        //     cr.moveTo(width - padding - metricTe.width, padding - 2);
+        //     cr.showText(metricLabel);
+        // }],
+        ['draw', (self, cr: Cairo.Context) => {
+          const allocation = self.get_allocation();
+          const width = allocation.width;
+          const height = allocation.height;
+          console.log(`ForecastGraph draw signal: size <span class="math-inline">\{width\}x</span>{height}`); // Log size
+          // Draw a bright, semi-transparent rectangle covering the whole area
+          cr.setSourceRGBA(1, 0, 0, 0.5); // Red, 50% opacity
+          cr.rectangle(0, 0, width, height);
+          cr.fill();
+          // Draw simple text
+          cr.setSourceRGB(0, 0, 0); // Black text
+          cr.moveTo(10, 20);
+          cr.selectFontFace("sans-serif", Cairo.FontSlant.NORMAL, Cairo.FontWeight.NORMAL);
+          cr.setFontSize(12);
+          cr.showText(`Graph Area: <span class="math-inline">\{width\}x</span>{height}`);
+      }],
+    ],
+});
 
 export default () => {
   return (
@@ -233,6 +388,31 @@ export default () => {
                 ? fc.map(ForecastDayWidget)
                 : [<label label="Loading forecast..." />] // Show loading or error message
             )}
+        </box>
+        {/* Graph Section */}
+        <box vertical spacing={spacing / 2} margin_top={spacing}>
+             {/* Metric Selection Buttons */}
+             <box homogeneous={true} spacing={spacing / 2} className="graph-metric-buttons">
+                 {(['temp', 'humidity', 'wind', 'precip', 'pressure', 'uv'] as GraphMetricType[]).map(metric => (
+                     <button
+                         // Use the standalone bind function here
+                         className={bind(graphMetric).as(m => m === metric ? 'active' : '')}
+                         onClicked={() => graphMetric.value = metric}
+                     >
+                         {/* Simple text label for buttons */}
+                         <label label={
+                             metric === 'temp' ? 'Temp' :
+                             metric === 'humidity' ? 'Humid' :
+                             metric === 'wind' ? 'Wind' :
+                             metric === 'precip' ? 'Rain' :
+                             metric === 'pressure' ? 'Pressure' :
+                             'UV'
+                         }/>
+                     </button>
+                 ))}
+             </box>
+             {/* The Graph */}
+             {ForecastGraph}
         </box>
       </box>
     </PopupWindow>

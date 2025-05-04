@@ -320,6 +320,20 @@ export interface ForecastDay {
     description: string;
 }
 
+// Structure for hourly forecast data points
+export interface HourlyDataPoint {
+    time: number; // Hour (0-23)
+    tempC: number;
+    tempF: number;
+    humidity: number;
+    windKmph: number;
+    windMiles: number;
+    precipMM: number;
+    chanceOfRain: number;
+    pressure: number; // hPa
+    uvIndex: number;
+}
+
 // Poll for forecast data (e.g., every hour)
 export const forecast = Variable<ForecastDay[] | null>(null).poll(
     3_600_000, // Poll every hour
@@ -331,22 +345,26 @@ export const forecast = Variable<ForecastDay[] | null>(null).poll(
                 return null;
             }
             const data = JSON.parse(out);
-            if (!data || !data.weather || !Array.isArray(data.weather)) {
+            // Basic validation of the expected structure
+            if (!data?.weather?.[0]?.hourly || !Array.isArray(data.weather)) {
                 console.error("Forecast: Invalid JSON structure", data);
+                hourlyForecast.value = null; // Clear hourly data on error too
                 return null;
             }
 
+            // --- Process Daily Forecast ---
             // Get today's date to format day names correctly
             const today = new Date();
             const tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
-
-            return data.weather.slice(0, 3).map((day: any, index: number): ForecastDay => { // Take next 3 days
+            
+            // Process Daily Forecast first
+            const dailyForecastData = data.weather.slice(0, 3).map((day: any, index: number): ForecastDay => { // Take next 3 days
                 const date = new Date(day.date);
                 const dayOfWeek = index === 0 ? "Today" : index === 1 ? "Tomorrow" : date.toLocaleDateString('en-US', { weekday: 'short' });
                 // Use noon weather description as representative for the day
                 const representativeHour = day.hourly?.find((h: any) => h.time === "1200") || day.hourly[4] || day.hourly[0]; // Try noon, then ~midday, then first available
-                const description = representativeHour?.weatherDesc?.[0]?.value || "Unknown";
+                const description = representativeHour?.weatherDesc?.[0]?.value || "N/A"; // Use N/A if unknown
                 return {
                     date: day.date,
                     dayOfWeek: dayOfWeek,
@@ -358,10 +376,55 @@ export const forecast = Variable<ForecastDay[] | null>(null).poll(
                     description: description,
                 };
             });
+
+            // --- THEN Process Hourly Forecast (next 12 hours) ---
+            const nowHour = new Date().getHours();
+            const hourlyPoints: HourlyDataPoint[] = [];
+            let hoursCollected = 0;
+
+            // Combine today's and tomorrow's hourly data if needed
+            const combinedHourly = [
+                ...(data.weather[0]?.hourly || []),
+                ...(data.weather[1]?.hourly || []) // Add tomorrow's data
+            ];
+
+            for (const hourData of combinedHourly) {
+                const hourTime = parseInt(hourData.time) / 100; // API time is "0", "100", "200" etc.
+
+                // Start from the current hour or the next available forecast hour
+                if (hourlyPoints.length === 0 && hourTime < nowHour) {
+                    continue; // Skip past hours for the first day
+                }
+
+                if (hoursCollected < 12) { // Collect next 12 hours
+                    hourlyPoints.push({
+                        time: hourTime,
+                        tempC: parseInt(hourData.tempC),
+                        tempF: parseInt(hourData.tempF),
+                        humidity: parseInt(hourData.humidity),
+                        windKmph: parseInt(hourData.windspeedKmph),
+                        windMiles: parseInt(hourData.windspeedMiles),
+                        precipMM: parseFloat(hourData.precipMM),
+                        chanceOfRain: parseInt(hourData.chanceofrain),
+                        pressure: parseInt(hourData.pressure),
+                        uvIndex: parseInt(hourData.uvIndex),
+                    });
+                    hoursCollected++;
+                } else {
+                    break; // Stop once we have 12 hours
+                }
+            }
+            hourlyForecast.value = hourlyPoints; // Update the hourly forecast variable
+
+            return dailyForecastData; // NOW return the daily forecast data
         } catch (e) {
             console.error('Error processing forecast data:', e);
             console.error('Raw forecast output:', out); // Log raw output on error
+            hourlyForecast.value = null; // Clear hourly data on error
             return null; // Return null or previous value on error
         }
     }
 );
+
+// Variable to store the processed hourly forecast data
+export const hourlyForecast = Variable<HourlyDataPoint[] | null>(null);

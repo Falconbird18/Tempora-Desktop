@@ -1504,24 +1504,23 @@ switch:checked slider {
 /*Player*/
 .player {
   min-height: 155px;
-  background: #f0edea;
-  border: 2px solid #de6e12;
+  background: transparent;
   padding: 20px 10px;
-  border-radius: 30px;
   background-size: cover;
   background-position: center;
   transition: background 0.5s 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
 }
 
-.player__icon {
-  font-size: 20px;
+.play-button {
+  font-size: 40px;
+  color: #562f10;
+  text-shadow: 2px 2px 0 #f2f2f2, 2px -2px 0 #f2f2f2, -2px 2px 0 #f2f2f2, -2px -2px 0 #f2f2f2, 2px 0px 0 #f2f2f2, 0px 2px 0 #f2f2f2, -2px 0px 0 #f2f2f2, 0px -2px 0 #f2f2f2;
 }
 
-.player__box {
-  background-color: transparent;
-  padding: 0;
-  border-radius: 30px;
-  border: 2px solid #de6e12;
+.nav-buttons {
+  font-size: 25px;
+  color: #562f10;
+  text-shadow: 2px 2px 0 #f2f2f2, 2px -2px 0 #f2f2f2, -2px 2px 0 #f2f2f2, -2px -2px 0 #f2f2f2, 2px 0px 0 #f2f2f2, 0px 2px 0 #f2f2f2, -2px 0px 0 #f2f2f2, 0px -2px 0 #f2f2f2;
 }
 
 .player__title {
@@ -1542,20 +1541,28 @@ switch:checked slider {
 }
 
 .player__playpause {
+  font-size: 18px;
+  font-weight: normal;
+  min-width: 42px;
+  min-height: 42px;
+  background: linear-gradient(45deg, #de6e12 25%, #f2f2f2 25%, #f2f2f2 50%, #de6e12 50%, #de6e12 75%, #f2f2f2 75%, #f2f2f2);
+  color: #562f10;
+  box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
+  font-family: "Monaspace Radon";
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 2px;
+  margin-left: 2px;
+  border: 2px solid #de6e12;
+  background-size: 8px 8px;
+  border-radius: 100%;
+  text-shadow: 2px 2px 0 #f2f2f2, 2px -2px 0 #f2f2f2, -2px 2px 0 #f2f2f2, -2px -2px 0 #f2f2f2, 2px 0px 0 #f2f2f2, 0px 2px 0 #f2f2f2, -2px 0px 0 #f2f2f2, 0px -2px 0 #f2f2f2;
   min-width: 60px;
   min-height: 60px;
-  padding: 0;
-  background-color: #de6e12;
-  color: #562f10;
-  font-size: 24px;
-  border-radius: 0px;
-  border: 2px solid #de6e12;
-  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  border-radius: 30px;
-  box-shadow: 0 0 0 transparent;
 }
 .player__playpause.active {
+  background: #de6e12;
   box-shadow: 0 0 0 transparent;
+  background-size: 8px 8px;
 }
 
 .player__next,
@@ -2269,13 +2276,14 @@ switch:checked slider {
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
   padding: 20px;
   background: #f0edea;
+  min-width: 350px; /* May need adjustment */
 }
 
 .temperature {
   font-size: 40px;
   font-family: "Monaspace Radon";
   font-weight: normal;
-  color: red;
+  color: #562f10;
 }
 
 .location_input {
@@ -2315,6 +2323,49 @@ switch:checked slider {
   font-family: "Monaspace Xenon";
   font-size: 11px;
   font-weight: 100;
+}
+
+.forecast-day {
+  /* Existing styles */
+  min-width: 50px; /* Ensure days have some width */
+}
+
+.forecast-icon {
+  font-size: 1.8em;
+}
+
+/* Graph Styling */
+.graph-metric-buttons button {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: #f2f2f2;
+  color: #562f10;
+  box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
+  font-family: "Monaspace Radon";
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 2px;
+  margin-left: 2px;
+  border: 2px solid #de6e12;
+  background-size: 8px 8px;
+  border-radius: 30px;
+}
+
+.graph-metric-buttons button.active {
+  background: #de6e12;
+  box-shadow: 0 0 0 transparent;
+  background-size: 8px 8px;
+}
+
+.forecast-graph {
+  background-color: rgba(222, 110, 18, 0.2); /* Light orange with transparency */
+  border: 2px solid #de6e12;
+  border-radius: 30px;
+  margin-top: 5px;
+  min-height: 100px;
+  padding: 8px;
 }
 
 /*SideBar*/

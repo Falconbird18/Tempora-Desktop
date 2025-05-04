@@ -124,9 +124,22 @@
     transition: background $transition;
 }
 
+@mixin primary-circular-button-hover {
+    background-image: $background-image;
+    text-shadow: $text-shadow;
+    box-shadow: $inset, $border-shadow;
+    background-size: $background-size;
+}
+
 @mixin primary-button-active {
     background-color: $primary;
     transition: background $transition;
+}
+
+@mixin primary-circular-button-active {
+    background: $primary;
+    box-shadow: $inset_primary;
+    background-size: $background-size;
 }
 
 @mixin secondary-button {
@@ -1362,24 +1375,23 @@ switch:checked slider {
 
 .player {
     min-height: 155px;
-    background: $background;
-    border: $primary-border;
+    background: transparent;
     padding: 20px 10px;
-    border-radius: $secondary-radius;
     background-size: cover;
     background-position: center;
     transition: background 0.5s $transition;
 }
 
-.player__icon {
-    font-size: 20px;
+.play-button {
+    font-size: 40px;
+    color: $text;
+    text-shadow: $text-shadow;
 }
 
-.player__box {
-    background-color: transparent;
-    padding: 0;
-    border-radius: $secondary-radius;
-    border: $primary-border;
+.nav-buttons{
+    font-size: 25px;
+    color: $text;
+    text-shadow: $text-shadow;
 }
 
 .player__title {
@@ -1400,20 +1412,12 @@ switch:checked slider {
 }
 
 .player__playpause {
+    @include primary-circular-button;
     min-width: 60px;
     min-height: 60px;
-    padding: 0;
-    background-color: $primary;
-    color: $text;
-    font-size: $h1_size;
-    border-radius: 0px;
-    border: $primary-border;
-    transition: all $transition;
-    border-radius: $primary-radius;
-    box-shadow: $outset_primary;
 
     &.active {
-        box-shadow: $inset_primary;
+        @include primary-circular-button-active;
     }
 }
 
@@ -1894,6 +1898,7 @@ switch:checked slider {
     @include card;
     padding: 20px;
     background: $background;
+    min-width: 350px; /* May need adjustment */
 }
 
 .temperature {
@@ -1932,6 +1937,35 @@ switch:checked slider {
     font-size: $subtext_size;
     font-weight: $subtext_weight;
 }
+
+.forecast-day {
+    /* Existing styles */
+    min-width: 50px; /* Ensure days have some width */
+}
+
+.forecast-icon {
+    font-size: 1.8em;
+}
+
+/* Graph Styling */
+.graph-metric-buttons button {
+    @include secondary-button;
+}
+
+.graph-metric-buttons button.active {
+    @include secondary-button-active;
+}
+
+.forecast-graph {
+    background-color: rgba(222, 110, 18, 0.2); /* Light orange with transparency */
+    border: 2px solid #de6e12;
+    border-radius: 30px;
+    margin-top: 5px;
+    min-height: 100px;
+    padding: 8px;
+  }
+
+
 
 /*SideBar*/
 .sidebar-window {
