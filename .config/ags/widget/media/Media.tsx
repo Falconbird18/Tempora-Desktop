@@ -10,9 +10,10 @@ import { hexToRgb, lookUpIcon } from "../../lib/utils";
 import { Colors } from "../../lib/variables";
 type PlayerProps = {
   player: AstalMpris.Player;
+  changePlayer: (direction: number) => void;
 };
 
-const Player = ({ player }: PlayerProps) => {
+const Player = ({ player, changePlayer }: PlayerProps) => {
   const PlayerColors = PlayerColorsService(player);
 
   const updateColors = (element: Gtk.Widget, colors: Colors | null, background: "image" | "container" = "container") => {
@@ -37,6 +38,22 @@ const Player = ({ player }: PlayerProps) => {
         lookUpIcon(`${i}-symbolic`) ? `${i}-symbolic` : lookUpIcon(i) ? i : icons.fallback.audio,
       )}
       className="player__icon"
+    />
+  );
+
+  const CoverArt = () => (
+    <box
+      className="player__cover-art"
+      hexpand={false}
+      vexpand={false}
+      css={`
+        background-image: url("${player.coverArt}");
+        background-size: cover;
+        background-position: center;
+        min-width: 64px;
+        min-height: 64px;
+      `}
+      className="player-cover-art"
     />
   );
 
@@ -103,25 +120,36 @@ const Player = ({ player }: PlayerProps) => {
       <box vexpand valign={Gtk.Align.START}>
         <PlayerIcon />
       </box>
-      <box vertical halign={Gtk.Align.START} vexpand valign={Gtk.Align.CENTER}
-        setup={(self) => {
-          self.hook(player, "notify::title", (_) => {
-            self.toggleClassName("dissappear", true);
-            setTimeout(() => {
-              self.toggleClassName("dissappear", false);
-              Title.label = player.title;
-              Artist.label = player.artist;
-            }, 300);
-          });
-        }}
-      >
-        {Title}
-        {Artist}
+      <box horizontal>
+        <box vertical halign={Gtk.Align.START} vexpand valign={Gtk.Align.CENTER}
+          setup={(self) => {
+            self.hook(player, "notify::title", (_) => {
+              self.toggleClassName("dissappear", true);
+              setTimeout(() => {
+                self.toggleClassName("dissappear", false);
+                Title.label = player.title;
+                Artist.label = player.artist;
+              }, 300);
+            });
+          }}
+        >
+          {Title}
+          {Artist}
+        </box>
+        <CoverArt />
       </box>
       <box horizontal spacing={spacing} >
-        <icon icon={icons.ui.arrow.left} className="nav-buttons" />
+        <button
+          onClicked={() => changePlayer(-1)}
+        >
+          <icon icon={icons.ui.arrow.left} className="nav-buttons" />
+        </button>
         <PositionSlider />
-        <icon icon={icons.ui.arrow.right} className="nav-buttons" />
+        <button
+          onClicked={() => changePlayer(1)}
+        >
+          <icon icon={icons.ui.arrow.right} className="nav-buttons" />
+        </button>
       </box>
       <box horizontal halign={Gtk.Align.CENTER} spacing={spacing}>
         <ControlButton icon={icons.media.prev} onClick={() => player.previous()} className="nav-buttons" />
@@ -144,34 +172,41 @@ const PlayerSwitcher = ({ mpris, selectedPlayer }: { mpris: AstalMpris.Mpris; se
   return (
     <revealer revealChild={players.as((p) => p.length > 0)}>
       <overlay>
-        <eventbox onScroll={(self, event) => changePlayer(event.direction === Gdk.ScrollDirection.UP ? 1 : -1)}>
-          <stack
-            transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
-            transitionDuration={300}
-            interpolateSize
-            shown={bind(selectedPlayer)}
-          >
-            {players.as((ps) => ps.map((player) => <Player player={player} />))}
-          </stack>
-        </eventbox>
-        <revealer valign={Gtk.Align.END} halign={Gtk.Align.CENTER} revealChild={players.as((p) => p.length > 1)}>
-          <box valign={Gtk.Align.END} halign={Gtk.Align.CENTER} spacing={4}>
-            {players.as((ps) =>
-              ps.map((player, idx) => (
-                <box
-                  className="player__indicator"
-                  setup={(self) => {
-                    if (idx === 0) selectedPlayer.set(player.busName);
-                    self.toggleClassName("selected", selectedPlayer.get() === player.busName);
-                    self.hook(selectedPlayer, (_, selected) => {
-                      self.toggleClassName("selected", selected === player.busName);
-                    });
-                  }}
-                ></box>
-              )),
-            )}
-          </box>
-        </revealer>
+        <box vertical spacing={4}>
+          <eventbox onScroll={(self, event) => changePlayer(event.direction === Gdk.ScrollDirection.UP ? 1 : -1)}>
+            <stack
+              transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
+              transitionDuration={300}
+              interpolateSize
+              shown={bind(selectedPlayer)}
+            >
+              {players.as((ps) => ps.map((player) => (
+                <Player
+                  player={player}
+                  changePlayer={changePlayer}
+                />
+              )))}
+            </stack>
+          </eventbox>
+          <revealer valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} revealChild={players.as((p) => p.length > 1)}>
+            <box valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER} spacing={6}>
+              {players.as((ps) =>
+                ps.map((player, idx) => (
+                  <box
+                    className="player__indicator"
+                    setup={(self) => {
+                      if (idx === 0) selectedPlayer.set(player.busName);
+                      self.toggleClassName("selected", selectedPlayer.get() === player.busName);
+                      self.hook(selectedPlayer, (_, selected) => {
+                        self.toggleClassName("selected", selected === player.busName);
+                      });
+                    }}
+                  ></box>
+                )),
+              )}
+            </box>
+          </revealer>
+        </box>
       </overlay>
     </revealer>
   );

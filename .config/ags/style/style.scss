@@ -1382,6 +1382,10 @@ switch:checked slider {
     transition: background 0.5s $transition;
 }
 
+.player-cover-art {
+    border-radius: $primary-radius;
+}
+
 .play-button {
     font-size: 40px;
     color: $text;
@@ -1465,6 +1469,7 @@ switch:checked slider {
     border-radius: 100px;
     margin-bottom: 8px;
     transition: all $transition;
+    background: $subtext;
 
     &.selected {
         background: $text;
