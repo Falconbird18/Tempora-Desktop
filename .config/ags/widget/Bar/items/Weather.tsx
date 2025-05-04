@@ -6,7 +6,12 @@ import { toggleWindow } from "../../../lib/utils";
 import icons from "../../../lib/icons";
 
 export default () => {
-    const wthr = bind(barWeather);
+    const wthr = bind(barWeather).as((value) => {
+        if (!value || value.includes("Unknown location;")) {
+            return "loading...";
+        }
+        return value.trim();
+    });
     const desc = bind(weatherDescription); // Bind the description variable
 
     // Debug: Log the weather description

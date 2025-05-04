@@ -56,13 +56,50 @@ const displayLocation = bind(location).as((value) => {
   return value.replace(/,/g, ", "); // Add a space after the comma
 });
 
-const temperature = bind(realTemp).as((value) => `${(value || 'N/A').trim()}`); // Trim whitespace and add quotes
-const feelsTemperature = bind(feelsTemp).as((value) => value || "N/A");
-const uv = bind(uvIndex).as((value) => value || "N/A");
-const Wind = bind(wind).as((value) => value || "N/A");
-const Precipitation = bind(precipitation).as((value) => value || "N/A");
-const Pressure = bind(pressure).as((value) => value || "N/A");
-const Humidity = bind(humidity).as((value) => value || "N/A");
+const temperature = bind(realTemp).as((value) => {
+  if (!value || value.includes("Unknown location;")) {
+      return "loading...";
+  }
+  return value.trim();
+});
+
+
+const feelsTemperature = bind(feelsTemp).as((value) => {
+  if (!value || value.includes("Unknown location;")) {
+      return "N/A";
+  }
+  return value.trim();
+});
+const uv = bind(uvIndex).as((value) => {
+  if (!value || value.includes("Unknown location;")) {
+      return "N/A";
+  }
+  return value.trim();
+});
+const Wind = bind(wind).as((value) => {
+  if (!value || value.includes("Unknown location;")) {
+      return "N/A";
+  }
+  return value.trim();
+});
+const Precipitation = bind(precipitation).as((value) => {
+  if (!value || value.includes("Unknown location;")) {
+      return "N/A";
+  }
+  return value.trim();
+});
+const Pressure = bind(pressure).as((value) => {
+  if (!value || value.includes("Unknown location;")) {
+      return "N/A";
+  }
+  return value.trim();
+});
+const Humidity = bind(humidity).as((value) => {
+  if (!value || value.includes("Unknown location;")) {
+      return "N/A";
+  }
+  return value.trim();
+});
 
 const icon = icons.ui.edit;
 
