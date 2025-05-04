@@ -3,7 +3,6 @@ import { bind, execAsync, timeout, Variable } from "astal";
 import Main from "./pages/Main";
 import Network from "./pages/Network";
 import Bluetooth from "./pages/Bluetooth";
-import Media from "./items/Media";
 import { spacing } from "../../lib/variables";
 import PopupWindow from "../../common/PopupWindow";
 import { toggleWindow } from "../../lib/utils";
@@ -80,7 +79,6 @@ export default () => {
 						{AdvancedSettings()}
 					</stack>
 				</box>
-				<Media />
 			</box>
 		</PopupWindow>
 	);

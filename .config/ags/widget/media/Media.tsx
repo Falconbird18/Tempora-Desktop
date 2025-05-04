@@ -43,7 +43,6 @@ const Player = ({ player, changePlayer }: PlayerProps) => {
 
   const CoverArt = () => (
     <box
-      className="player__cover-art"
       hexpand={false}
       vexpand={false}
       css={`
@@ -53,7 +52,7 @@ const Player = ({ player, changePlayer }: PlayerProps) => {
         min-width: 64px;
         min-height: 64px;
       `}
-      className="player-cover-art"
+      className="player__cover-art"
     />
   );
 
@@ -163,6 +162,11 @@ const Player = ({ player, changePlayer }: PlayerProps) => {
 const PlayerSwitcher = ({ mpris, selectedPlayer }: { mpris: AstalMpris.Mpris; selectedPlayer: Variable<string> }) => {
   const players = bind(mpris, "players");
 
+  const findPlayingPlayer = (players: AstalMpris.Player[]) => {
+    const playing = players.find(p => p.playbackStatus === AstalMpris.PlaybackStatus.PLAYING);
+    return playing?.busName || players[0]?.busName || "";
+  };
+
   const changePlayer = (direction: number) => {
     const allPlayers = mpris.get_players();
     const index = allPlayers.findIndex((p) => p.busName === selectedPlayer.get());
@@ -172,7 +176,29 @@ const PlayerSwitcher = ({ mpris, selectedPlayer }: { mpris: AstalMpris.Mpris; se
   return (
     <revealer revealChild={players.as((p) => p.length > 0)}>
       <overlay>
-        <box vertical spacing={4}>
+        <box vertical spacing={4} setup={(self) => {
+          // Monitor all players for status changes
+          const updateOnPlayback = () => {
+            const ps = mpris.get_players();
+            const playingPlayer = findPlayingPlayer(ps);
+            if (playingPlayer) {
+              selectedPlayer.set(playingPlayer);
+            }
+          };
+
+          self.hook(mpris, "notify::players", () => {
+            const ps = mpris.get_players();
+            // Set initial player or update when players change
+            if (selectedPlayer.get() === "" || !ps.some(p => p.busName === selectedPlayer.get())) {
+              selectedPlayer.set(findPlayingPlayer(ps));
+            }
+            
+            // Setup hooks for new players
+            ps.forEach(player => {
+              self.hook(player, "notify::playback-status", updateOnPlayback);
+            });
+          });
+        }}>
           <eventbox onScroll={(self, event) => changePlayer(event.direction === Gdk.ScrollDirection.UP ? 1 : -1)}>
             <stack
               transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
@@ -195,7 +221,9 @@ const PlayerSwitcher = ({ mpris, selectedPlayer }: { mpris: AstalMpris.Mpris; se
                   <box
                     className="player__indicator"
                     setup={(self) => {
-                      if (idx === 0) selectedPlayer.set(player.busName);
+                      if (selectedPlayer.get() === "") {
+                        selectedPlayer.set(findPlayingPlayer(ps));
+                      }
                       self.toggleClassName("selected", selectedPlayer.get() === player.busName);
                       self.hook(selectedPlayer, (_, selected) => {
                         self.toggleClassName("selected", selected === player.busName);
