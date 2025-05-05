@@ -1,11 +1,11 @@
-import { exec, execAsync } from "astal";
+import { exec, execAsync, writeFile, writeFileAsync } from "astal";
 import { currentTheme, currentMode } from "../widget/ControlCenter/pages/Themes";
 const { GLib } = imports.gi;
 
 export class StarshipService {
     private static generateConfig(colors: { primary: string, secondary: string, tertiary: string }) {
         return `format = """
-[](#${colors.primary})\
+[◖](fg:#${colors.secondary})\
 $os\
 $username\
 [◗](bg:#${colors.secondary} fg:#${colors.secondary})\
@@ -13,7 +13,7 @@ $directory\
 [◗](fg:#${colors.secondary} bg:#${colors.primary})\
 $git_branch\
 $git_status\
-[◗](fg:#${colors.secondary} bg:#${colors.secondary})\
+[◗](fg:#${colors.primary} bg:#${colors.primary})\
 $c\
 $elixir\
 $elm\
@@ -78,11 +78,11 @@ format = '[ $symbol ($version) ]($style)'
 
 [git_branch]
 symbol = ""
-style = "bg:#${colors.secondary}"
+style = "bg:#${colors.primary}"
 format = '[ $symbol $branch ]($style)'
 
 [git_status]
-style = "bg:#${colors.secondary}"
+style = "bg:#${colors.primary}"
 format = '[$all_status$ahead_behind ]($style)'
 
 [golang]
@@ -132,7 +132,7 @@ format = '[ $symbol ($version) ]($style)'
 [time]
 disabled = false
 time_format = "%R"
-style = "bg:#${colors.secondary}"
+style = "bg:#${colors.primary}"
 format = '[ ♥ $time ]($style)'
 #This config was auto generated!`
     }
@@ -142,7 +142,7 @@ format = '[ ♥ $time ]($style)'
         const theme = currentTheme.get();
         const mode = currentMode.get();
         const scssFile = `${homeDir}/.config/ags/style/${theme}${mode}/main.scss`;
-        
+
         try {
             // Read SCSS file content and extract color variables
             const result = await execAsync(`grep -E '\\$primary|\\$secondary|\\$tertiary' "${scssFile}"`);
@@ -180,9 +180,10 @@ format = '[ ♥ $time ]($style)'
         const colors = await this.getThemeColors();
         const config = this.generateConfig(colors);
         const homeDir = GLib.get_home_dir();
-        
+
         try {
-            await execAsync(`echo '${config}' > "${homeDir}/.config/starship.toml"`);
+            // await execAsync(`echo '${config}' > "${homeDir}/.config/starship.toml"`);
+            await writeFileAsync(`${homeDir}/.config/starship.toml`, config);
             await execAsync(`fish --command "source ${homeDir}/.config/fish/config.fish"`);
 
             console.log('Starship config updated successfully');
