@@ -25,6 +25,7 @@ import Powermenu from "./widget/Powermenu";
 import ScreenRecordService from "./service/ScreenRecord";
 import Dashboard from "./widget/Dashboard";
 import { initBingImageService } from "./lib/bing";
+import StarshipService from "./service/starship";
 
 const applyTheme = async () => {
   const homeDir = GLib.get_home_dir();
@@ -79,6 +80,8 @@ const applyTheme = async () => {
     console.log("Spicetify reloaded");
     await execAsync(kittyCommand);
     console.log("Kitty reloaded");
+    await StarshipService.updateConfig();
+    console.log("Starship config updated");
   } catch (error) {
     console.error("Error applying theme:", error);
     if (error instanceof Gio.IOError) {
