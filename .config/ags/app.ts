@@ -5,6 +5,7 @@ const { GLib } = imports.gi;
 // import { currentTheme, currentMode } from "./widget/Popups/menus/ThemeSettings";
 import { currentTheme, currentMode } from "./widget/ControlCenter/pages/Themes";
 import Bar from "./widget/Bar";
+import TaskBar from "./widget/TaskBar";
 import ControlCenter from "./widget/ControlCenter";
 import AppLauncher from "./widget/AppLauncher";
 import NotificationsPopup from "./widget/Notifications/NotificationsPopup";
@@ -105,6 +106,7 @@ const applyTheme = async () => {
 
 function main() {
   const bars = new Map<Gdk.Monitor, Gtk.Widget>();
+  const taskBars = new Map<Gdk.Monitor, Gtk.Widget>();
   const notificationsPopups = new Map<Gdk.Monitor, Gtk.Widget>();
   const osds = new Map<Gdk.Monitor, Gtk.Widget>();
 
@@ -127,18 +129,21 @@ function main() {
 
   for (const gdkmonitor of App.get_monitors()) {
     bars.set(gdkmonitor, Bar(gdkmonitor));
+    taskBars.set(gdkmonitor, TaskBar(gdkmonitor));
     notificationsPopups.set(gdkmonitor, NotificationsPopup(gdkmonitor));
     osds.set(gdkmonitor, OSD(gdkmonitor));
   }
 
   App.connect("monitor-added", (_, gdkmonitor) => {
     bars.set(gdkmonitor, Bar(gdkmonitor));
+    taskBars.set(gdkmonitor, TaskBar(gdkmonitor));
     notificationsPopups.set(gdkmonitor, NotificationsPopup(gdkmonitor));
     osds.set(gdkmonitor, OSD(gdkmonitor));
   });
 
   App.connect("monitor-removed", (_, gdkmonitor) => {
     bars.get(gdkmonitor)?.destroy();
+    taskBars.get(gdkmonitor)?.destroy();
     notificationsPopups.get(gdkmonitor)?.destroy();
     osds.get(gdkmonitor)?.destroy();
     bars.delete(gdkmonitor);
