@@ -557,6 +557,24 @@ switch:checked slider {
 
 /*Bar*/
 
+.taskbar-item {
+    padding: 8px;
+    border-radius: $primary-radius;
+    transition: $transition;
+    
+    &:hover {
+        background: $background-2;
+    }
+    
+    &:active {
+        background: $background-3;
+    }
+
+    icon {
+        font-size: $h2_size;
+    }
+}
+
 .bar {
     min-height: 60px;
     padding: 0 12px;
