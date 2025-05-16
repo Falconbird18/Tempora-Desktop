@@ -3,6 +3,7 @@ import { bind, Variable, exec } from "astal";
 import AstalApps from "gi://AstalApps?version=0.1";
 import AppItem, { MathResultItem } from "./AppItem";
 import PopupWindow from "../../common/PopupWindow";
+import icons from "../../lib/icons";
 
 const apps = new AstalApps.Apps();
 
@@ -58,7 +59,7 @@ export default () => {
   const Entry = new Widget.Entry({
     text: bind(query),
     canFocus: true,
-    className: "app-launcher__input",
+    className: "app-launcher__entry",
     onActivate: () => {
       const currentItems = items.get();
       if (currentItems.length > 0) {
@@ -78,7 +79,7 @@ export default () => {
 
   return (
     <PopupWindow
-      scrimType="transparent"
+      scrimType="opaque"
       visible={false}
       margin={12}
       vexpand={true}
@@ -107,7 +108,10 @@ export default () => {
       }}
     >
       <box className="app-launcher" vertical>
-        {Entry}
+        <box horizontal className="app-launcher__input">
+          <icon icon={icons.ui.search} />
+          {Entry}
+        </box>
         <scrollable vexpand>
           <box className="app-launcher__list" vertical>
             {items}

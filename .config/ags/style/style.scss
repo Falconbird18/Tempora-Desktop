@@ -4,6 +4,7 @@
     font-weight: $monospace_weight;
     font-size: $monospace_size;
 }
+
 @mixin h1 {
     font-family: $h1_font;
     font-weight: $h1_weight;
@@ -206,12 +207,9 @@
 /* AppLauncher */
 .app-launcher {
     min-width: 650px;
-    background-image: $background_gradient;
-    border-radius: $secondary-radius;
     padding: 0px;
     min-height: 700px;
-    border: $primary-border;
-    box-shadow: $border-shadow;
+    background: none;
 }
 
 .app-launcher__input {
@@ -222,6 +220,11 @@
     icon {
         margin-right: 20px;
     }
+}
+
+.app-launcher__entry {
+    @include textbox;
+    background: none
 }
 
 .app-launcher__list {
@@ -561,11 +564,11 @@ switch:checked slider {
     padding: 8px;
     border-radius: $primary-radius;
     transition: $transition;
-    
+
     &:hover {
         background: $background-2;
     }
-    
+
     &:active {
         background: $background-3;
     }
@@ -591,7 +594,31 @@ switch:checked slider {
 .bar__item {
     @include secondary-button;
 
-    &.bar__button {
+    &.transparent {
+        background: transparent;
+        box-shadow: none;
+        border: none;
+    }
+
+}
+
+.bar__button {
+    @include secondary-button;
+
+    &:hover {
+        @include secondary-button-hover;
+    }
+
+    &:active {
+        @include secondary-button-active;
+    }
+
+    &.transparent {
+        @include secondary-button;
+        background: transparent;
+        box-shadow: none;
+        border: none;
+
         &:hover {
             @include secondary-button-hover;
         }
@@ -599,28 +626,28 @@ switch:checked slider {
         &:active {
             @include secondary-button-active;
         }
+    }
 
-        &.bar__recording-indicator {
-            padding: 0;
-            min-height: 42px;
-            min-width: 42px;
-            background: $error;
-            color: $text;
+    &.bar__recording-indicator {
+        padding: 0;
+        min-height: 42px;
+        min-width: 42px;
+        background: $error;
+        color: $text;
 
-            &:hover {
-                color: $error;
-                background: $text;
+        &:hover {
+            color: $error;
+            background: $text;
+        }
+
+        &.spacing {
+            label {
+                min-width: 54px;
+                margin-right: 8px;
             }
 
-            &.spacing {
-                label {
-                    min-width: 54px;
-                    margin-right: 8px;
-                }
-
-                padding-left: 16px;
-                padding-right: 16px;
-            }
+            padding-left: 16px;
+            padding-right: 16px;
         }
     }
 }
@@ -1410,7 +1437,7 @@ switch:checked slider {
     text-shadow: $text-shadow;
 }
 
-.nav-buttons{
+.nav-buttons {
     font-size: 25px;
     color: $text;
     text-shadow: $text-shadow;
@@ -1724,7 +1751,7 @@ switch:checked slider {
 }
 
 .scrim {
-    background: color.adjust($scrim, $alpha: -0.5);
+    background: $background-trans;
 }
 
 /*ThemeSettings*/
@@ -1921,7 +1948,8 @@ switch:checked slider {
     @include card;
     padding: 20px;
     background: $background;
-    min-width: 350px; /* May need adjustment */
+    min-width: 350px;
+    /* May need adjustment */
 }
 
 .temperature {
@@ -1963,7 +1991,8 @@ switch:checked slider {
 
 .forecast-day {
     /* Existing styles */
-    min-width: 50px; /* Ensure days have some width */
+    min-width: 50px;
+    /* Ensure days have some width */
 }
 
 .forecast-icon {
@@ -1980,13 +2009,14 @@ switch:checked slider {
 }
 
 .forecast-graph {
-    background-color: rgba(222, 110, 18, 0.2); /* Light orange with transparency */
+    background-color: rgba(222, 110, 18, 0.2);
+    /* Light orange with transparency */
     border: 2px solid #de6e12;
     border-radius: 30px;
     margin-top: 5px;
     min-height: 100px;
     padding: 8px;
-  }
+}
 
 
 
@@ -2107,63 +2137,64 @@ switch:checked slider {
 }
 
 .code-block {
-  @include card;
-  background-color: $background-3;
+    @include card;
+    background-color: $background-3;
 
-  label {
-    @include monospace;
-  }
+    label {
+        @include monospace;
+    }
 }
 
 .inline-code {
-  background-color: rgba(33, 37, 44, 0.3);
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin: 0 2px;
+    background-color: rgba(33, 37, 44, 0.3);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin: 0 2px;
 
-  label {
-    font-family: "Monaspace Neon", "JetBrains Mono", monospace;
-  }
+    label {
+        font-family: "Monaspace Neon", "JetBrains Mono", monospace;
+    }
 }
 
 .math-block {
-  padding: 8px 16px;
-  margin: 8px 0;
+    padding: 8px 16px;
+    margin: 8px 0;
 }
 
 .inline-math {
-  padding: 0 4px;
+    padding: 0 4px;
 }
 
 // Add styles for other markdown elements
 blockquote {
-  border-left: 3px solid #3979eb;
-  padding-left: 12px;
-  margin: 8px 0;
-  color: rgba(202, 211, 245, 0.8);
+    border-left: 3px solid #3979eb;
+    padding-left: 12px;
+    margin: 8px 0;
+    color: rgba(202, 211, 245, 0.8);
 }
 
 table {
-  margin: 8px 0;
-  
-  th, td {
-    border: 0.25px solid rgba(32, 32, 32, 0.31);
-    padding: 6px 12px;
-  }
-  
-  th {
-    background-color: rgba(33, 37, 44, 0.3);
-  }
+    margin: 8px 0;
+
+    th,
+    td {
+        border: 0.25px solid rgba(32, 32, 32, 0.31);
+        padding: 6px 12px;
+    }
+
+    th {
+        background-color: rgba(33, 37, 44, 0.3);
+    }
 }
 
 // Task lists
 .task-list-item {
-  margin: 4px 0;
-  
-  &.checked {
-    color: rgba(202, 211, 245, 0.6);
-    text-decoration: line-through;
-  }
+    margin: 4px 0;
+
+    &.checked {
+        color: rgba(202, 211, 245, 0.6);
+        text-decoration: line-through;
+    }
 }
 
 .message-input.expanded {

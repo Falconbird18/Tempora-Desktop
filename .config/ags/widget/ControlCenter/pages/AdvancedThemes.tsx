@@ -32,6 +32,7 @@ const loadSettings = () => {
     hideEmptyWorkspaces: false,
     workspaceIcons: {},
     barLocation: "top",
+    transparentBar: false,
   };
 };
 
@@ -61,6 +62,7 @@ const saveSettings = (
       hideEmptyWorkspaces,
       workspaceIcons,
       barLocation: barLocation.get().name,
+      transparentBar: transparentBar.get(),
     });
     file.replace_contents(
       contents,
@@ -87,6 +89,7 @@ export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
 export const settingsChanged = Variable(0);
 export const showNumbers = Variable(settings.numbers);
 export const workspaceIcons = Variable(settings.workspaceIcons || {});
+export const transparentBar = Variable(settings.transparentBar || false);
 
 const BarLocations = {
   Top: {
@@ -354,6 +357,51 @@ export default () => {
                     );
                     setHideEmptyWorkspaces(newValue);
                   }
+                }}
+              />
+            </box>
+          </box>
+
+          {/* Transparent Bar Switch */}
+          <box horizontal halign={Gtk.Align.FILL} className="setting-box">
+            <label
+              label="Transparent Bar Items"
+              className="h3"
+              halign={Gtk.Align.START}
+              hexpand={false}
+              valign={Gtk.Align.CENTER}
+            />
+            <box horizontal halign={Gtk.Align.END} hexpand={true} valign={Gtk.Align.CENTER}>
+              <switch
+                active={bind(transparentBar).as((trans) => trans)}
+                onNotifyActive={(self) => {
+                  const newValue = self.active;
+                  if (newValue !== transparentBar.get()) {
+                    transparentBar.set(newValue);
+                    saveSettings(
+                      currentTheme.get(),
+                      currentMode.get(),
+                      slideshow.get(),
+                      wallpaperImage.get(),
+                      wallpaperFolder.get(),
+                      useBing.get(),
+                      totalWorkspaces.get(),
+                      showNumbers.get(),
+                      hideEmptyWorkspaces.get(),
+                      workspaceIcons.get(),
+                    );
+                    settingsChanged.set(settingsChanged.get() + 1);
+                  }
+                  const homeDir = GLib.get_home_dir();
+                  const theme = currentTheme.get();
+                  const mode = currentMode.get();
+                  const themePathCss = `${homeDir}/.config/ags/style/${theme}${mode}/main.css`;
+                  const themePathScss = `${homeDir}/.config/ags/style/${theme}${mode}/main.scss`;
+                  execAsync(`sass "${themePathScss}" "${themePathCss}"`);
+                  console.log("Scss compiled");
+                  App.reset_css();
+                  App.apply_css(themePathCss);
+                  console.log("Css applied");
                 }}
               />
             </box>

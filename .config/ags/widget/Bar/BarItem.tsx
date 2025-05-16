@@ -1,25 +1,27 @@
-import { App, Gtk, Gdk } from "astal/gtk3";
-import { BoxProps } from "astal/gtk3/widget";
+import { Box, Astal, Gtk } from "astal/gtk3";
+import { bind } from "astal";
+import { transparentBar } from "../ControlCenter/pages/AdvancedThemes";
 
-export enum BarItemStyle {
-	transparent = "transparent",
-	primary = "primary",
-	primaryContainer = "primary_container",
+interface Props extends Box.Props {
+    vertical?: boolean;
+    transparent?: boolean;
 }
 
-type Props = BoxProps & {
-	itemStyle?: BarItemStyle;
-	child?: JSX.Element; // when only one child is passed
-};
-
-export default ({ child, itemStyle, className, ...props }: Props) => {
-	return (
-		<box
-			className={`bar__item ${itemStyle || ""} ${className}`}
-			valign={Gtk.Align.CENTER}
-			{...props}
-		>
-			{child}
-		</box>
-	);
+export default ({
+    className = "",
+    children,
+    vertical = false,
+    transparent = false,
+    ...rest
+}: Props) => {
+    return (
+        <box
+            className={`bar__item ${className} ${bind(transparentBar).as(trans => trans ? 'transparent' : '')}`}
+            {...rest}
+        >
+            <box spacing={8} vertical={vertical}>
+                {children}
+            </box>
+        </box>
+    );
 };

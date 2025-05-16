@@ -39,6 +39,7 @@ export default function TaskBar(gdkmonitor: Gdk.Monitor) {
             vexpand={true}
             className="Bar"
             namespace="taskBar"
+            name="taskBar"
             gdkmonitor={gdkmonitor}
             exclusivity={Astal.Exclusivity.EXCLUSIVE}
             layer="top"
