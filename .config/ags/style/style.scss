@@ -595,6 +595,7 @@ switch:checked slider {
     @include secondary-button;
 
     &.transparent {
+        @include secondary-button;
         background: transparent;
         box-shadow: none;
         border: none;
@@ -650,11 +651,6 @@ switch:checked slider {
             padding-right: 16px;
         }
     }
-}
-
-.bar__item.transparent {
-    background: transparent;
-    color: $text;
 }
 
 .bar__item.primary_container {

@@ -1,16 +1,9 @@
 import { bind } from "astal";
-import { transparentBar } from "../ControlCenter/pages/AdvancedThemes";
+import { transparentItems } from "../ControlCenter/pages/AdvancedThemes";
 import { App, Gtk, Gdk } from "astal/gtk3";
 import { ButtonProps } from "astal/gtk3/widget";
 
-export enum BarButtonStyle {
-    transparent = "transparent",
-    primary = "primary",
-    primaryContainer = "primary_container",
-}
-
 type Props = ButtonProps & {
-    buttonStyle?: BarButtonStyle;
     child?: JSX.Element; // when only one child is passed
 };
 
@@ -21,9 +14,9 @@ export default ({
     onClicked,
     ...props
 }: Props) => {
-    const transparent = transparentBar.get();
-    const transparentClass = transparent ? ".transparent" : "";
-    const combinedClassName = `bar__button${transparentClass}`;
+    const transparent = transparentItems.get();
+    const transparentSuffix = transparent ? " transparent" : "";
+    const combinedClassName = `bar__button${transparentSuffix}`;
 
     return (
         <button

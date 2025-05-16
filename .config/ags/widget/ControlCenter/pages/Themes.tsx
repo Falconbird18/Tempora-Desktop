@@ -136,13 +136,11 @@ const setTheme = (theme: string, mode: string) => {
   currentTheme.set(theme);
   currentMode.set(mode);
   saveSettings(theme, mode, slideshow.get(), wallpaperImage.get(), wallpaperFolder.get(), useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
-  // Apply theme changes immediately (assuming this is handled elsewhere based on variables)
 };
 
 const setSlideshow = (isSlideshow: boolean) => {
   slideshow.set(isSlideshow);
   saveSettings(currentTheme.get(), currentMode.get(), isSlideshow, wallpaperImage.get(), wallpaperFolder.get(), useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
-  // Handle slideshow logic (start/stop timers etc.)
 };
 
 const setWallpaper = async (wallpaperName: string) => {

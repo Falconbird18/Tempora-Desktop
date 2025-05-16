@@ -32,7 +32,7 @@ const loadSettings = () => {
     hideEmptyWorkspaces: false,
     workspaceIcons: {},
     barLocation: "top",
-    transparentBar: false,
+    transparentBarItems: false,
   };
 };
 
@@ -47,6 +47,7 @@ const saveSettings = (
   numbers: boolean,
   hideEmptyWorkspaces: boolean,
   workspaceIcons: { [key: number]: string },
+  transparentBarItems: boolean,
 ) => {
   try {
     const file = Gio.File.new_for_path(settingsFile);
@@ -62,7 +63,8 @@ const saveSettings = (
       hideEmptyWorkspaces,
       workspaceIcons,
       barLocation: barLocation.get().name,
-      transparentBar: transparentBar.get(),
+      // transparentBarItems: transparentBar.get(),
+      transparentBarItems,
     });
     file.replace_contents(
       contents,
@@ -89,7 +91,7 @@ export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
 export const settingsChanged = Variable(0);
 export const showNumbers = Variable(settings.numbers);
 export const workspaceIcons = Variable(settings.workspaceIcons || {});
-export const transparentBar = Variable(settings.transparentBar || false);
+export const transparentItems = Variable(settings.transparentBarItems);
 
 const BarLocations = {
   Top: {
@@ -130,6 +132,7 @@ const setWorkspaces = (workspaces: number) => {
     showNumbers.get(),
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
+    transparentItems.get(),
   );
   settingsChanged.set(settingsChanged.get() + 1);
 };
@@ -147,6 +150,7 @@ const setShowNumbers = (numbers: boolean) => {
     numbers,
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
+    transparentItems.get(),
   );
   settingsChanged.set(settingsChanged.get() + 1);
 };
@@ -164,6 +168,7 @@ const setHideEmptyWorkspaces = (hide: boolean) => {
     showNumbers.get(),
     hide,
     workspaceIcons.get(),
+    transparentItems.get(),
   );
   settingsChanged.set(settingsChanged.get() + 1);
 };
@@ -187,6 +192,7 @@ const setWorkspaceIcon = (workspaceId: number, icon: string) => {
     showNumbers.get(),
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
+    transparentItems.get(),
   );
   settingsChanged.set(settingsChanged.get() + 1);
 };
@@ -206,6 +212,7 @@ const removeWorkspaceIcon = (workspaceId: number) => {
     showNumbers.get(),
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
+    transparentItems.get(),
   );
   settingsChanged.set(settingsChanged.get() + 1);
 };
@@ -223,6 +230,7 @@ const setBarLocation = (location: keyof typeof BarLocations) => {
     showNumbers.get(),
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
+    transparentItems.get(),
   );
   settingsChanged.set(settingsChanged.get() + 1);
 };
@@ -373,11 +381,11 @@ export default () => {
             />
             <box horizontal halign={Gtk.Align.END} hexpand={true} valign={Gtk.Align.CENTER}>
               <switch
-                active={bind(transparentBar).as((trans) => trans)}
+                active={bind(transparentItems).as((trans) => trans)}
                 onNotifyActive={(self) => {
                   const newValue = self.active;
-                  if (newValue !== transparentBar.get()) {
-                    transparentBar.set(newValue);
+                  if (newValue !== transparentItems.get()) {
+                    transparentItems.set(newValue);
                     saveSettings(
                       currentTheme.get(),
                       currentMode.get(),
@@ -389,6 +397,7 @@ export default () => {
                       showNumbers.get(),
                       hideEmptyWorkspaces.get(),
                       workspaceIcons.get(),
+                      transparentItems.get(),
                     );
                     settingsChanged.set(settingsChanged.get() + 1);
                   }
