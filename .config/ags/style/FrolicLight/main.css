@@ -506,6 +506,21 @@ switch:checked slider {
   border-radius: 30px;
 }
 .bar__item.transparent {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: #f2f2f2;
+  color: #562f10;
+  box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
+  font-family: "Monaspace Radon";
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 2px;
+  margin-left: 2px;
+  border: 2px solid #de6e12;
+  background-size: 8px 8px;
+  border-radius: 30px;
   background: transparent;
   box-shadow: none;
   border: none;
@@ -588,11 +603,6 @@ switch:checked slider {
 .bar__button.bar__recording-indicator.spacing label {
   min-width: 54px;
   margin-right: 8px;
-}
-
-.bar__item.transparent {
-  background: transparent;
-  color: #562f10;
 }
 
 .bar__item.primary_container {

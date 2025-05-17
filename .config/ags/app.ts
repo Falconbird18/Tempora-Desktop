@@ -3,7 +3,9 @@ import { exec, execAsync } from "astal";
 const { GLib } = imports.gi;
 // const style = require(`../ags/style/frolic${Theme}/main.scss`);
 // import { currentTheme, currentMode } from "./widget/Popups/menus/ThemeSettings";
+// import { currentTheme, currentMode } from "./widget/ControlCenter/pages/Themes";
 import { currentTheme, currentMode } from "./widget/ControlCenter/pages/Themes";
+import { transparentItems } from "./widget/ControlCenter/pages/AdvancedThemes";
 import Bar from "./widget/Bar";
 import TaskBar from "./widget/TaskBar";
 import ControlCenter from "./widget/ControlCenter";
@@ -156,6 +158,7 @@ function main() {
 
   currentTheme.subscribe(applyTheme);
   currentMode.subscribe(applyTheme);
+  transparentItems.subscribe(applyTheme);
 }
 
 App.start({

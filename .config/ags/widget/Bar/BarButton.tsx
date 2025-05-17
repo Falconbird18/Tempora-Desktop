@@ -10,17 +10,15 @@ type Props = ButtonProps & {
 export default ({
     child,
     buttonStyle,
-    className = "", // Provide a default empty string
+    className = "",
     onClicked,
     ...props
 }: Props) => {
-    const transparent = transparentItems.get();
-    const transparentSuffix = transparent ? " transparent" : "";
-    const combinedClassName = `bar__button${transparentSuffix}`;
-
     return (
         <button
-            className={combinedClassName}
+            className={bind(transparentItems).as(transparent => 
+                `bar__button${transparent ? " transparent" : ""}`
+            )}
             onClicked={onClicked}
             valign={Gtk.Align.CENTER}
             {...props}

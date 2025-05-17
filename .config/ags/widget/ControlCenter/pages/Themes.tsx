@@ -1,17 +1,15 @@
 import Page from "../Page";
 import { App, Gtk, Gdk, Widget } from "astal/gtk3";
 import { bind, execAsync, timeout, Variable, exec } from "astal";
-
+import { loadSettings, saveSettings } from "../../../service/LoadSave";
 const { GLib, Gio } = imports.gi;
-
 import { spacing } from "../../../lib/variables";
 import icons from "../../../lib/icons";
 import { controlCenterPage } from "../index";
 import GdkPixbuf from 'gi://GdkPixbuf';
+import { totalWorkspaces, hideEmptyWorkspaces, settingsChanged, showNumbers, workspaceIcons, transparentItems } from "./AdvancedThemes";
 
-const settingsFile = `${GLib.get_home_dir()}/.config/ags/theme-settings.json`;
 const menuName = "advancedsettings";
-const bingWallpaperPath = `${GLib.get_home_dir()}/.config/ags/bing.jpg`;
 
 const THUMBNAIL_SIZE = 160; // Desired thumbnail size in pixels
 const THUMBNAIL_CACHE_DIR = `${GLib.get_user_cache_dir()}/ags/thumbnails/wallpapers`;
@@ -50,73 +48,6 @@ const generateThumbnailAsync = async (originalPath: string, thumbPath: string, s
     }
 };
 
-
-
-const loadSettings = () => {
-  try {
-    const file = Gio.File.new_for_path(settingsFile);
-    const [ok, contents] = file.load_contents(null);
-    if (ok) {
-      const settings = JSON.parse(new TextDecoder().decode(contents));
-      console.log("Loaded settings:", settings);
-      return settings;
-    }
-  } catch (e) {
-    console.error("Failed to load settings:", e);
-  }
-  // Default settings
-  return {
-    theme: "Frolic",
-    mode: "Light",
-    slideshow: false,
-    wallpaper: "747.jpg",
-    wallpaperDirectory: "/home/austin/Pictures/wallpapers",
-    useBingWallpaper: false,
-    workspaces: 10,
-    numbers: false,
-    hideEmptyWorkspaces: false,
-    workspaceIcons: {},
-  };
-};
-
-const saveSettings = (
-  theme: string,
-  mode: string,
-  slideshow: boolean,
-  wallpaper: string,
-  wallpaperDirectory: string,
-  useBingWallpaper: boolean,
-  workspaces: number,
-  numbers: boolean,
-  hideEmptyWorkspaces: boolean,
-  workspaceIcons: { [key: number]: string },
-) => {
-  try {
-    const file = Gio.File.new_for_path(settingsFile);
-    const contents = JSON.stringify({
-      theme,
-      mode,
-      slideshow,
-      wallpaper,
-      wallpaperDirectory,
-      useBingWallpaper,
-      workspaces,
-      numbers,
-      hideEmptyWorkspaces,
-      workspaceIcons,
-    });
-    file.replace_contents(
-      contents,
-      null,
-      false,
-      Gio.FileCreateFlags.NONE,
-      null,
-    );
-  } catch (e) {
-    console.error("Failed to save settings:", e);
-  }
-};
-
 const settings = loadSettings();
 
 export const currentTheme = Variable(settings.theme);
@@ -125,28 +56,23 @@ export const slideshow = Variable(settings.slideshow);
 export const wallpaperImage = Variable(settings.wallpaper);
 export const wallpaperFolder = Variable(settings.wallpaperDirectory);
 export const useBing = Variable(settings.useBingWallpaper);
-export const totalWorkspaces = Variable(settings.workspaces);
-export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
-export const settingsChanged = Variable(0);
-export const showNumbers = Variable(settings.numbers);
-export const workspaceIcons = Variable(settings.workspaceIcons || {});
 
 
 const setTheme = (theme: string, mode: string) => {
   currentTheme.set(theme);
   currentMode.set(mode);
-  saveSettings(theme, mode, slideshow.get(), wallpaperImage.get(), wallpaperFolder.get(), useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
+  saveSettings(theme, mode, slideshow.get(), wallpaperImage.get(), wallpaperFolder.get(), useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get(), transparentItems.get());
 };
 
 const setSlideshow = (isSlideshow: boolean) => {
   slideshow.set(isSlideshow);
-  saveSettings(currentTheme.get(), currentMode.get(), isSlideshow, wallpaperImage.get(), wallpaperFolder.get(), useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
+  saveSettings(currentTheme.get(), currentMode.get(), isSlideshow, wallpaperImage.get(), wallpaperFolder.get(), useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get(), transparentItems.get());
 };
 
 const setWallpaper = async (wallpaperName: string) => {
   wallpaperImage.set(wallpaperName);
   useBing.set(false); // Disable Bing wallpaper when a custom wallpaper is set
-  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperName, wallpaperFolder.get(), useBing, totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
+  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperName, wallpaperFolder.get(), useBing, totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get(), transparentItems.get());
   console.log(`Setting Wallpaper to: ${wallpaperName}`);
 
   const wallpaperImagePath = `${wallpaperFolder.get()}/${wallpaperName}`;
@@ -206,7 +132,7 @@ const setWallpaperDirectory = (wallpaperDirectory: string) => {
 
   wallpaperFolder.set(wallpaperDirectory);
   // For simplicity, let's keep the current wallpaper setting but it might become invalid.
-  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperImage.get(), wallpaperDirectory, totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
+  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperImage.get(), wallpaperDirectory, useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get(), transparentItems.get());
 
   console.log("Wallpaper directory set. UI refresh might be needed manually.");
 
@@ -312,7 +238,7 @@ export default () => {
 
     wallpaperFolder.set(wallpaperDirectory);
     // For simplicity, let's keep the current wallpaper setting but it might become invalid.
-    saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperImage.get(), wallpaperDirectory, useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get());
+    saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperImage.get(), wallpaperDirectory, useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get(), transparentItems.get());
 
     console.log(`Wallpaper directory set to: ${wallpaperDirectory}`);
 
@@ -509,7 +435,8 @@ export default () => {
                 totalWorkspaces.get(),
                 showNumbers.get(),
                 hideEmptyWorkspaces.get(),
-                workspaceIcons.get()
+                workspaceIcons.get(),
+                transparentItems.get()
               );
               console.log(`Toggled Use Bing Wallpaper to: ${isActive}`); // Optional logging
 

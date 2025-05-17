@@ -5,87 +5,11 @@ const { GLib, Gio } = imports.gi;
 import { spacing } from "../../../lib/variables";
 import icons from "../../../lib/icons";
 import { ComboBoxText } from "../../../common/Types";
-
-const settingsFile = `${GLib.get_home_dir()}/.config/ags/theme-settings.json`;
-
-const loadSettings = () => {
-  try {
-    const file = Gio.File.new_for_path(settingsFile);
-    const [ok, contents] = file.load_contents(null);
-    if (ok) {
-      const settings = JSON.parse(new TextDecoder().decode(contents));
-      console.log(settings);
-      return settings;
-    }
-  } catch (e) {
-    console.error("Failed to load settings:", e);
-  }
-  return {
-    theme: "Frolic",
-    mode: "Light",
-    slideshow: false,
-    wallpaper: "747.jpg",
-    wallpaperDirectory: "/home/austin/Pictures/wallpapers",
-    useBingWallpaper: false,
-    workspaces: 10,
-    numbers: false,
-    hideEmptyWorkspaces: false,
-    workspaceIcons: {},
-    barLocation: "top",
-    transparentBarItems: false,
-  };
-};
-
-const saveSettings = (
-  theme: string,
-  mode: string,
-  slideshow: boolean,
-  wallpaper: string,
-  wallpaperDirectory: string,
-  useBingWallpaper: boolean,
-  workspaces: number,
-  numbers: boolean,
-  hideEmptyWorkspaces: boolean,
-  workspaceIcons: { [key: number]: string },
-  transparentBarItems: boolean,
-) => {
-  try {
-    const file = Gio.File.new_for_path(settingsFile);
-    const contents = JSON.stringify({
-      theme,
-      mode,
-      slideshow,
-      wallpaper,
-      wallpaperDirectory,
-      useBingWallpaper,
-      workspaces,
-      numbers,
-      hideEmptyWorkspaces,
-      workspaceIcons,
-      barLocation: barLocation.get().name,
-      // transparentBarItems: transparentBar.get(),
-      transparentBarItems,
-    });
-    file.replace_contents(
-      contents,
-      null,
-      false,
-      Gio.FileCreateFlags.NONE,
-      null,
-    );
-  } catch (e) {
-    console.error("Failed to save settings:", e);
-  }
-};
+import { loadSettings, saveSettings } from "../../../service/LoadSave";
+import { currentTheme, currentMode, slideshow, wallpaperImage, wallpaperFolder, useBing } from "./Themes";
 
 const settings = loadSettings();
 
-export const currentTheme = Variable(settings.theme);
-export const currentMode = Variable(settings.mode);
-export const slideshow = Variable(settings.slideshow);
-export const wallpaperImage = Variable(settings.wallpaper);
-export const wallpaperFolder = Variable(settings.wallpaperDirectory);
-export const useBing = Variable(settings.useBingWallpaper);
 export const totalWorkspaces = Variable(settings.workspaces);
 export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
 export const settingsChanged = Variable(0);
