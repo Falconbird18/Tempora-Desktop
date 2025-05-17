@@ -7,6 +7,13 @@ import icons from "../../lib/icons";
 
 const apps = new AstalApps.Apps();
 
+const PINNED_APP_IDS = [
+  "firefox.desktop",
+  "org.gnome.Nautilus.desktop",
+  "microsoft-edge.desktop",
+  "code.desktop",
+];
+
 const query = Variable<string>("");
 
 const isMathExpression = (input: string): boolean => {
@@ -19,7 +26,6 @@ const isMathExpression = (input: string): boolean => {
 
 const calculateWithQalc = (expression: string): string => {
   try {
-    // Remove the $ prefix if present, otherwise use the expression as-is
     const cleanExpression = expression.startsWith("$")
       ? expression.slice(1)
       : expression;
@@ -39,21 +45,81 @@ const calculateWithQalc = (expression: string): string => {
   }
 };
 
-export default () => {
-  const items = query((query) => {
-    const trimmedQuery = query.trim();
-    let resultItems: any[] = [];
+let PinnedAppGridWidgetCache: any | null = null;
 
-    if (trimmedQuery && isMathExpression(trimmedQuery)) {
-      const result = calculateWithQalc(trimmedQuery);
-      // Show the original input (with or without $) in the result
-      resultItems.push(MathResultItem(trimmedQuery, result));
+function getPinnedAppsGridWidget() {
+  if (PinnedAppGridWidgetCache) {
+    return PinnedAppGridWidgetCache;
+  }
+
+  const allAppsList = apps.list || [];
+  console.log("[AppLauncher] Total apps from apps.list:", allAppsList.length);
+  if (allAppsList.length > 0) {
+    console.log("[AppLauncher] Properties of the first app found:", allAppsList[0]);
+    console.log("[AppLauncher] All enumerable properties of the first app (allAppsList[0]):");
+    for (const prop in allAppsList[0]) {
+      try {
+        console.log(`  Property '${prop}':`, (allAppsList[0] as any)[prop]);
+      } catch (e) {
+        console.log(`  Property '${prop}': <error reading property: ${e}>`);
+      }
+    }
+  }
+
+  const pinnedAppWidgets = PINNED_APP_IDS
+    .map(pinned_id => {
+      console.log(`[AppLauncher] Trying to find pinned app with ID: ${pinned_id}`);
+      const app = allAppsList.find((a: AstalApps.Application) => {
+        if (a.entry && typeof a.entry === 'string' && a.entry === pinned_id) return true;
+        if (a.id && typeof a.id === 'string' && a.id === pinned_id) return true;
+        if (a.app_id && typeof a.app_id === 'string' && a.app_id === pinned_id) return true;
+        return false;
+      });
+      if (app) {
+        console.log(`[AppLauncher] Found app for ID ${pinned_id}:`, (app as any).name || (app as any).entry || (app as any).id || app);
+      }
+      return app ? AppItem(app) : null;
+    })
+    .filter(widget => widget !== null);
+
+  if (pinnedAppWidgets.length === 0) {
+    PinnedAppGridWidgetCache = <label>No pinned apps found or configured.</label>;
+    return PinnedAppGridWidgetCache;
+  }
+
+  const itemsPerRow = 5;
+  const rows = [];
+  for (let i = 0; i < pinnedAppWidgets.length; i += itemsPerRow) {
+    const rowItems = pinnedAppWidgets.slice(i, i + itemsPerRow);
+    rows.push(
+      <box horizontal spacing={10} className="pinned-apps-row" key={`pinned-row-${i / itemsPerRow}`}>
+        {rowItems}
+      </box>
+    );
+  }
+  PinnedAppGridWidgetCache = <box vertical spacing={10} className="pinned-apps-grid">{rows}</box>;
+  return PinnedAppGridWidgetCache;
+}
+
+export default () => {
+  const appLauncherContent = query(currentQuery => {
+    const trimmedQuery = currentQuery.trim();
+
+    if (!trimmedQuery) {
+      return getPinnedAppsGridWidget();
     }
 
+    // Search results logic
+    let resultItems: any[] = [];
+    if (isMathExpression(trimmedQuery)) {
+      const result = calculateWithQalc(trimmedQuery);
+      resultItems.push(MathResultItem(trimmedQuery, result));
+    }
     const appItems = apps
-      .fuzzy_query(query)
+      .fuzzy_query(currentQuery)
       .map((app: AstalApps.Application) => AppItem(app));
-    return [...resultItems, ...appItems];
+
+    return <box className="app-launcher__list" vertical>{[...resultItems, ...appItems]}</box>;
   });
 
   const Entry = new Widget.Entry({
@@ -61,13 +127,16 @@ export default () => {
     canFocus: true,
     className: "app-launcher__entry",
     onActivate: () => {
-      const currentItems = items.get();
-      if (currentItems.length > 0) {
-        const firstItem = currentItems[0];
-        if (firstItem.app) {
-          firstItem.app.launch();
+      const currentQueryVal = query.get().trim();
+      if (currentQueryVal) {
+        const appResults = apps.fuzzy_query(currentQueryVal);
+        if (appResults.length > 0) {
+          appResults[0].launch();
+          App.toggle_window("app-launcher");
+        } else if (isMathExpression(currentQueryVal)) {
+          App.toggle_window("app-launcher");
         }
-        App.toggle_window("app-launcher");
+      } else {
       }
     },
     setup: (self) => {
@@ -101,6 +170,7 @@ export default () => {
         self.hook(self, "notify::visible", () => {
           if (!self.get_visible()) {
             query.set("");
+            // PinnedAppGridWidgetCache = null; // Optional: clear cache if app list can change dynamically
           } else {
             Entry.grab_focus();
           }
@@ -113,9 +183,7 @@ export default () => {
           {Entry}
         </box>
         <scrollable vexpand>
-          <box className="app-launcher__list" vertical>
-            {items}
-          </box>
+          {appLauncherContent}
         </scrollable>
       </box>
     </PopupWindow>
