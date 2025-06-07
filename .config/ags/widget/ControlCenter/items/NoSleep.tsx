@@ -7,45 +7,37 @@ export default () => {
     // Create a reactive variable to track sleep state
     const noSleep = Variable(false);
 
-    // Function to toggle sleep mode
     const toggleSleep = () => {
-        const currentState = noSleep.get();
-        console.log("Current state before toggle:", currentState);
+        const currentNoSleepState = noSleep.get();
+        const targetNoSleepState = !currentNoSleepState;
 
-        if (currentState) {
-            console.log("Attempting to start hypridle");
-            try {
-                exec("hyprctl dispatch exec hypridle");
-                console.log("hypridle started successfully");
-                noSleep.set(false);
-                console.log("State set to:", false);
-            } catch (err) {
-                console.error("Failed to start hypridle:", err);
-            }
-        } else {
-            console.log("Attempting to kill hypridle");
+        if (targetNoSleepState) { // User wants to disable sleep (noSleep = true)
+            console.log("Attempting to disable sleep (kill hypridle)...");
             try {
                 exec("pkill hypridle");
-                console.log("hypridle killed successfully");
-                noSleep.set(true);
-                console.log("State set to:", true);
+                console.log("pkill hypridle command executed.");
             } catch (err) {
-                console.log("pkill error:", err.message);
-                if (err.message.includes("exit code 1")) {
-                    console.log("No hypridle process was running");
-                    noSleep.set(true);
-                    console.log("State set to:", true);
+                const errorMsg = String(err.message || err);
+                // pkill exits 1 if no process found. This is not a critical failure for the desired state.
+                if (errorMsg.includes("exit status 1") || errorMsg.toLowerCase().includes("no process found")) {
+                    console.log("hypridle was not running (or pkill found no matching process).");
                 } else {
-                    console.error("Failed to kill hypridle:", err);
+                    console.warn("Error trying to kill hypridle:", errorMsg);
                 }
             }
+            noSleep.set(true);
+        } else { // User wants to enable sleep (noSleep = false)
+            console.log("Attempting to enable sleep (start hypridle)...");
+            try {
+                exec("hyprctl dispatch exec hypridle");
+                console.log("hypridle start command dispatched.");
+            } catch (err) {
+                console.error("Error trying to start hypridle:", String(err.message || err));
+            }
+            noSleep.set(false);
         }
+        console.log(`NoSleep state set to: ${noSleep.get()}`);
     };
-
-    // Log state changes for debugging
-    noSleep.subscribe((newValue) => {
-        console.log("noSleep state changed to:", newValue);
-    });
 
     return (
         <button
