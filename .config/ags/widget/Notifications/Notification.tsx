@@ -73,11 +73,13 @@ type NotificationsProps = {
 	setup(self: EventBox): void;
 	onHoverLost(self: EventBox): void;
 	notification: Notifd.Notification;
+	// Callback to notify parent to remove this widget from its layout
+    _removeWidgetFromParent?: () => void;
 };
 
 export default function Notification(props: NotificationsProps) {
-	const { notification, onHoverLost, setup } = props;
-
+	const { notification, onHoverLost, setup, _removeWidgetFromParent } = props;
+	
 	const Content = () => (
 		<box hexpand={true} className="content">
 			<NotificationIcon notification={notification} />
@@ -195,7 +197,7 @@ export default function Notification(props: NotificationsProps) {
 	let timeoutId: number | null = null;
 	
 	return Object.assign(revealer, {
-		close(remove: () => void) {
+		close() {
 			if (isClosing || !revealer) return; // Early exit if already closing or revealer is null
 			isClosing = true;
 			revealer.revealChild = false; // Start the hide animation
@@ -215,16 +217,20 @@ export default function Notification(props: NotificationsProps) {
 					child.className = `${currentClass} resolved`.trim();
 				}
 	
-				// Now remove the widget
-				remove();
+				// Call the passed-in removal function which also handles destroy
+                if (_removeWidgetFromParent) {
+                    _removeWidgetFromParent();
+                } else {
+                    // Fallback if no callback, just destroy (less ideal for parent management)
+                    if (revealer.get_parent()) revealer.get_parent().remove(revealer);
+                    revealer.destroy();
+                }
 			});
 		},
 		onDestroy: () => {
-			if (timeoutId !== null) {
-				GLib.source_remove(timeoutId);
-				timeoutId = null;
-			}
+			if (timeoutId !== null) GLib.source_remove(timeoutId);
 			isClosing = true;
+			(revealer as any)._destroyed = true; // Add a flag for external checks
 		},
 	});
 }

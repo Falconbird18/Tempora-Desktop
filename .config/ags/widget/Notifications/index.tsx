@@ -1,142 +1,15 @@
 import { App, Gtk, Gdk, Widget, Astal } from "astal/gtk3";
 import { bind, timeout, Variable, GLib } from "astal";
-import Notifd from "gi://AstalNotifd?version=0.1";
-import Notification from "./Notification";
+// import Notifd from "gi://AstalNotifd?version=0.1"; // No longer directly used here
+import NotificationWidget from "./Notification"; // Renamed import
 import { spacing } from "../../lib/variables";
 import PopupWindow from "../../common/PopupWindow";
-import { Subscribable } from "astal/binding";
+// import { Subscribable } from "astal/binding"; // No longer needed
+import notificationsStore from "../../service/Notifications"; // Import central store
 
-/**
- * Wrap the Notification widget so that it tracks whether it’s been destroyed.
- * This is our helper so that later we don’t try to re-manipulate a dead widget.
- */
-function createNotificationWidget(notification) {
-    // Create the widget using your existing Notification code.
-    const widget = Notification({
-        notification,
-        onHoverLost: () => { },
-        setup: (self) => { },
-    });
-
-    // Add a custom flag.
-    widget._destroyed = false;
-
-    // Wrap the original destroy function so that we mark _destroyed.
-    const originalDestroy = widget.destroy.bind(widget);
-    widget.destroy = () => {
-        if (!widget._destroyed) {
-            widget._destroyed = true;
-            originalDestroy();
-        }
-    };
-
-    return widget;
-}
-
-class NotificationsMap implements Subscribable {
-    // Maps to track notifications.
-    private activeWidgets: Map<number, Gtk.Widget> = new Map();
-    // We keep allNotifications public so that our UI subscription can access it.
-    public allNotifications: Map<
-        number,
-        { widget: Gtk.Widget; resolved: boolean; notification: Notifd.Notification }
-    > = new Map();
-    private var: Variable<Array<Gtk.Widget>> = Variable([]);
-
-    // Notify our binding variable with the updated list.
-    private notify() {
-        // We reverse so the most recent ones come out first.
-        const widgets = [...this.allNotifications.values()].map(entry => entry.widget).reverse();
-        console.log(`Notify called. Total: ${this.allNotifications.size}, Widgets: ${widgets.length}`);
-        this.var.set(widgets);
-    }
-
-    constructor() {
-        const notifd = Notifd.get_default();
-        notifd.set_ignore_timeout(true);
-
-        // When a new notification arrives…
-        notifd.connect("notified", (_, id) => {
-            console.log(`New notification: ID ${id}, Summary: ${notifd.get_notification(id)?.summary}`);
-            const notification = notifd.get_notification(id);
-            if (!notification) return;
-            // Create our wrapped widget.
-            const widget = createNotificationWidget(notification);
-            this.set(id, widget, notification);
-        });
-
-        // When a notification is resolved…
-        notifd.connect("resolved", (_, id) => {
-            const entry = this.allNotifications.get(id);
-            if (entry) {
-                console.log(`Resolved: ID ${id}`);
-                entry.resolved = true;
-                // Remove from the active map.
-                this.activeWidgets.delete(id);
-                // Close the widget (if not already destroyed).
-                if (!entry.widget._destroyed) {
-                    entry.widget.close(() => { });
-                }
-                this.notify();
-            }
-        });
-    }
-
-    private set(key: number, value: Gtk.Widget, notification: Notifd.Notification) {
-        // If a widget already exists for this key, destroy it.
-        const oldWidget = this.activeWidgets.get(key);
-        if (oldWidget && typeof oldWidget.destroy === "function") {
-            oldWidget.destroy();
-        }
-        this.activeWidgets.set(key, value);
-        this.allNotifications.set(key, { widget: value, resolved: false, notification });
-        console.log(`Set ID ${key}. Active: ${this.activeWidgets.size}, All: ${this.allNotifications.size}`);
-        this.notify();
-    }
-
-    clearAll(widgetContainer?: Widget.Box) {
-        console.log("Clearing all notifications");
-
-        // First, remove each widget from its parent if possible.
-        if (widgetContainer) {
-            this.allNotifications.forEach((entry) => {
-                if (!entry.widget._destroyed && entry.widget.get_parent() === widgetContainer) {
-                    widgetContainer.remove(entry.widget);
-                }
-            });
-        }
-
-        // Destroy all widgets using our safe flag check.
-        this.activeWidgets.forEach((widget) => {
-            if (!widget._destroyed && widget.get_parent()) {
-                widget.destroy();
-            }
-        });
-        this.allNotifications.forEach((entry) => {
-            if (!entry.widget._destroyed && entry.widget.get_parent()) {
-                entry.widget.destroy();
-            }
-        });
-
-        // Clear our maps and update the UI binding.
-        this.activeWidgets.clear();
-        this.allNotifications.clear();
-        this.notify();
-    }
-
-    get() {
-        return this.var.get();
-    }
-
-    subscribe(callback: (list: Array<Gtk.Widget>) => void) {
-        return this.var.subscribe(callback);
-    }
-}
+// Remove NotificationsMap and createNotificationWidget as logic is now centralized
 
 export default () => {
-    const notifs = new NotificationsMap();
-    const notifications = Notifd.get_default();
-
     return (
         <PopupWindow
             scrimType="transparent"
@@ -168,10 +41,8 @@ export default () => {
                         <button
                             className="primary-button"
                             halign={Gtk.Align.END}
-                            onClicked={(self) => {
-                                // Determine the container holding the notification widgets.
-                                const widgetContainer = self.get_parent()?.get_parent()?.get_parent() as Widget.Box;
-                                notifs.clearAll(widgetContainer);
+                            onClicked={() => {
+                                notificationsStore.clearAll();
                             }}
                         >
                             <label label="Clear All" />
@@ -186,43 +57,50 @@ export default () => {
                     spacing={6}
                     vexpand={true}
                     hexpand={true}
-                    setup={(self) => {
-                        // Map to track widgets already added to this container.
-                        const widgetMap = new Map<number, Gtk.Widget>();
-                        notifs.subscribe((notifsList) => {
-                            // Process notifications that should be added or updated.
-                            notifsList.forEach((widget, index) => {
-                                const entries = [...notifs.allNotifications.values()];
-                                const entry = entries[notifsList.length - 1 - index];
-                                if (!entry) return;
-                                const id = entry.notification.id;
-                                if (!widgetMap.has(id) && !widget._destroyed) {
-                                    console.log(`Adding widget ID ${id}: Resolved=${entry.resolved}`);
-                                    widgetMap.set(id, widget);
-                                    self.add(widget);
-                                    widget.show();
-                                }
-                                // Update class for resolved notifications, if the widget is still valid.
-                                if (entry.resolved && !widget._destroyed && widget.get_parent()) {
-                                    widget.className = `${widget.className || ""} resolved`.trim();
-                                }
-                            });
-                            // Remove widgets that are no longer present.
-                            widgetMap.forEach((widget, id) => {
-                                if (!notifs.allNotifications.has(id)) {
-                                    console.log(`Removing widget ID ${id}`);
-                                    if (!widget._destroyed && widget.get_parent()) {
-                                        try {
-                                            self.remove(widget);
-                                        } catch (e) {
-                                            console.error(`Error while removing widget ID ${id}:`, e);
-                                        }
+                    setup={(self: Widget.Box) => {
+                        const widgetMap = new Map<number, Widget.Revealer>(); // Store Gtk.Widget (Revealer)
+
+                        const updateList = (currentNotifications: Notifd.Notification[]) => {
+                            const newIds = new Set(currentNotifications.map(n => n.id));
+
+                            // Remove widgets for notifications that no longer exist
+                            widgetMap.forEach((widgetInstance, id) => {
+                                if (!newIds.has(id)) {
+                                    if (widgetInstance && !(widgetInstance as any)._destroyed) {
+                                        widgetInstance.close(); // Triggers animation and removal via callback
+                                    } else {
+                                        widgetMap.delete(id); // Clean up map if already gone
                                     }
-                                    widgetMap.delete(id);
                                 }
                             });
-                            console.log(`Updated list: ${widgetMap.size} notifications, Children: ${self.get_children().length}`);
-                        });
+
+                            // Add new widgets (newest on top)
+                            // Iterate normal order and prepend, or reverse and add
+                            [...currentNotifications].reverse().forEach(notification => {
+                                if (!widgetMap.has(notification.id)) {
+                                    const newWidget = NotificationWidget({
+                                        notification: notification,
+                                        onHoverLost: () => {}, // Adapt if needed
+                                        setup: () => {},       // Adapt if needed
+                                        _removeWidgetFromParent: () => {
+                                            if (newWidget.get_parent() === self) {
+                                                self.remove(newWidget);
+                                            }
+                                            newWidget.destroy();
+                                            widgetMap.delete(notification.id);
+                                        }
+                                    });
+                                    (newWidget as any)._destroyed = false; // Initialize flag
+                                    self.add(newWidget); // Adds to the end, results in newest on top due to reversed list
+                                    newWidget.show_all();
+                                    widgetMap.set(notification.id, newWidget);
+                                }
+                            });
+                        };
+
+                        // Initial population and subscription
+                        updateList(notificationsStore.notifications);
+                        notificationsStore.subscribe(updateList);
                     }}
                 />
             </scrollable>
