@@ -21,7 +21,7 @@ class PopupNotificationsMap implements Subscribable {
             let timeoutId: number | null = null;
             const widget = Notification({
                 notification: notifd.get_notification(id)!,
-                onHoverLost: () => this.map.get(id)?.close(() => this.delete(id)),
+                onHoverLost: () => this.map.get(id)?.close(),
                 setup: (self) => {
                     timeoutId = timeout(TIMEOUT_DELAY, () => {
                         this.map.get(id)?.close(() => this.delete(id));

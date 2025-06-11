@@ -41,7 +41,7 @@ export default () => {
                         <button
                             className="primary-button"
                             halign={Gtk.Align.END}
-                            onClicked={() => {
+                            on_clicked={() => {
                                 notificationsStore.clearAll();
                             }}
                         >

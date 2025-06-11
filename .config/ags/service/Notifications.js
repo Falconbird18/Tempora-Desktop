@@ -2,6 +2,7 @@
 import { Variable } from "astal";
 import Notifd from "gi://AstalNotifd?version=0.1";
 
+
 // Get the default Notifd instance.
 const notifd = Notifd.get_default();
 notifd.set_ignore_timeout(true); // This keeps notifications until explicitly dismissed
@@ -41,26 +42,18 @@ export default {
     return notifd;
   },
   clearAll: () => {
-    let clearedViaBulk = false;
-    if (typeof notifd.resolve_all === 'function') {
-      notifd.resolve_all();
-      clearedViaBulk = true;
-    } else if (typeof notifd.close_all_notifications === 'function') {
-      notifd.close_all_notifications();
-      clearedViaBulk = true;
-    }
-
-    if (clearedViaBulk) {
-      // If a bulk clear method was called on the daemon,
-      // we update our local store to an empty array.
-      // The UI (Notifications/index.tsx) subscribes to this variable
-      // and will call `close()` on individual widgets, handling animations.
-      notificationsStore.set([]);
-    } else {
-      // Fallback: iterate over a copy of our current notifications and close them one by one.
-      // This relies on `close_notification` emitting 'resolved' for each,
-      // which in turn updates `notificationsStore`.
-      [...notificationsStore.get()].forEach(n => notifd.close_notification(n.id));
-    }
+    // Always dismiss notifications one by one.
+    // This will trigger "resolved" signals for each.
+    const currentNotifications = [...notificationsStore.get()];
+    currentNotifications.forEach(n => { // 'n' is an AstalNotifd.Notification instance
+      if (typeof n.dismiss === 'function') {
+        n.dismiss(); // Call dismiss on the notification object itself
+      } else {
+        // This would be unexpected if AstalNotifd.Notification conforms to the provided docs
+        // and 'n' is indeed a valid notification object.
+        console.error(`Notification object (id: ${n.id}) does not have a 'dismiss' method.`);
+      }
+    });
   }
 };
+// which in turn updates `notificationsStore`.

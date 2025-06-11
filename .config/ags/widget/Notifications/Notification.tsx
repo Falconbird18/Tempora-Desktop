@@ -74,12 +74,12 @@ type NotificationsProps = {
 	onHoverLost(self: EventBox): void;
 	notification: Notifd.Notification;
 	// Callback to notify parent to remove this widget from its layout
-    _removeWidgetFromParent?: () => void;
+	_removeWidgetFromParent?: () => void;
 };
 
 export default function Notification(props: NotificationsProps) {
 	const { notification, onHoverLost, setup, _removeWidgetFromParent } = props;
-	
+
 	const Content = () => (
 		<box hexpand={true} className="content">
 			<NotificationIcon notification={notification} />
@@ -166,14 +166,14 @@ export default function Notification(props: NotificationsProps) {
 			</box>
 		);
 
-    const Eventbox = () => (
-        <eventbox vexpand={false} on_hover_lost={onHoverLost} setup={setup}>
-            <box vertical={true}>
-                <Content />
-                <ActionsBox />
-            </box>
-        </eventbox>
-    );
+	const Eventbox = () => (
+		<eventbox vexpand={false} on_hover_lost={onHoverLost} setup={setup}>
+			<box vertical={true}>
+				<Content />
+				<ActionsBox />
+			</box>
+		</eventbox>
+	);
 
 	const revealer = new Widget.Revealer({
 		transitionType: Gtk.RevealerTransitionType.SLIDE_DOWN,
@@ -192,16 +192,17 @@ export default function Notification(props: NotificationsProps) {
 			</box>
 		),
 	});
-	
+
 	let isClosing = false;
 	let timeoutId: number | null = null;
-	
+	let isSelfDestroyed = false;
+
 	return Object.assign(revealer, {
 		close() {
 			if (isClosing || !revealer) return; // Early exit if already closing or revealer is null
 			isClosing = true;
 			revealer.revealChild = false; // Start the hide animation
-	
+
 			timeoutId = timeout(transitionDuration, () => {
 				timeoutId = null;
 				// Check if revealer still exists and is in the widget tree
@@ -209,22 +210,22 @@ export default function Notification(props: NotificationsProps) {
 					// Widget is already disposed; skip further action
 					return;
 				}
-	
+
 				// Safely update the child’s class before removal
 				const child = revealer.get_child(); // Use modern GTK method
 				if (child) {
 					const currentClass = child.className || "";
 					child.className = `${currentClass} resolved`.trim();
 				}
-	
+
 				// Call the passed-in removal function which also handles destroy
-                if (_removeWidgetFromParent) {
-                    _removeWidgetFromParent();
-                } else {
-                    // Fallback if no callback, just destroy (less ideal for parent management)
-                    if (revealer.get_parent()) revealer.get_parent().remove(revealer);
-                    revealer.destroy();
-                }
+				if (_removeWidgetFromParent) {
+					_removeWidgetFromParent();
+				} else {
+					// Fallback if no callback, just destroy (less ideal for parent management)
+					if (revealer.get_parent()) revealer.get_parent().remove(revealer);
+					revealer.destroy();
+				}
 			});
 		},
 		onDestroy: () => {
