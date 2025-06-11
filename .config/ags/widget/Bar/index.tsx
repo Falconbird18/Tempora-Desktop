@@ -67,9 +67,10 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       namespace="bar"
       gdkmonitor={gdkmonitor}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
-      layer="top"
+      layer={Astal.Layer.TOP}
       anchor={bind(barLocation).as((loc: { anchor: number }) => loc.anchor)}
       application={App}
+      focusable={true}
     >
       {bind(barLocation).as((loc: { name: string }) => loc.name === "left" || loc.name === "right" ? (
         <box className="bar" vertical>
