@@ -19,7 +19,7 @@ const Scrim = ({ scrimType, className = "scrim" }: ScrimProps) => (
       Astal.WindowAnchor.RIGHT |
       Astal.WindowAnchor.BOTTOM
     }
-    keymode={Astal.Keymode.NONE}
+    // keymode={Astal.Keymode.NONE}
     application={App}
     className={className}
     setup={(self) => {
@@ -36,7 +36,8 @@ const Scrim = ({ scrimType, className = "scrim" }: ScrimProps) => (
       vexpand={true}
       hexpand={true}
       onClick={(self) => {
-        self.parent.visible = false;
+        // self.parent.visible = false;
+        toggleWindow(PopupMenu.name);
       }}
     />
   </window>

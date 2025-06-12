@@ -29,12 +29,16 @@ import ScreenRecordService from "./service/ScreenRecord";
 import Dashboard from "./widget/Dashboard";
 import { initBingImageService } from "./lib/bing";
 import StarshipService from "./service/starship";
+import HyprlockService from "./service/hyprlock";
 
 const applyTheme = async () => {
   const homeDir = GLib.get_home_dir();
   const theme = currentTheme.get();
   const mode = currentMode.get();
   const spicetifyPathScss = `${homeDir}/.config/ags/style/${theme}${mode}/spicetify.scss`;
+
+  // Update hyprlock config when theme changes
+  await HyprlockService.updateConfig();
   const spicetifyPathCss = `${homeDir}/.config/spicetify/Themes/Frolic/user.css`;
 
   try {
@@ -45,8 +49,8 @@ const applyTheme = async () => {
     const themePathScss = `${homeDir}/.config/ags/style/${theme}${mode}/main.scss`;
     const hyprThemeConfSource = `${homeDir}/.config/hypr/hyprland/${theme}${mode}/theme.conf`;
     const hyprThemeConfDest = `${homeDir}/.config/hypr/hyprland/theme.conf`;
-    const hyprLockConfSource = `${homeDir}/.config/hypr/hyprlock/${theme}${mode}/hyprlock.conf`;
-    const hyprLockConfDest = `${homeDir}/.config/hypr/hyprlock.conf`;
+    // const hyprLockConfSource = `${homeDir}/.config/hypr/hyprlock/${theme}${mode}/hyprlock.conf`;
+    // const hyprLockConfDest = `${homeDir}/.config/hypr/hyprlock.conf`;
     const ghosttySource = `${homeDir}/.config/ghostty/${theme}${mode}/config`;
     const ghosttyDest = `${homeDir}/.config/ghostty/config`;
     const hyprctl = "hyprctl reload"
@@ -58,17 +62,17 @@ const applyTheme = async () => {
     console.log("Theme Path Scss:", themePathScss);
     console.log("Hypr Theme Conf Source:", hyprThemeConfSource);
     console.log("Hypr Theme Conf Destination:", hyprThemeConfDest);
-    console.log("Hyprlock Conf Source:", hyprLockConfSource);
-    console.log("Hyprlock Conf Destination:", hyprLockConfDest);
+    // console.log("Hyprlock Conf Source:", hyprLockConfSource);
+    // console.log("Hyprlock Conf Destination:", hyprLockConfDest);
     console.log("Ghostty Source:", ghosttySource);
     console.log("Ghostty Destination:", ghosttyDest);
 
 
     await execAsync(`rm -f ${hyprThemeConfDest}`);
-    await execAsync(`rm -f ${hyprLockConfDest}`);
+    // await execAsync(`rm -f ${hyprLockConfDest}`);
     await execAsync(`rm -f ${ghosttyDest}`);
     await execAsync(`cp "${hyprThemeConfSource}" "${hyprThemeConfDest}"`);
-    await execAsync(`cp "${hyprLockConfSource}" "${hyprLockConfDest}"`);
+    // await execAsync(`cp "${hyprLockConfSource}" "${hyprLockConfDest}"`);
     await execAsync(`cp -r "${ghosttySource}" "${ghosttyDest}"`);
     console.log("Config files copied");
     await execAsync(`sass "${themePathScss}" "${themePathCss}"`);

@@ -8,6 +8,8 @@ import icons from "../../../lib/icons";
 import { controlCenterPage } from "../index";
 import GdkPixbuf from 'gi://GdkPixbuf';
 import { totalWorkspaces, hideEmptyWorkspaces, settingsChanged, showNumbers, workspaceIcons, transparentItems } from "./AdvancedThemes";
+import HyprlockService from "../../../service/hyprlock";
+
 
 const menuName = "advancedsettings";
 
@@ -437,9 +439,8 @@ export default () => {
                 hideEmptyWorkspaces.get(),
                 workspaceIcons.get(),
                 transparentItems.get()
-              );
-              console.log(`Toggled Use Bing Wallpaper to: ${isActive}`); // Optional logging
-
+              );              console.log(`Toggled Use Bing Wallpaper to: ${isActive}`); // Optional logging
+              HyprlockService.updateConfig(); // Update hyprlock config
               if (isActive) {
                 // When enabling Bing wallpaper
                 const bingPath = `${GLib.get_home_dir()}/.config/ags/bing.jpg`;
