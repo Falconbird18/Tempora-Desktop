@@ -4,18 +4,18 @@ import { useBing } from "../widget/ControlCenter/pages/Themes";
 const { GLib } = imports.gi;
 
 export class HyprlockService {
-    private static generateConfig(colors: { primary: string, secondary: string, text: string, background: string }) {
+    private static generateConfig(colors: { background: string, primary: string, secondary: string, text: string, h1_font: string, paragraph_font: string }) {
         const homeDir = GLib.get_home_dir();
         const wallpaperPath = useBing()
             ? `${homeDir}/.config/ags/bing.jpg`
             : `${homeDir}/.config/ags/wallpaper.jpg`;
 
         return `$text_color = rgb(${colors.text})
-$entry_background_color = rgba(${colors.background})
+$background = rgb(${colors.background})
 $entry_border_color = rgb(${colors.secondary})
-$font_family = Monaspace Xenon
-$font_family_clock = Monaspace Radon
-$font_material_symbols = Frolic-filled
+$font_family = ${colors.paragraph_font}
+$font_family_clock = ${colors.h1_font}
+$font_material_symbols = Frolic-Filled
 
 background {
     path = ${wallpaperPath}
@@ -30,7 +30,7 @@ input-field {
     dots_size = 0.3
     dots_spacing = 0.4
     outer_color = $entry_border_color
-    inner_color = $entry_background_color
+    inner_color = $background
     font_color = $text_color
     font_family = $font_family
     placeholder_text = Input password
@@ -107,33 +107,48 @@ label { # Status
 }`
     }
 
-    private static async getThemeColors(): Promise<{ primary: string, secondary: string, text: string, background: string }> {
+    private static async getThemeColors(): Promise<{ background: string, primary: string, secondary: string, text: string, h1_font: string, paragraph_font: string }> {
         const homeDir = GLib.get_home_dir();
         const theme = currentTheme.get();
         const mode = currentMode.get();
         const scssFile = `${homeDir}/.config/ags/style/${theme}${mode}/main.scss`;
+        const fontScssFile = `${homeDir}/.config/ags/style/${theme.toLowerCase()}.scss`;
 
         try {
             // Read SCSS file content and extract color variables
-            const result = await execAsync(`grep -E '\\$primary:|\\$secondary:|\\$text:|\\$background:' "${scssFile}"`);
+            const colorResult = await execAsync(`grep -E '$background:|\\$primary:|\\$secondary:|\\$text:|' "${scssFile}"`);
+            const fontResult = await execAsync(`grep -E '$h1-font:|\\$p-font:|' "${fontScssFile}"`);
+            
             const colors = {
-                primary: '562f10',      // Default fallback
-                secondary: 'F0EDEA',    // Default fallback
-                text: 'FF0000',     // Default fallback
-                background: '00FF00'    // Default fallback
+                background: '00FF00',
+                primary: '562f10',
+                secondary: 'F0EDEA',
+                text: 'FF0000',
+                h1_font: 'Monaspace Radon',
+                paragraph_font: 'Monaspace Xenon'
             };
 
             // Parse SCSS variables
-            const lines = result.split('\n');
-            lines.forEach(line => {
-                if (line.includes('$primary:')) {
+            const colorLines = colorResult.split('\n');
+            colorLines.forEach((line: string) => {
+                if (line.includes('$background:')) {
+                    colors.background = line.split('#')[1]?.trim().slice(0, 6) || colors.background;
+                } else if (line.includes('$primary:')) {
                     colors.primary = line.split('#')[1]?.trim().slice(0, 6) || colors.primary;
                 } else if (line.includes('$secondary:')) {
                     colors.secondary = line.split('#')[1]?.trim().slice(0, 6) || colors.secondary;
                 } else if (line.includes('$text:')) {
                     colors.text = line.split('#')[1]?.trim().slice(0, 6) || colors.text;
-                } else if (line.includes('$background:')) {
-                    colors.background = line.split('#')[1]?.trim().slice(0, 6) || colors.background;
+                }
+            });
+
+            // Parse font variables
+            const fontLines = fontResult.split('\n');
+            fontLines.forEach((line: string) => {
+                if (line.includes('$h1_font:')) {
+                    colors.h1_font = line.split(':')[1]?.trim().replace(/;$/, '').replace(/"/g, '') || colors.h1_font;
+                } else if (line.includes('$paragraph_font:')) {
+                    colors.paragraph_font = line.split(':')[1]?.trim().replace(/;$/, '').replace(/"/g, '') || colors.paragraph_font;
                 }
             });
 
@@ -142,10 +157,12 @@ label { # Status
             console.error('Error reading theme colors:', error);
             // Return default colors if there's an error
             return {
+                background: '00FF00',
                 primary: '562f10',
                 secondary: 'F0EDEA',
                 text: 'FF0000',
-                background: 'F0EDEA'
+                h1_font: 'Monaspace Radon',
+                paragraph_font: 'Monaspace Xenon'
             };
         }
     }
@@ -158,7 +175,7 @@ label { # Status
         try {
             await writeFileAsync(`${homeDir}/.config/hypr/hyprlock.conf`, config);
             console.log('Hyprlock config updated successfully');
-            console.log(`colors: ${colors.primary}, ${colors.secondary}, ${colors.text}, ${colors.background}`);
+            console.log(`Hyprlock colors: Background, ${colors.background}, Primary: ${colors.primary}, Secondary: ${colors.secondary}, Text: ${colors.text}`);
         } catch (error) {
             console.error('Error updating hyprlock config:', error);
         }

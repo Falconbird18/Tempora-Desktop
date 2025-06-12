@@ -15,12 +15,9 @@
 /* AppLauncher */
 .app-launcher {
   min-width: 650px;
-  background-image: linear-gradient(145deg, #e0ecdf, #edf4ec);
-  border-radius: 10px;
   padding: 0px;
   min-height: 700px;
-  border: none;
-  box-shadow: 0 0 0 transparent;
+  background: none;
 }
 
 .app-launcher__input {
@@ -39,6 +36,20 @@
 }
 .app-launcher__input icon {
   margin-right: 20px;
+}
+
+.app-launcher__entry {
+  background-color: #e0ecdf;
+  border-radius: 10px;
+  border: none;
+  padding: 5px;
+  color: #562f10;
+  font-family: "Open sans";
+  font-size: 14px;
+  font-weight: 300;
+  box-shadow: inset 0px 3px 5px #999999, inset 0px -5px 3px #ffffff;
+  caret-color: #562f10;
+  background: none;
 }
 
 .app-launcher__list {
@@ -449,11 +460,26 @@ switch:checked slider {
 }
 
 /*Bar*/
+.taskbar-item {
+  padding: 8px;
+  border-radius: 20px;
+  transition: 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+.taskbar-item:hover {
+  background: #e0ecdf;
+}
+.taskbar-item:active {
+  background: #f5f6f9;
+}
+.taskbar-item icon {
+  font-size: 18px;
+}
+
 .bar {
   min-height: 60px;
   padding: 0 12px;
   background-image: linear-gradient(145deg, #e0ecdf, #edf4ec);
-  margin: 7px 7px 7px 7px;
+  margin: 5px;
   border-radius: 10px;
   border: none;
 }
@@ -479,40 +505,104 @@ switch:checked slider {
   background-size: 8px 8px;
   border-radius: 20px;
 }
-.bar__item.bar__button:hover {
+.bar__item.transparent {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: #e0ecdf;
+  color: #562f10;
+  box-shadow: 0px -3px 5px #ffffff, 0px 3px 5px #999999, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 20px;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
+
+.bar__button {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: #e0ecdf;
+  color: #562f10;
+  box-shadow: 0px -3px 5px #ffffff, 0px 3px 5px #999999, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 20px;
+}
+.bar__button:hover {
   background-size: 8px 8px;
   background-image: linear-gradient(45deg, #26e012 25%, #26e012 25%, #26e012 50%, #26e012 50%, #26e012 75%, #26e012 75%, #26e012);
   text-shadow: none;
   box-shadow: inset 0px 3px 5px #999999, inset 0px -5px 3px #ffffff, 0 0 0 transparent;
 }
-.bar__item.bar__button:active {
+.bar__button:active {
   background: #26e012;
   box-shadow: inset 0px 3px 5px #0e974a, inset 0px -5px 3px #5eff4c;
   background-size: 8px 8px;
 }
-.bar__item.bar__button.bar__recording-indicator {
+.bar__button.transparent {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: #e0ecdf;
+  color: #562f10;
+  box-shadow: 0px -3px 5px #ffffff, 0px 3px 5px #999999, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 20px;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
+.bar__button.transparent:hover {
+  background-size: 8px 8px;
+  background-image: linear-gradient(45deg, #26e012 25%, #26e012 25%, #26e012 50%, #26e012 50%, #26e012 75%, #26e012 75%, #26e012);
+  text-shadow: none;
+  box-shadow: inset 0px 3px 5px #999999, inset 0px -5px 3px #ffffff, 0 0 0 transparent;
+}
+.bar__button.transparent:active {
+  background: #26e012;
+  box-shadow: inset 0px 3px 5px #0e974a, inset 0px -5px 3px #5eff4c;
+  background-size: 8px 8px;
+}
+.bar__button.bar__recording-indicator {
   padding: 0;
   min-height: 42px;
   min-width: 42px;
   background: #e99898;
   color: #562f10;
 }
-.bar__item.bar__button.bar__recording-indicator:hover {
+.bar__button.bar__recording-indicator:hover {
   color: #e99898;
   background: #562f10;
 }
-.bar__item.bar__button.bar__recording-indicator.spacing {
+.bar__button.bar__recording-indicator.spacing {
   padding-left: 16px;
   padding-right: 16px;
 }
-.bar__item.bar__button.bar__recording-indicator.spacing label {
+.bar__button.bar__recording-indicator.spacing label {
   min-width: 54px;
   margin-right: 8px;
-}
-
-.bar__item.transparent {
-  background: transparent;
-  color: #562f10;
 }
 
 .bar__item.primary_container {
@@ -1220,11 +1310,6 @@ switch:checked slider {
   color: #562f10;
 }
 
-.calendar__days {
-  color: #562f10;
-  font-size: 100px;
-}
-
 .calendar__button {
   padding: 10px 12px;
 }
@@ -1509,24 +1594,27 @@ switch:checked slider {
 /*Player*/
 .player {
   min-height: 155px;
-  background: #edf4ec;
-  border: none;
+  background: transparent;
   padding: 20px 10px;
-  border-radius: 10px;
   background-size: cover;
   background-position: center;
   transition: background 0.5s 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 
-.player__icon {
-  font-size: 20px;
+.player-cover-art {
+  border-radius: 20px;
 }
 
-.player__box {
-  background-color: transparent;
-  padding: 0;
-  border-radius: 10px;
-  border: none;
+.play-button {
+  font-size: 40px;
+  color: #562f10;
+  text-shadow: none;
+}
+
+.nav-buttons {
+  font-size: 25px;
+  color: #562f10;
+  text-shadow: none;
 }
 
 .player__title {
@@ -1547,20 +1635,28 @@ switch:checked slider {
 }
 
 .player__playpause {
+  font-size: 18px;
+  font-weight: normal;
+  min-width: 42px;
+  min-height: 42px;
+  background: linear-gradient(45deg, #26e012 25%, #26e012 25%, #26e012 50%, #26e012 50%, #26e012 75%, #26e012 75%, #26e012);
+  color: #562f10;
+  box-shadow: 0px -3px 5px #ffffff, 0px 3px 5px #999999, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 100%;
+  text-shadow: none;
   min-width: 60px;
   min-height: 60px;
-  padding: 0;
-  background-color: #26e012;
-  color: #562f10;
-  font-size: 24px;
-  border-radius: 0px;
-  border: none;
-  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  border-radius: 20px;
-  box-shadow: inset 0px 1px 2px #5eff4c, inset 0px -1px 2px #0e974a, 0px -3px 5px #ffffff, 0px 3px 5px #999999;
 }
 .player__playpause.active {
+  background: #26e012;
   box-shadow: inset 0px 3px 5px #0e974a, inset 0px -5px 3px #5eff4c;
+  background-size: 8px 8px;
 }
 
 .player__next,
@@ -1617,6 +1713,7 @@ switch:checked slider {
   border-radius: 100px;
   margin-bottom: 8px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  background: #766251;
 }
 .player__indicator.selected {
   background: #562f10;
@@ -1872,7 +1969,7 @@ switch:checked slider {
 }
 
 .scrim {
-  background: rgba(0, 0, 0, 0.5);
+  background: #e0ecdf;
 }
 
 /*ThemeSettings*/
@@ -2274,6 +2371,8 @@ switch:checked slider {
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
   padding: 20px;
   background: #edf4ec;
+  min-width: 350px;
+  /* May need adjustment */
 }
 
 .temperature {
@@ -2320,6 +2419,51 @@ switch:checked slider {
   font-family: "Open sans";
   font-size: 11px;
   font-weight: 100;
+}
+
+.forecast-day {
+  /* Existing styles */
+  min-width: 50px;
+  /* Ensure days have some width */
+}
+
+.forecast-icon {
+  font-size: 1.8em;
+}
+
+/* Graph Styling */
+.graph-metric-buttons button {
+  font-size: 18px;
+  font-weight: normal;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 42px;
+  background: #e0ecdf;
+  color: #562f10;
+  box-shadow: 0px -3px 5px #ffffff, 0px 3px 5px #999999, 0 0 0 transparent;
+  font-family: "Open sans";
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-size: 8px 8px;
+  border-radius: 20px;
+}
+
+.graph-metric-buttons button.active {
+  background: #26e012;
+  box-shadow: inset 0px 3px 5px #0e974a, inset 0px -5px 3px #5eff4c;
+  background-size: 8px 8px;
+}
+
+.forecast-graph {
+  background-color: rgba(222, 110, 18, 0.2);
+  /* Light orange with transparency */
+  border: 2px solid #de6e12;
+  border-radius: 30px;
+  margin-top: 5px;
+  min-height: 100px;
+  padding: 8px;
 }
 
 /*SideBar*/
@@ -2501,6 +2645,68 @@ switch:checked slider {
   /* Comfortable padding */
   transition: height 0.2s ease;
   /* Smooth height expansion */
+}
+
+.code-block {
+  background-color: #e0ecdf;
+  box-shadow: 0 0 0 transparent, 0px -3px 5px #ffffff, 0px 3px 5px #999999;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+  background-color: #f5f6f9;
+}
+.code-block label {
+  font-family: "Monospace Neon";
+  font-weight: normal;
+  font-size: 14px;
+}
+
+.inline-code {
+  background-color: rgba(33, 37, 44, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin: 0 2px;
+}
+.inline-code label {
+  font-family: "Monaspace Neon", "JetBrains Mono", monospace;
+}
+
+.math-block {
+  padding: 8px 16px;
+  margin: 8px 0;
+}
+
+.inline-math {
+  padding: 0 4px;
+}
+
+blockquote {
+  border-left: 3px solid #3979eb;
+  padding-left: 12px;
+  margin: 8px 0;
+  color: rgba(202, 211, 245, 0.8);
+}
+
+table {
+  margin: 8px 0;
+}
+table th,
+table td {
+  border: 0.25px solid rgba(32, 32, 32, 0.31);
+  padding: 6px 12px;
+}
+table th {
+  background-color: rgba(33, 37, 44, 0.3);
+}
+
+.task-list-item {
+  margin: 4px 0;
+}
+.task-list-item.checked {
+  color: rgba(202, 211, 245, 0.6);
+  text-decoration: line-through;
 }
 
 .message-input.expanded {
