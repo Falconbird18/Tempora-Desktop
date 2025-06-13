@@ -1,9 +1,6 @@
 import { App, Gdk, Gtk } from "astal/gtk3";
 import { exec, execAsync } from "astal";
 const { GLib } = imports.gi;
-// const style = require(`../ags/style/frolic${Theme}/main.scss`);
-// import { currentTheme, currentMode } from "./widget/Popups/menus/ThemeSettings";
-// import { currentTheme, currentMode } from "./widget/ControlCenter/pages/Themes";
 import { currentTheme, currentMode } from "./widget/ControlCenter/pages/Themes";
 import { transparentItems } from "./widget/ControlCenter/pages/AdvancedThemes";
 import Bar from "./widget/Bar";
@@ -30,6 +27,7 @@ import Dashboard from "./widget/Dashboard";
 import { initBingImageService } from "./lib/bing";
 import StarshipService from "./service/starship";
 import HyprlockService from "./service/hyprlock";
+import KittyThemesService from "./service/KittyThemes";
 
 const applyTheme = async () => {
   const homeDir = GLib.get_home_dir();
@@ -49,30 +47,22 @@ const applyTheme = async () => {
     const themePathScss = `${homeDir}/.config/ags/style/${theme}${mode}/main.scss`;
     const hyprThemeConfSource = `${homeDir}/.config/hypr/hyprland/${theme}${mode}/theme.conf`;
     const hyprThemeConfDest = `${homeDir}/.config/hypr/hyprland/theme.conf`;
-    // const hyprLockConfSource = `${homeDir}/.config/hypr/hyprlock/${theme}${mode}/hyprlock.conf`;
-    // const hyprLockConfDest = `${homeDir}/.config/hypr/hyprlock.conf`;
     const ghosttySource = `${homeDir}/.config/ghostty/${theme}${mode}/config`;
     const ghosttyDest = `${homeDir}/.config/ghostty/config`;
-    const hyprctl = "hyprctl reload"
-    const spicetify = "spicetify update"
-    const kittyCommand = `kitten themes --reload-in=all ${theme} ${mode}`;
-
+    const hyprctl = "hyprctl reload";
+    const spicetify = "spicetify update";
+    const kittyCommand = `kitten themes --reload-in=all ${theme}${mode}`;
 
     console.log("Theme Path CSS:", themePathCss);
     console.log("Theme Path Scss:", themePathScss);
     console.log("Hypr Theme Conf Source:", hyprThemeConfSource);
     console.log("Hypr Theme Conf Destination:", hyprThemeConfDest);
-    // console.log("Hyprlock Conf Source:", hyprLockConfSource);
-    // console.log("Hyprlock Conf Destination:", hyprLockConfDest);
     console.log("Ghostty Source:", ghosttySource);
     console.log("Ghostty Destination:", ghosttyDest);
 
-
     await execAsync(`rm -f ${hyprThemeConfDest}`);
-    // await execAsync(`rm -f ${hyprLockConfDest}`);
     await execAsync(`rm -f ${ghosttyDest}`);
     await execAsync(`cp "${hyprThemeConfSource}" "${hyprThemeConfDest}"`);
-    // await execAsync(`cp "${hyprLockConfSource}" "${hyprLockConfDest}"`);
     await execAsync(`cp -r "${ghosttySource}" "${ghosttyDest}"`);
     console.log("Config files copied");
     await execAsync(`sass "${themePathScss}" "${themePathCss}"`);
@@ -89,28 +79,19 @@ const applyTheme = async () => {
     console.log("Kitty reloaded");
     await StarshipService.updateConfig();
     console.log("Starship config updated");
-  } catch (error) {
+    await KittyThemesService.generateAllThemes();
+    console.log("Kitty themes generated");
+  } catch (error: unknown) {
     console.error("Error applying theme:", error);
     if (error instanceof Gio.IOError) {
-      console.error("Gio.IOError:", error.message, error.code);
+      if (error instanceof Error) {
+        console.error("Gio.IOError:", error.message);
+      }
     }
   }
 };
 
-// const applyTheme = () => {
-//     const homeDir = GLib.get_home_dir();
-//     const theme = currentTheme.get();
-//     const mode = currentMode.get();
-//     const themePathCss = `${homeDir}/.config/ags/style/${theme}${mode}/main.css`;
-//     const themePathScss = `${homeDir}/.config/ags/style/${theme}${mode}/main.scss`;
-//     exec(`sass ${themePathScss} ${themePathCss}`);
-//     console.log("Scss compiled");
-// 	App.reset_css();
-//     App.apply_css(themePathCss);
-//     console.log("Compiled css applied");
-// };
-
-function main() {
+async function main() {
   const bars = new Map<Gdk.Monitor, Gtk.Widget>();
   const taskBars = new Map<Gdk.Monitor, Gtk.Widget>();
   const notificationsPopups = new Map<Gdk.Monitor, Gtk.Widget>();
@@ -120,7 +101,6 @@ function main() {
   Weather();
   Media();
   SideBar();
-  //Keybinds();
   Clipboard();
   Screenshot();
   ControlCenter();
@@ -140,14 +120,14 @@ function main() {
     osds.set(gdkmonitor, OSD(gdkmonitor));
   }
 
-  App.connect("monitor-added", (_, gdkmonitor) => {
+  App.connect("monitor-added", (_: unknown, gdkmonitor: Gdk.Monitor) => {
     bars.set(gdkmonitor, Bar(gdkmonitor));
     taskBars.set(gdkmonitor, TaskBar(gdkmonitor));
     notificationsPopups.set(gdkmonitor, NotificationsPopup(gdkmonitor));
     osds.set(gdkmonitor, OSD(gdkmonitor));
   });
 
-  App.connect("monitor-removed", (_, gdkmonitor) => {
+  App.connect("monitor-removed", (_: unknown, gdkmonitor: Gdk.Monitor) => {
     bars.get(gdkmonitor)?.destroy();
     taskBars.get(gdkmonitor)?.destroy();
     notificationsPopups.get(gdkmonitor)?.destroy();
@@ -157,6 +137,7 @@ function main() {
     osds.delete(gdkmonitor);
   });
 
+  await KittyThemesService.generateAllThemes();
   applyTheme();
   initBingImageService();
 
