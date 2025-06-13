@@ -12,7 +12,7 @@ import Weather from "./items/Weather";
 import RecordingIndicator from "./items/RecordingIndicator";
 import SideBar from "./items/SideBar";
 import Media from "./items/Media";
-import { barLocation } from "../ControlCenter/pages/AdvancedThemes";
+import { barLocation } from "../../service/Settings";
 import { bind } from "astal";
 
 // declare global {
@@ -62,7 +62,9 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
   return (
     <window
       vexpand={true}
-      vertical={bind(barLocation).as((loc: { name: string }) => loc.name === "left" || loc.name === "right")}
+      vertical={bind(barLocation).as(
+        (loc: { name: string }) => loc.name === "left" || loc.name === "right",
+      )}
       className="Bar"
       namespace="bar"
       gdkmonitor={gdkmonitor}
@@ -72,25 +74,27 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       application={App}
       focusable={true}
     >
-      {bind(barLocation).as((loc: { name: string }) => loc.name === "left" || loc.name === "right" ? (
-        <box className="bar" vertical>
-          <box vexpand={false} spacing={spacing}>
+      {bind(barLocation).as((loc: { name: string }) =>
+        loc.name === "left" || loc.name === "right" ? (
+          <box className="bar" vertical>
+            <box vexpand={false} spacing={spacing}>
+              <Start />
+            </box>
+            <box vexpand={true} valign={Gtk.Align.CENTER} spacing={spacing}>
+              <Center />
+            </box>
+            <box vexpand={false} spacing={spacing}>
+              <End />
+            </box>
+          </box>
+        ) : (
+          <centerbox className="bar" valign={Gtk.Align.CENTER}>
             <Start />
-          </box>
-          <box vexpand={true} valign={Gtk.Align.CENTER} spacing={spacing}>
             <Center />
-          </box>
-          <box vexpand={false} spacing={spacing}>
             <End />
-          </box>
-        </box>
-      ) : (
-        <centerbox className="bar" valign={Gtk.Align.CENTER}>
-          <Start />
-          <Center />
-          <End />
-        </centerbox>
-      ))}
+          </centerbox>
+        ),
+      )}
     </window>
   );
 }

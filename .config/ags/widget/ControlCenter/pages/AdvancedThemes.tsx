@@ -5,24 +5,25 @@ const { GLib, Gio } = imports.gi;
 import { spacing } from "../../../lib/variables";
 import icons from "../../../lib/icons";
 import { ComboBoxText } from "../../../common/Types";
-import { loadSettings, saveSettings } from "../../../service/LoadSave";
 import {
+  loadSettings,
+  saveSettings,
   currentTheme,
   currentMode,
   slideshow,
   wallpaperImage,
   wallpaperFolder,
   useBing,
-} from "./Themes";
+  totalWorkspaces,
+  showNumbers,
+  hideEmptyWorkspaces,
+  workspaceIcons,
+  transparentItems,
+  settingsChanged,
+  barLocation,
+} from "../../../service/Settings";
 
 const settings = loadSettings();
-
-export const totalWorkspaces = Variable(settings.workspaces);
-export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
-export const settingsChanged = Variable(0);
-export const showNumbers = Variable(settings.numbers);
-export const workspaceIcons = Variable(settings.workspaceIcons || {});
-export const transparentItems = Variable(settings.transparentBarItems);
 
 // Define Padding Options
 const PaddingOptions = [
@@ -32,7 +33,7 @@ const PaddingOptions = [
   { name: "Extra Large", value: "20px" },
 ];
 
-// New variable for padding size, default to Medium (10px) if not in settings
+// New variable for padding size, initialize from loaded settings
 export const paddingSize = Variable(
   settings.paddingSize || PaddingOptions[1].value,
 );
@@ -68,11 +69,11 @@ const BarLocations = {
   },
 } as const;
 
-// Update the barLocation type to include anchor
-export const barLocation = Variable({
-  name: settings.barLocation || "top",
-  anchor: BarLocations.Top.anchor,
-});
+// Remove this barLocation variable since it's now imported from LoadSave.ts
+// export const barLocation = Variable({
+//   name: settings.barLocation || "top",
+//   anchor: BarLocations.Top.anchor,
+// });
 
 const setWorkspaces = (workspaces: number) => {
   const newValue = Math.max(1, Math.min(20, workspaces));

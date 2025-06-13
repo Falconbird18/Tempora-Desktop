@@ -45,7 +45,7 @@
     background-color: $background-2;
     border-radius: $secondary-radius;
     border: $secondary-border;
-    padding: 5px;
+    padding: calc($padding/2);
     color: $text;
     font-family: $paragraph_font;
     font-size: $paragraph_size;
@@ -58,7 +58,7 @@
     background-color: $background-2;
     box-shadow: $border-shadow, $outset;
     border: $primary-border;
-    padding: 10px;
+    padding: $padding;
     border-radius: $secondary-radius;
     margin-bottom: $outset_margin;
     transition: all $transition;
@@ -67,9 +67,7 @@
 @mixin primary-button {
     font-size: $h2_size;
     font-weight: $h2_weight;
-    padding-left: 16px;
-    padding-right: 16px;
-    min-height: 42px;
+    padding: $padding;
     background: $background-image;
     color: $text;
     box-shadow: $outset, $border-shadow;
@@ -86,8 +84,7 @@
 @mixin primary-circular-button {
     font-size: $h2_size;
     font-weight: $h2_weight;
-    min-width: 42px;
-    min-height: 42px;
+    padding: $padding;
     background: $background-image;
     color: $text;
     box-shadow: $outset, $border-shadow;
@@ -102,21 +99,12 @@
 }
 
 @mixin primary-button-inactive {
-    font-size: $h2_size;
-    font-weight: $h2_weight;
-    padding-left: 16px;
-    padding-right: 16px;
-    min-height: 42px;
     background: $background-3;
     color: $text;
     box-shadow: $outset, $border-shadow;
-    font-family: $h2_font;
     transition: background $transition;
-    margin-right: $outset_margin;
-    margin-left: $outset_margin;
     border: $primary-border;
     background-size: $background-size;
-    border-radius: $primary-radius;
     text-shadow: $text-shadow;
 }
 
@@ -146,9 +134,7 @@
 @mixin secondary-button {
     font-size: $h2_size;
     font-weight: $h2_weight;
-    padding-left: 16px;
-    padding-right: 16px;
-    min-height: 42px;
+    padding: $padding;
     background: $background-2;
     color: $text;
     box-shadow: $outset, $border-shadow;
@@ -164,8 +150,7 @@
 @mixin secondary-circular-button {
     font-size: $h2_size;
     font-weight: $h2_weight;
-    min-width: 42px;
-    min-height: 42px;
+    padding: $padding;
     background: $background-2;
     color: $text;
     box-shadow: $outset, $border-shadow;
@@ -565,7 +550,7 @@ switch:checked slider {
 /*Bar*/
 
 .taskbar-item {
-    padding: 8px;
+    padding: $padding;
     border-radius: $primary-radius;
     transition: $transition;
 
@@ -583,8 +568,7 @@ switch:checked slider {
 }
 
 .bar {
-    min-height: 60px;
-    padding: 0 12px;
+    padding: 0 $padding;
     background-image: $background_gradient;
     margin: $outset_margin;
     border-radius: $secondary-radius;
@@ -592,7 +576,7 @@ switch:checked slider {
 }
 
 .arch-container {
-    padding: 10px 0px;
+    padding: $padding 0px;
 }
 
 .bar__item {
@@ -634,8 +618,6 @@ switch:checked slider {
 
     &.bar__recording-indicator {
         padding: 0;
-        min-height: 42px;
-        min-width: 42px;
         background: $error;
         color: $text;
 

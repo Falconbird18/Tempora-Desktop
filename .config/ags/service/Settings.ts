@@ -1,6 +1,6 @@
 const { GLib, Gio } = imports.gi;
 import { Astal } from "astal/gtk3";
-import { Variable} from "astal";
+import { Variable } from "astal";
 
 const settingsFile = `${GLib.get_home_dir()}/.config/ags/theme-settings.json`;
 
@@ -29,6 +29,7 @@ export const loadSettings = () => {
     workspaceIcons: {},
     barLocation: "top",
     transparentBarItems: false,
+    paddingSize: "10px", // Add default paddingSize
   };
 };
 
@@ -44,6 +45,7 @@ export const saveSettings = (
   hideEmptyWorkspaces: boolean,
   workspaceIcons: { [key: number]: string },
   transparentBarItems: boolean,
+  paddingSize: string, // Add paddingSize argument
 ) => {
   try {
     const file = Gio.File.new_for_path(settingsFile);
@@ -59,8 +61,8 @@ export const saveSettings = (
       hideEmptyWorkspaces,
       workspaceIcons,
       barLocation: barLocation.get().name,
-      // transparentBarItems: transparentBar.get(),
       transparentBarItems,
+      paddingSize, // Save paddingSize
     });
     file.replace_contents(
       contents,
@@ -74,22 +76,50 @@ export const saveSettings = (
   }
 };
 
+const settings = loadSettings();
+export const settingsChanged = Variable(0);
+
+export const currentTheme = Variable(settings.theme);
+export const currentMode = Variable(settings.mode);
+export const slideshow = Variable(settings.slideshow);
+export const wallpaperImage = Variable(settings.wallpaper);
+export const wallpaperFolder = Variable(settings.wallpaperDirectory);
+export const useBing = Variable(settings.useBingWallpaper);
+export const totalWorkspaces = Variable(settings.workspaces);
+export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
+export const showNumbers = Variable(settings.numbers);
+export const workspaceIcons = Variable(settings.workspaceIcons || {});
+export const transparentItems = Variable(settings.transparentBarItems);
+export const paddingSize = Variable(settings.paddingSize);
+
 const BarLocations = {
   Top: {
     name: "top",
-    anchor: Astal.WindowAnchor.LEFT | Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT,
+    anchor:
+      Astal.WindowAnchor.LEFT |
+      Astal.WindowAnchor.TOP |
+      Astal.WindowAnchor.RIGHT,
   },
   Bottom: {
     name: "bottom",
-    anchor: Astal.WindowAnchor.LEFT | Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.RIGHT,
+    anchor:
+      Astal.WindowAnchor.LEFT |
+      Astal.WindowAnchor.BOTTOM |
+      Astal.WindowAnchor.RIGHT,
   },
   Left: {
     name: "left",
-    anchor: Astal.WindowAnchor.LEFT | Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM,
+    anchor:
+      Astal.WindowAnchor.LEFT |
+      Astal.WindowAnchor.TOP |
+      Astal.WindowAnchor.BOTTOM,
   },
   Right: {
     name: "right",
-    anchor: Astal.WindowAnchor.RIGHT | Astal.WindowAnchor.TOP | Astal.WindowAnchor.BOTTOM,
+    anchor:
+      Astal.WindowAnchor.RIGHT |
+      Astal.WindowAnchor.TOP |
+      Astal.WindowAnchor.BOTTOM,
   },
 } as const;
 

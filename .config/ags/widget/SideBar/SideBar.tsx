@@ -6,7 +6,6 @@ import { spacing } from "../../lib/variables";
 import PopupWindow from "../../common/PopupWindow";
 import icons from "../../lib/icons";
 
-
 // Array to store chat messages
 const chatHistory = Variable([]);
 // Variable to track if greeting should be shown
@@ -15,7 +14,7 @@ const showGreeting = Variable(true);
 const ollamaRunningStatus = Variable(false);
 
 type ModelDefinition =
-  | { type: "llm"; name: string }  // For existing LLM models
+  | { type: "llm"; name: string } // For existing LLM models
   | { type: "web"; name: string; url: string }; // For web-based models
 
 // Message type definition
@@ -46,7 +45,11 @@ const modelIcons = {
 function loadGeminiApiKey(): string {
   const configDir = GLib.get_user_config_dir();
   const appName = "ags";
-  const configPath = GLib.build_filenamev([configDir, appName, "gemini-key.json"]);
+  const configPath = GLib.build_filenamev([
+    configDir,
+    appName,
+    "gemini-key.json",
+  ]);
 
   try {
     const file = Gio.File.new_for_path(configPath);
@@ -57,7 +60,9 @@ function loadGeminiApiKey(): string {
     const config = JSON.parse(jsonString);
     return config.gemini_api_key || "";
   } catch (error) {
-    console.error(`Failed to load Gemini API key from ${configPath}: ${error.message}`);
+    console.error(
+      `Failed to load Gemini API key from ${configPath}: ${error.message}`,
+    );
     return "";
   }
 }
@@ -65,7 +70,11 @@ function loadGeminiApiKey(): string {
 function saveGeminiApiKey(apiKey: string): boolean {
   const configDir = GLib.get_user_config_dir();
   const appName = "ags";
-  const configPath = GLib.build_filenamev([configDir, appName, "gemini-key.json"]);
+  const configPath = GLib.build_filenamev([
+    configDir,
+    appName,
+    "gemini-key.json",
+  ]);
 
   try {
     const config = { gemini_api_key: apiKey };
@@ -73,13 +82,21 @@ function saveGeminiApiKey(apiKey: string): boolean {
     const file = Gio.File.new_for_path(configPath);
     const dir = file.get_parent();
     if (!dir.query_exists(null)) dir.make_directory_with_parents(null);
-    file.replace_contents(jsonString, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+    file.replace_contents(
+      jsonString,
+      null,
+      false,
+      Gio.FileCreateFlags.REPLACE_DESTINATION,
+      null,
+    );
     const fileInfo = new Gio.FileInfo();
     fileInfo.set_attribute_uint32("unix::mode", 0o600);
     file.set_attributes_from_info(fileInfo, Gio.FileQueryInfoFlags.NONE, null);
     return true;
   } catch (error) {
-    console.error(`Failed to save Gemini API key to ${configPath}: ${error.message}`);
+    console.error(
+      `Failed to save Gemini API key to ${configPath}: ${error.message}`,
+    );
     return false;
   }
 }
@@ -90,10 +107,17 @@ const selectedModel = Variable(models[0].name);
 
 const ModelButtons = () => (
   <box horizontal halign={Gtk.Align.CENTER} expand={false}>
-    <box horizontal className="model-buttons" halign={Gtk.Align.CENTER} expand={false}>
+    <box
+      horizontal
+      className="model-buttons"
+      halign={Gtk.Align.CENTER}
+      expand={false}
+    >
       {models.map((model) => (
         <button
-          className={bind(selectedModel).as((m) => `model-button${m === model.name ? " active" : ""}`)}
+          className={bind(selectedModel).as(
+            (m) => `model-button${m === model.name ? " active" : ""}`,
+          )}
           onClicked={() => selectedModel.set(model.name)}
           tooltip_text={getModelDisplayName(model.name)}
         >
@@ -112,14 +136,14 @@ const WebViewWidget = ({ url }: { url: Variable<string> }) => {
   const cookieManager = context.get_cookie_manager();
   cookieManager.set_persistent_storage(
     GLib.build_filenamev([GLib.get_user_cache_dir(), "ags", "cookies.db"]),
-    WebKit2.CookiePersistentStorage.SQLITE
+    WebKit2.CookiePersistentStorage.SQLITE,
   );
   cookieManager.set_accept_policy(WebKit2.CookieAcceptPolicy.ALWAYS);
 
   // Create and configure the WebKit2 WebView with the context
   const webView = new WebKit2.WebView({ web_context: context });
   console.log("WebViewWidget: WebView created");
-  
+
   const settings = webView.get_settings();
   settings.set_enable_javascript(true);
   settings.set_enable_html5_database(true);
@@ -130,7 +154,7 @@ const WebViewWidget = ({ url }: { url: Variable<string> }) => {
 
   settings.set_user_agent(
     "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 " +
-    "(KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1"
+      "(KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1",
   );
 
   settings.set_enable_developer_extras(true);
@@ -185,11 +209,11 @@ const WebViewWidget = ({ url }: { url: Variable<string> }) => {
   return scrolledWindow;
 };
 
-
-
 const webUrl = Variable("");
 const WebContent = () => {
-  const currentModel = bind(selectedModel).as((name) => models.find((m) => m.name === name));
+  const currentModel = bind(selectedModel).as((name) =>
+    models.find((m) => m.name === name),
+  );
 
   // Update webUrl when the model changes
   currentModel.subscribe((m) => {
@@ -211,26 +235,61 @@ const WebContent = () => {
       <WebViewWidget url={webUrl} />
     </box>
   );
- };
+};
 
 async function startOllama() {
   try {
     const ollamaRunning = await isOllamaRunning();
     if (ollamaRunning) {
       console.log("Ollama server is already running");
-      const timestamp = new Date().toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-      chatHistory.set([...chatHistory.get(), { sender: "ollama", text: "Ollama server is already running.", timestamp }]);
+      const timestamp = new Date().toLocaleTimeString([], {
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+      chatHistory.set([
+        ...chatHistory.get(),
+        {
+          sender: "ollama",
+          text: "Ollama server is already running.",
+          timestamp,
+        },
+      ]);
       return;
     }
-    const subprocess = new Gio.Subprocess({ argv: ["ollama", "serve"], flags: Gio.SubprocessFlags.NONE });
+    const subprocess = new Gio.Subprocess({
+      argv: ["ollama", "serve"],
+      flags: Gio.SubprocessFlags.NONE,
+    });
     subprocess.init(null);
     console.log("Started Ollama server");
-    const timestamp = new Date().toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    chatHistory.set([...chatHistory.get(), { sender: "ollama", text: "Ollama server started.", timestamp }]);
+    const timestamp = new Date().toLocaleTimeString([], {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+    chatHistory.set([
+      ...chatHistory.get(),
+      { sender: "ollama", text: "Ollama server started.", timestamp },
+    ]);
   } catch (error) {
     console.error("Failed to start Ollama:", error.message);
-    const timestamp = new Date().toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    chatHistory.set([...chatHistory.get(), { sender: "ollama", text: `Failed to start Ollama: ${error.message}`, timestamp }]);
+    const timestamp = new Date().toLocaleTimeString([], {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+    chatHistory.set([
+      ...chatHistory.get(),
+      {
+        sender: "ollama",
+        text: `Failed to start Ollama: ${error.message}`,
+        timestamp,
+      },
+    ]);
   }
 }
 
@@ -248,15 +307,29 @@ const StartOllamaButton = bind(ollamaRunningStatus).as((isRunning) =>
         <label label="Ollama is not started." className="subtext" />
       </box>
       <box halign={Gtk.Align.END} hexpand={true}>
-        <button halign={Gtk.Align.END} label="Start Ollama" className="primary-button" onClicked={async () => await startOllama()} />
+        <button
+          halign={Gtk.Align.END}
+          label="Start Ollama"
+          className="primary-button"
+          onClicked={async () => await startOllama()}
+        />
       </box>
     </box>
-  )
+  ),
 );
 
-
-function splitMessageParts(text: string): { type: "text" | "code" | "math" | "display_math"; content: string; language?: string }[] {
-  const parts: { type: "text" | "code" | "math" | "display_math"; content: string; language?: string }[] = [];
+function splitMessageParts(
+  text: string,
+): {
+  type: "text" | "code" | "math" | "display_math";
+  content: string;
+  language?: string;
+}[] {
+  const parts: {
+    type: "text" | "code" | "math" | "display_math";
+    content: string;
+    language?: string;
+  }[] = [];
   const codeBlockRegex = /```(\w*)\n([\s\S]*?)```/g;
   const inlineCodeRegex = /`([^`]+)`/g;
   const displayMathRegex = /\$\$([\s\S]*?)\$\$/g;
@@ -264,16 +337,23 @@ function splitMessageParts(text: string): { type: "text" | "code" | "math" | "di
   let remainingText = text;
   let lastIndex = 0;
 
-  function processMatches(regex: RegExp, type: "code" | "math" | "display_math", isCodeBlock: boolean = false) {
+  function processMatches(
+    regex: RegExp,
+    type: "code" | "math" | "display_math",
+    isCodeBlock: boolean = false,
+  ) {
     let match;
     regex.lastIndex = 0;
     while ((match = regex.exec(remainingText)) !== null) {
       if (match.index > lastIndex) {
-        parts.push({ type: "text", content: remainingText.slice(lastIndex, match.index) });
+        parts.push({
+          type: "text",
+          content: remainingText.slice(lastIndex, match.index),
+        });
       }
       if (isCodeBlock) {
-        const language = match[1]?.trim() || 'text';
-        const code = match[2]?.trim() || '';
+        const language = match[1]?.trim() || "text";
+        const code = match[2]?.trim() || "";
         parts.push({ type, content: code, language });
       } else if (type === "code") {
         parts.push({ type, content: match[1].trim(), language: "inline" });
@@ -305,7 +385,10 @@ function markdownToPango(text: string): string {
     .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
     .replace(/\*(.+?)\*/g, "<i>$1</i>")
     .replace(/~~(.+?)~~/g, "<s>$1</s>")
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<span foreground="#3584e4"><u>$1</u></span>')
+    .replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      '<span foreground="#3584e4"><u>$1</u></span>',
+    )
     .replace(/^### (.+)$/gm, '<span size="large" weight="bold">$1</span>')
     .replace(/^## (.+)$/gm, '<span size="x-large" weight="bold">$1</span>')
     .replace(/^# (.+)$/gm, '<span size="xx-large" weight="bold">$1</span>')
@@ -318,7 +401,10 @@ function formatMath(content: string, isDisplay: boolean = false): string {
   let result = content
     .replace(/(\w+)\^(\d+)/g, "$1<sup>$2</sup>")
     .replace(/(\w+)_(\d+)/g, "$1<sub>$2</sub>")
-    .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, "<span>$1</span>/<span>$2</span>");
+    .replace(
+      /\\frac\{([^}]+)\}\{([^}]+)\}/g,
+      "<span>$1</span>/<span>$2</span>",
+    );
   result = `<tt>${result}</tt>`;
   if (isDisplay) result = `<span size="large">${result}</span>`;
   return result;
@@ -327,67 +413,133 @@ function formatMath(content: string, isDisplay: boolean = false): string {
 async function queryGemini(prompt: string) {
   console.log("Starting queryGemini with prompt:", prompt);
   try {
-    const timestamp = new Date().toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    chatHistory.set([...chatHistory.get(), { sender: "user", text: prompt, timestamp }]);
+    const timestamp = new Date().toLocaleTimeString([], {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+    chatHistory.set([
+      ...chatHistory.get(),
+      { sender: "user", text: prompt, timestamp },
+    ]);
     const subprocess = new Gio.Subprocess({
       argv: [
-        "curl", "--silent", "--no-buffer", "-N", "-X", "POST",
+        "curl",
+        "--silent",
+        "--no-buffer",
+        "-N",
+        "-X",
+        "POST",
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:streamGenerateContent?key=${GEMINI_API_KEY}`,
-        "-H", "Content-Type: application/json", "-d",
-        JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.9, topK: 40, topP: 0.95, maxOutputTokens: 1024 } }),
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.9,
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 1024,
+          },
+        }),
       ],
       flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_MERGE,
     });
     subprocess.init(null);
     console.log("Gemini subprocess initialized");
-    const stdout = new Gio.DataInputStream({ base_stream: subprocess.get_stdout_pipe() });
+    const stdout = new Gio.DataInputStream({
+      base_stream: subprocess.get_stdout_pipe(),
+    });
     let fullResponse = "";
-    const geminiTimestamp = new Date().toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-
-    const readStream = () => new Promise((resolve) => {
-      const readNextLine = () => {
-        stdout.read_line_async(GLib.PRIORITY_DEFAULT, null, (source, result) => {
-          const [line] = stdout.read_line_finish_utf8(result);
-          if (line === null) {
-            console.log("Gemini stream ended");
-            try {
-              const parsedArray = JSON.parse(fullResponse);
-              const geminiResponse = parsedArray[0]?.candidates[0]?.content?.parts[0]?.text || "No response received";
-              chatHistory.set([...chatHistory.get(), { sender: "ollama", text: geminiResponse, timestamp: geminiTimestamp }]);
-            } catch (e) {
-              console.error("Error parsing full Gemini response:", e.message, "Response:", fullResponse);
-              chatHistory.set([...chatHistory.get(), { sender: "ollama", text: `Error parsing response: ${e.message}`, timestamp: geminiTimestamp }]);
-            }
-            resolve();
-            return;
-          }
-          fullResponse += line;
-          readNextLine();
-        });
-      };
-      console.log("Starting to read Gemini stream");
-      readNextLine();
+    const geminiTimestamp = new Date().toLocaleTimeString([], {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
     });
 
-    const waitForSubprocess = () => new Promise((resolve, reject) => {
-      subprocess.wait_async(null, (proc, result) => {
-        try {
-          subprocess.wait_finish(result);
-          console.log("Gemini subprocess completed");
-          resolve();
-        } catch (e) {
-          reject(e);
-        }
+    const readStream = () =>
+      new Promise((resolve) => {
+        const readNextLine = () => {
+          stdout.read_line_async(
+            GLib.PRIORITY_DEFAULT,
+            null,
+            (source, result) => {
+              const [line] = stdout.read_line_finish_utf8(result);
+              if (line === null) {
+                console.log("Gemini stream ended");
+                try {
+                  const parsedArray = JSON.parse(fullResponse);
+                  const geminiResponse =
+                    parsedArray[0]?.candidates[0]?.content?.parts[0]?.text ||
+                    "No response received";
+                  chatHistory.set([
+                    ...chatHistory.get(),
+                    {
+                      sender: "ollama",
+                      text: geminiResponse,
+                      timestamp: geminiTimestamp,
+                    },
+                  ]);
+                } catch (e) {
+                  console.error(
+                    "Error parsing full Gemini response:",
+                    e.message,
+                    "Response:",
+                    fullResponse,
+                  );
+                  chatHistory.set([
+                    ...chatHistory.get(),
+                    {
+                      sender: "ollama",
+                      text: `Error parsing response: ${e.message}`,
+                      timestamp: geminiTimestamp,
+                    },
+                  ]);
+                }
+                resolve();
+                return;
+              }
+              fullResponse += line;
+              readNextLine();
+            },
+          );
+        };
+        console.log("Starting to read Gemini stream");
+        readNextLine();
       });
-    });
+
+    const waitForSubprocess = () =>
+      new Promise((resolve, reject) => {
+        subprocess.wait_async(null, (proc, result) => {
+          try {
+            subprocess.wait_finish(result);
+            console.log("Gemini subprocess completed");
+            resolve();
+          } catch (e) {
+            reject(e);
+          }
+        });
+      });
 
     console.log("Starting Gemini stream reading and waiting for subprocess");
     const readPromise = readStream();
     await waitForSubprocess();
     await readPromise;
   } catch (error) {
-    const timestamp = new Date().toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    chatHistory.set([...chatHistory.get(), { sender: "user", text: prompt, timestamp }, { sender: "ollama", text: `Error: ${error.message}`, timestamp }]);
+    const timestamp = new Date().toLocaleTimeString([], {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+    chatHistory.set([
+      ...chatHistory.get(),
+      { sender: "user", text: prompt, timestamp },
+      { sender: "ollama", text: `Error: ${error.message}`, timestamp },
+    ]);
     console.error("Gemini streaming error:", error);
   }
 }
@@ -399,19 +551,25 @@ async function isOllamaRunning(): Promise<boolean> {
       flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_MERGE,
     });
     subprocess.init(null);
-    const stdout = new Gio.DataInputStream({ base_stream: subprocess.get_stdout_pipe() });
+    const stdout = new Gio.DataInputStream({
+      base_stream: subprocess.get_stdout_pipe(),
+    });
     return new Promise((resolve) => {
       let response = "";
       const readResponse = () => {
-        stdout.read_line_async(GLib.PRIORITY_DEFAULT, null, (source, result) => {
-          const [line] = stdout.read_line_finish_utf8(result);
-          if (line === null) {
-            resolve(response.includes("Ollama"));
-            return;
-          }
-          response += line;
-          readResponse();
-        });
+        stdout.read_line_async(
+          GLib.PRIORITY_DEFAULT,
+          null,
+          (source, result) => {
+            const [line] = stdout.read_line_finish_utf8(result);
+            if (line === null) {
+              resolve(response.includes("Ollama"));
+              return;
+            }
+            response += line;
+            readResponse();
+          },
+        );
       };
       subprocess.wait_check_async(null, (proc, result) => {
         try {
@@ -432,108 +590,243 @@ async function queryOllama(prompt: string) {
   const currentModel = models.find((m) => m.name === currentModelName);
 
   if (currentModel?.type === "web") {
-    const timestamp = new Date().toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    chatHistory.set([...chatHistory.get(), { sender: "user", text: prompt, timestamp }, { sender: "ollama", text: `This is a web-based model (${currentModel.name}). Interaction happens in the web view above.`, timestamp }]);
+    const timestamp = new Date().toLocaleTimeString([], {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+    chatHistory.set([
+      ...chatHistory.get(),
+      { sender: "user", text: prompt, timestamp },
+      {
+        sender: "ollama",
+        text: `This is a web-based model (${currentModel.name}). Interaction happens in the web view above.`,
+        timestamp,
+      },
+    ]);
     return;
   }
 
   if (prompt.startsWith("\\key ")) {
     const apiKey = prompt.substring(5).trim();
-    const timestamp = new Date().toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    const timestamp = new Date().toLocaleTimeString([], {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
     if (currentModel?.name === "gemini") {
       if (saveGeminiApiKey(apiKey)) {
         GEMINI_API_KEY = apiKey;
-        chatHistory.set([...chatHistory.get(), { sender: "user", text: prompt, timestamp }, { sender: "ollama", text: "Gemini API key saved successfully!", timestamp }]);
+        chatHistory.set([
+          ...chatHistory.get(),
+          { sender: "user", text: prompt, timestamp },
+          {
+            sender: "ollama",
+            text: "Gemini API key saved successfully!",
+            timestamp,
+          },
+        ]);
       } else {
-        chatHistory.set([...chatHistory.get(), { sender: "user", text: prompt, timestamp }, { sender: "ollama", text: "Failed to save Gemini API key.", timestamp }]);
+        chatHistory.set([
+          ...chatHistory.get(),
+          { sender: "user", text: prompt, timestamp },
+          {
+            sender: "ollama",
+            text: "Failed to save Gemini API key.",
+            timestamp,
+          },
+        ]);
       }
     } else {
-      chatHistory.set([...chatHistory.get(), { sender: "user", text: prompt, timestamp }, { sender: "ollama", text: "Switch to Gemini model to set the API key.", timestamp }]);
+      chatHistory.set([
+        ...chatHistory.get(),
+        { sender: "user", text: prompt, timestamp },
+        {
+          sender: "ollama",
+          text: "Switch to Gemini model to set the API key.",
+          timestamp,
+        },
+      ]);
     }
     return;
   }
 
   if (currentModel?.name === "gemini") {
     if (!GEMINI_API_KEY) {
-      const timestamp = new Date().toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-      chatHistory.set([...chatHistory.get(), { sender: "user", text: prompt, timestamp }, { sender: "ollama", text: "No Gemini API key found. Please submit your key using: \\key YOUR_API_KEY", timestamp }]);
+      const timestamp = new Date().toLocaleTimeString([], {
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+      chatHistory.set([
+        ...chatHistory.get(),
+        { sender: "user", text: prompt, timestamp },
+        {
+          sender: "ollama",
+          text: "No Gemini API key found. Please submit your key using: \\key YOUR_API_KEY",
+          timestamp,
+        },
+      ]);
       return;
     }
     await queryGemini(prompt);
   } else if (currentModel?.type === "llm") {
     const ollamaRunning = await isOllamaRunning();
-    const timestamp = new Date().toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    const timestamp = new Date().toLocaleTimeString([], {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
     if (!ollamaRunning) {
       console.log("Ollama is not running");
-      chatHistory.set([...chatHistory.get(), { sender: "user", text: prompt, timestamp }, { sender: "ollama", text: "Ollama server is not running. Please click 'Start Ollama' or run 'ollama serve' manually.", timestamp }]);
+      chatHistory.set([
+        ...chatHistory.get(),
+        { sender: "user", text: prompt, timestamp },
+        {
+          sender: "ollama",
+          text: "Ollama server is not running. Please click 'Start Ollama' or run 'ollama serve' manually.",
+          timestamp,
+        },
+      ]);
       return;
     }
     console.log("Starting queryOllama with prompt:", prompt);
     try {
-      chatHistory.set([...chatHistory.get(), { sender: "user", text: prompt, timestamp }]);
+      chatHistory.set([
+        ...chatHistory.get(),
+        { sender: "user", text: prompt, timestamp },
+      ]);
       const subprocess = new Gio.Subprocess({
-        argv: ["curl", "--silent", "--no-buffer", "-N", "-X", "POST", "http://localhost:11434/api/generate", "-d", JSON.stringify({ model: currentModel.name, prompt, stream: true })],
-        flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_MERGE,
+        argv: [
+          "curl",
+          "--silent",
+          "--no-buffer",
+          "-N",
+          "-X",
+          "POST",
+          "http://localhost:11434/api/generate",
+          "-d",
+          JSON.stringify({ model: currentModel.name, prompt, stream: true }),
+        ],
+        flags:
+          Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_MERGE,
       });
       subprocess.init(null);
-      const stdout = new Gio.DataInputStream({ base_stream: subprocess.get_stdout_pipe() });
+      const stdout = new Gio.DataInputStream({
+        base_stream: subprocess.get_stdout_pipe(),
+      });
       let ollamaResponse = "";
-      const ollamaTimestamp = new Date().toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      const ollamaTimestamp = new Date().toLocaleTimeString([], {
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
 
-      const readStream = () => new Promise((resolve) => {
-        const readNextLine = () => {
-          stdout.read_line_async(GLib.PRIORITY_DEFAULT, null, (source, result) => {
-            const [line] = stdout.read_line_finish_utf8(result);
-            if (line === null) {
-              console.log("Stream ended");
-              if (!ollamaResponse) chatHistory.set([...chatHistory.get(), { sender: "ollama", text: "No response received from Ollama.", timestamp: ollamaTimestamp }]);
-              resolve();
-              return;
-            }
-            if (!line.trim() || !line.startsWith("{")) {
-              readNextLine();
-              return;
-            }
-            try {
-              const parsed = JSON.parse(line);
-              if (parsed.response) {
-                ollamaResponse += parsed.response;
-                const currentHistory = chatHistory.get();
-                const lastMessage = currentHistory[currentHistory.length - 1];
-                if (lastMessage?.sender === "ollama" && lastMessage?.timestamp === ollamaTimestamp) {
-                  chatHistory.set([...currentHistory.slice(0, -1), { sender: "ollama", text: ollamaResponse, timestamp: ollamaTimestamp }]);
-                } else {
-                  chatHistory.set([...currentHistory, { sender: "ollama", text: ollamaResponse, timestamp: ollamaTimestamp }]);
+      const readStream = () =>
+        new Promise((resolve) => {
+          const readNextLine = () => {
+            stdout.read_line_async(
+              GLib.PRIORITY_DEFAULT,
+              null,
+              (source, result) => {
+                const [line] = stdout.read_line_finish_utf8(result);
+                if (line === null) {
+                  console.log("Stream ended");
+                  if (!ollamaResponse)
+                    chatHistory.set([
+                      ...chatHistory.get(),
+                      {
+                        sender: "ollama",
+                        text: "No response received from Ollama.",
+                        timestamp: ollamaTimestamp,
+                      },
+                    ]);
+                  resolve();
+                  return;
                 }
-              }
-            } catch (e) {
-              console.error("Error parsing stream line:", e.message, "Line:", line);
-            }
-            readNextLine();
-          });
-        };
-        console.log("Starting to read stream");
-        readNextLine();
-      });
-
-      const waitForSubprocess = () => new Promise((resolve, reject) => {
-        subprocess.wait_async(null, (proc, result) => {
-          try {
-            subprocess.wait_finish(result);
-            console.log("Subprocess completed");
-            resolve();
-          } catch (e) {
-            reject(e);
-          }
+                if (!line.trim() || !line.startsWith("{")) {
+                  readNextLine();
+                  return;
+                }
+                try {
+                  const parsed = JSON.parse(line);
+                  if (parsed.response) {
+                    ollamaResponse += parsed.response;
+                    const currentHistory = chatHistory.get();
+                    const lastMessage =
+                      currentHistory[currentHistory.length - 1];
+                    if (
+                      lastMessage?.sender === "ollama" &&
+                      lastMessage?.timestamp === ollamaTimestamp
+                    ) {
+                      chatHistory.set([
+                        ...currentHistory.slice(0, -1),
+                        {
+                          sender: "ollama",
+                          text: ollamaResponse,
+                          timestamp: ollamaTimestamp,
+                        },
+                      ]);
+                    } else {
+                      chatHistory.set([
+                        ...currentHistory,
+                        {
+                          sender: "ollama",
+                          text: ollamaResponse,
+                          timestamp: ollamaTimestamp,
+                        },
+                      ]);
+                    }
+                  }
+                } catch (e) {
+                  console.error(
+                    "Error parsing stream line:",
+                    e.message,
+                    "Line:",
+                    line,
+                  );
+                }
+                readNextLine();
+              },
+            );
+          };
+          console.log("Starting to read stream");
+          readNextLine();
         });
-      });
+
+      const waitForSubprocess = () =>
+        new Promise((resolve, reject) => {
+          subprocess.wait_async(null, (proc, result) => {
+            try {
+              subprocess.wait_finish(result);
+              console.log("Subprocess completed");
+              resolve();
+            } catch (e) {
+              reject(e);
+            }
+          });
+        });
 
       const readPromise = readStream();
       await waitForSubprocess();
       await readPromise;
     } catch (error) {
-      const timestamp = new Date().toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-      chatHistory.set([...chatHistory.get(), { sender: "user", text: prompt, timestamp }, { sender: "ollama", text: `Error: ${error.message}`, timestamp }]);
+      const timestamp = new Date().toLocaleTimeString([], {
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+      chatHistory.set([
+        ...chatHistory.get(),
+        { sender: "user", text: prompt, timestamp },
+        { sender: "ollama", text: `Error: ${error.message}`, timestamp },
+      ]);
       console.error("Streaming error:", error);
     }
   }
@@ -570,7 +863,9 @@ function getModelDisplayName(modelName: string): string {
 }
 
 const Entry = new Widget.Entry({
-  placeholder_text: bind(selectedModel).as((model) => `Ask ${getModelDisplayName(model)}`),
+  placeholder_text: bind(selectedModel).as(
+    (model) => `Ask ${getModelDisplayName(model)}`,
+  ),
   canFocus: true,
   className: "message-input",
   hexpand: true,
@@ -578,7 +873,8 @@ const Entry = new Widget.Entry({
   on_key_press_event: () => false,
   on_changed: (self) => {
     const text = self.get_text();
-    self.className = text.length > 0 ? "message-input expanded" : "message-input";
+    self.className =
+      text.length > 0 ? "message-input expanded" : "message-input";
   },
   wrap_mode: Gtk.WrapMode.WORD_CHAR,
   max_height: 100,
@@ -607,7 +903,8 @@ const NewConversationButton = new Widget.Button({
 
 let entryFocused = false;
 
-const username = GLib.get_user_name().charAt(0).toUpperCase() + GLib.get_user_name().slice(1);
+const username =
+  GLib.get_user_name().charAt(0).toUpperCase() + GLib.get_user_name().slice(1);
 const greeting = `Hello, ${username}`;
 
 function getSenderName(sender: "user" | "ollama") {
@@ -646,7 +943,9 @@ const ChatMessages = () => (
                     className="message-text"
                     wrap={true}
                     justify={Gtk.Justification.FILL}
-                    halign={msg.sender === "user" ? Gtk.Align.END : Gtk.Align.START}
+                    halign={
+                      msg.sender === "user" ? Gtk.Align.END : Gtk.Align.START
+                    }
                     hexpand={false}
                     max_width_chars={60}
                   />
@@ -654,12 +953,14 @@ const ChatMessages = () => (
               } else if (part.type === "code") {
                 const isInline = part.language === "inline";
                 return (
-                  <box 
+                  <box
                     key={`code-${index}`}
                     className={isInline ? "inline-code" : "code-block"}
-                    css={isInline ? 
-                      "font-family: monospace; background-color: rgba(127, 127, 127, 0.1); padding: 2px 4px; border-radius: 4px;" :
-                      "background-color: rgba(0, 0, 0, 0.2); padding: 8px; border-radius: 8px; margin: 4px 0;"}
+                    css={
+                      isInline
+                        ? "font-family: monospace; background-color: rgba(127, 127, 127, 0.1); padding: 2px 4px; border-radius: 4px;"
+                        : "background-color: rgba(0, 0, 0, 0.2); padding: 8px; border-radius: 8px; margin: 4px 0;"
+                    }
                   >
                     <box vertical>
                       {!isInline && part.language !== "text" && (
@@ -682,17 +983,27 @@ const ChatMessages = () => (
               } else if (part.type === "math" || part.type === "display_math") {
                 const isDisplay = part.type === "display_math";
                 return (
-                  <box 
+                  <box
                     key={`math-${index}`}
                     className={isDisplay ? "display-math" : "inline-math"}
-                    css={isDisplay ? "padding: 8px 16px; margin: 4px 0;" : "padding: 0 4px;"}
+                    css={
+                      isDisplay
+                        ? "padding: 8px 16px; margin: 4px 0;"
+                        : "padding: 0 4px;"
+                    }
                   >
                     <label
                       label={formatMath(part.content, isDisplay)}
                       use_markup={true}
                       wrap={true}
                       justify={Gtk.Justification.CENTER}
-                      halign={isDisplay ? Gtk.Align.CENTER : (msg.sender === "user" ? Gtk.Align.END : Gtk.Align.START)}
+                      halign={
+                        isDisplay
+                          ? Gtk.Align.CENTER
+                          : msg.sender === "user"
+                            ? Gtk.Align.END
+                            : Gtk.Align.START
+                      }
                       hexpand={false}
                       max_width_chars={isDisplay ? 60 : 40}
                     />
@@ -701,15 +1012,21 @@ const ChatMessages = () => (
               }
             })}
           </box>
-          <label label={`${msg.timestamp}`} className="message-time" halign={msg.sender === "user" ? Gtk.Align.END : Gtk.Align.START} />
+          <label
+            label={`${msg.timestamp}`}
+            className="message-time"
+            halign={msg.sender === "user" ? Gtk.Align.END : Gtk.Align.START}
+          />
         </box>
-      ))
+      )),
     )}
   </box>
 );
 
 export default () => {
-  const currentModel = bind(selectedModel).as((name) => models.find((m) => m.name === name));
+  const currentModel = bind(selectedModel).as((name) =>
+    models.find((m) => m.name === name),
+  );
   const isWebModel = bind(currentModel).as((m) => m?.type === "web");
   const isLLMModel = bind(currentModel).as((m) => m?.type === "llm");
 
@@ -731,7 +1048,13 @@ export default () => {
         if (keyEvent && keyCode == 9) {
           App.toggle_window(self.name);
           return true;
-        } else if (keyEvent && keyCode === 65 && !entryFocused && !Entry.has_focus && !isWebModel.get()) {
+        } else if (
+          keyEvent &&
+          keyCode === 65 &&
+          !entryFocused &&
+          !Entry.has_focus &&
+          !isWebModel.get()
+        ) {
           Entry.grab_focus();
           entryFocused = true;
           return true;
@@ -741,50 +1064,109 @@ export default () => {
         return false;
       }}
     >
-      <box vertical className="sidebar-window" spacing={spacing} css="min-width: 400px;">
+      <box
+        vertical
+        className="sidebar-window"
+        spacing={spacing}
+        css="min-width: 400px;"
+      >
         <ModelButtons />
-        <box vertical visible={isLLMModel} spacing={spacing} halign={Gtk.Align.FILL} vexpand={true}>
+        <box
+          vertical
+          visible={isLLMModel}
+          spacing={spacing}
+          halign={Gtk.Align.FILL}
+          vexpand={true}
+        >
           <box vertical halign={Gtk.Align.FILL} spacing={spacing}>
             {NewConversationButton}
           </box>
           {bind(showGreeting).as((visible) =>
             visible ? (
-              <box vertical halign={Gtk.Align.FILL} valign={Gtk.Align.CENTER} vexpand={true}>
+              <box
+                vertical
+                halign={Gtk.Align.FILL}
+                valign={Gtk.Align.CENTER}
+                vexpand={true}
+              >
                 <box horizontal halign={Gtk.Align.CENTER}>
-                  <label label={greeting} className="greeting" halign={Gtk.Align.CENTER} />
+                  <label
+                    label={greeting}
+                    className="greeting"
+                    halign={Gtk.Align.CENTER}
+                  />
                 </box>
               </box>
             ) : (
               <box visible={false} />
-            )
+            ),
           )}
-          <scrollable vscroll={Gtk.PolicyType.AUTOMATIC} hscroll={Gtk.PolicyType.NEVER} className="chat-container" vexpand={true}>
+          <scrollable
+            vscroll={Gtk.PolicyType.AUTOMATIC}
+            hscroll={Gtk.PolicyType.NEVER}
+            className="chat-container"
+            vexpand={true}
+          >
             <ChatMessages />
           </scrollable>
-          <box vertical spacing={spacing} halign={Gtk.Align.FILL} valign={Gtk.Align.END}>
+          <box
+            vertical
+            spacing={spacing}
+            halign={Gtk.Align.FILL}
+            valign={Gtk.Align.END}
+          >
             {StartOllamaButton}
             {bind(showGreeting).as((visible) =>
               visible ? (
-                <box horizontal spacing={spacing} className="sidebar-prompt-container" halign={Gtk.Align.FILL}>
-                  <button className="sidebar-prompt-button" onClicked={() => { Entry.set_text("Tell me what you can do"); submitPrompt(); }}>
+                <box
+                  horizontal
+                  spacing={spacing}
+                  className="sidebar-prompt-container"
+                  halign={Gtk.Align.FILL}
+                >
+                  <button
+                    className="sidebar-prompt-button"
+                    onClicked={() => {
+                      Entry.set_text("Tell me what you can do");
+                      submitPrompt();
+                    }}
+                  >
                     <box vertical className="sidebar-prompt-example">
                       <label className="paragraph" label="Tell me what" />
                       <label className="subtext" label="you can do" />
                     </box>
                   </button>
-                  <button className="sidebar-prompt-button" onClicked={() => { Entry.set_text("Give me study tips"); submitPrompt(); }}>
+                  <button
+                    className="sidebar-prompt-button"
+                    onClicked={() => {
+                      Entry.set_text("Give me study tips");
+                      submitPrompt();
+                    }}
+                  >
                     <box vertical className="sidebar-prompt-example">
                       <label className="paragraph" label="Give me" />
                       <label className="subtext" label="study tips" />
                     </box>
                   </button>
-                  <button className="sidebar-prompt-button" onClicked={() => { Entry.set_text("Save me time"); submitPrompt(); }}>
+                  <button
+                    className="sidebar-prompt-button"
+                    onClicked={() => {
+                      Entry.set_text("Save me time");
+                      submitPrompt();
+                    }}
+                  >
                     <box vertical className="sidebar-prompt-example">
                       <label className="paragraph" label="Save me" />
                       <label className="subtext" label="time" />
                     </box>
                   </button>
-                  <button className="sidebar-prompt-button" onClicked={() => { Entry.set_text("Inspire me"); submitPrompt(); }}>
+                  <button
+                    className="sidebar-prompt-button"
+                    onClicked={() => {
+                      Entry.set_text("Inspire me");
+                      submitPrompt();
+                    }}
+                  >
                     <box vertical className="sidebar-prompt-example">
                       <label className="paragraph" label="Inspire" />
                       <label className="subtext" label="me" />
@@ -793,7 +1175,7 @@ export default () => {
                 </box>
               ) : (
                 <box visible={false} />
-              )
+              ),
             )}
             <InputBox />
           </box>

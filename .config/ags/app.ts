@@ -1,11 +1,13 @@
 import { App, Gdk, Gtk } from "astal/gtk3";
 import { exec, execAsync, writeFile } from "astal";
 const { GLib } = imports.gi;
-import { currentTheme, currentMode } from "./widget/ControlCenter/pages/Themes";
 import {
+  loadSettings,
+  currentTheme,
+  currentMode,
   transparentItems,
-  paddingSize,
-} from "./widget/ControlCenter/pages/AdvancedThemes"; // Import paddingSize
+} from "./service/Settings";
+import { paddingSize } from "./widget/ControlCenter/pages/AdvancedThemes"; // Import paddingSize
 import Bar from "./widget/Bar";
 import TaskBar from "./widget/TaskBar";
 import ControlCenter from "./widget/ControlCenter";
@@ -34,6 +36,7 @@ import KittyThemesService from "./service/KittyThemes";
 
 const applyTheme = async () => {
   const homeDir = GLib.get_home_dir();
+  loadSettings;
   const theme = currentTheme.get();
   const mode = currentMode.get();
   const spicetifyPathScss = `${homeDir}/.config/ags/style/${theme}${mode}/spicetify.scss`;
@@ -48,25 +51,15 @@ const applyTheme = async () => {
     const mode = currentMode.get();
     const themePathCss = `${homeDir}/.config/ags/style/${theme}${mode}/main.css`;
     const themePathScss = `${homeDir}/.config/ags/style/${theme}${mode}/main.scss`;
-    const hyprThemeConfSource = `${homeDir}/.config/hypr/hyprland/${theme}${mode}/theme.conf`;
-    const hyprThemeConfDest = `${homeDir}/.config/hypr/hyprland/theme.conf`;
-    const ghosttySource = `${homeDir}/.config/ghostty/${theme}${mode}/config`;
-    const ghosttyDest = `${homeDir}/.config/ghostty/config`;
     const hyprctl = "hyprctl reload";
     const spicetify = "spicetify update";
     const kittyCommand = `kitten themes --reload-in=all ${theme}${mode}`;
+    const hyprThemeConfSource = `${homeDir}/.config/hypr/hyprland/${theme}${mode}/theme.conf`;
+    const hyprThemeConfDest = `${homeDir}/.config/hypr/hyprland/theme.conf`;
 
     console.log("Theme Path CSS:", themePathCss);
     console.log("Theme Path Scss:", themePathScss);
-    console.log("Hypr Theme Conf Source:", hyprThemeConfSource);
-    console.log("Hypr Theme Conf Destination:", hyprThemeConfDest);
-    console.log("Ghostty Source:", ghosttySource);
-    console.log("Ghostty Destination:", ghosttyDest);
 
-    await execAsync(`rm -f ${hyprThemeConfDest}`);
-    await execAsync(`rm -f ${ghosttyDest}`);
-    await execAsync(`cp "${hyprThemeConfSource}" "${hyprThemeConfDest}"`);
-    await execAsync(`cp -r "${ghosttySource}" "${ghosttyDest}"`);
     console.log("Config files copied");
 
     // Write padding.scss
@@ -79,7 +72,7 @@ const applyTheme = async () => {
     console.log(
       `Padding SCSS file created/updated with value: ${currentPadding}`,
     );
-
+    await execAsync(`cp "${hyprThemeConfSource}" "${hyprThemeConfDest}"`);
     await execAsync(`sass "${themePathScss}" "${themePathCss}"`);
     await execAsync(`sass "${spicetifyPathScss}" "${spicetifyPathCss}"`);
     console.log("Scss compiled");

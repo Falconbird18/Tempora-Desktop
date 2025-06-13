@@ -8,7 +8,7 @@ import {
   hideEmptyWorkspaces,
   settingsChanged,
   workspaceIcons,
-} from "../../ControlCenter/pages/AdvancedThemes";
+} from "../../../service/Settings";
 
 export default function Workspaces() {
   const hypr = Hyprland.get_default();
@@ -66,9 +66,10 @@ export default function Workspaces() {
     const icons = workspaceIcons.get();
     const icon = icons[id];
 
-    let baseClass = icon || SHOW_NUMBERS
-      ? "bar__workspaces-indicator-number"
-      : "bar__workspaces-indicator dot";
+    let baseClass =
+      icon || SHOW_NUMBERS
+        ? "bar__workspaces-indicator-number"
+        : "bar__workspaces-indicator dot";
     if (isFocused) baseClass += " active";
     button.className = baseClass;
 

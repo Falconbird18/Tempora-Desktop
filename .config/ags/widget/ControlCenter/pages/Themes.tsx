@@ -1,15 +1,27 @@
 import Page from "../Page";
 import { App, Gtk, Gdk, Widget } from "astal/gtk3";
 import { bind, execAsync, timeout, Variable, exec } from "astal";
-import { loadSettings, saveSettings } from "../../../service/LoadSave";
 const { GLib, Gio } = imports.gi;
 import { spacing } from "../../../lib/variables";
 import icons from "../../../lib/icons";
 import { controlCenterPage } from "../index";
-import GdkPixbuf from 'gi://GdkPixbuf';
-import { totalWorkspaces, hideEmptyWorkspaces, settingsChanged, showNumbers, workspaceIcons, transparentItems } from "./AdvancedThemes";
+import GdkPixbuf from "gi://GdkPixbuf";
+import {
+  saveSettings,
+  currentTheme,
+  currentMode,
+  slideshow,
+  wallpaperImage,
+  wallpaperFolder,
+  useBing,
+  totalWorkspaces,
+  showNumbers,
+  hideEmptyWorkspaces,
+  workspaceIcons,
+  transparentItems,
+  paddingSize,
+} from "../../../service/Settings";
 import HyprlockService from "../../../service/hyprlock";
-
 
 const menuName = "advancedsettings";
 
@@ -32,49 +44,82 @@ const getThumbnailPath = (originalImagePath: string): string => {
   return `${THUMBNAIL_CACHE_DIR}/${baseName}`;
 };
 
-const generateThumbnailAsync = async (originalPath: string, thumbPath: string, size: number): Promise<void> => {
-    try {
-        const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
-            originalPath,
-            size,
-            size,
-            true // preserve aspect ratio
-        );
-        
-        if (pixbuf) {
-            pixbuf.savev(thumbPath, "jpeg", [], []);
-            console.log(`Successfully generated thumbnail: ${thumbPath}`);
-        }
-    } catch (error) {
-        console.error(`Failed to generate thumbnail for ${originalPath}:`, error);
+const generateThumbnailAsync = async (
+  originalPath: string,
+  thumbPath: string,
+  size: number,
+): Promise<void> => {
+  try {
+    const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+      originalPath,
+      size,
+      size,
+      true, // preserve aspect ratio
+    );
+
+    if (pixbuf) {
+      pixbuf.savev(thumbPath, "jpeg", [], []);
+      console.log(`Successfully generated thumbnail: ${thumbPath}`);
     }
+  } catch (error) {
+    console.error(`Failed to generate thumbnail for ${originalPath}:`, error);
+  }
 };
-
-const settings = loadSettings();
-
-export const currentTheme = Variable(settings.theme);
-export const currentMode = Variable(settings.mode);
-export const slideshow = Variable(settings.slideshow);
-export const wallpaperImage = Variable(settings.wallpaper);
-export const wallpaperFolder = Variable(settings.wallpaperDirectory);
-export const useBing = Variable(settings.useBingWallpaper);
-
 
 const setTheme = (theme: string, mode: string) => {
   currentTheme.set(theme);
   currentMode.set(mode);
-  saveSettings(theme, mode, slideshow.get(), wallpaperImage.get(), wallpaperFolder.get(), useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get(), transparentItems.get());
+  saveSettings(
+    theme,
+    mode,
+    slideshow.get(),
+    wallpaperImage.get(),
+    wallpaperFolder.get(),
+    useBing.get(),
+    totalWorkspaces.get(),
+    showNumbers.get(),
+    hideEmptyWorkspaces.get(),
+    workspaceIcons.get(),
+    transparentItems.get(),
+    paddingSize.get(),
+  );
 };
 
 const setSlideshow = (isSlideshow: boolean) => {
   slideshow.set(isSlideshow);
-  saveSettings(currentTheme.get(), currentMode.get(), isSlideshow, wallpaperImage.get(), wallpaperFolder.get(), useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get(), transparentItems.get());
+  saveSettings(
+    currentTheme.get(),
+    currentMode.get(),
+    isSlideshow,
+    wallpaperImage.get(),
+    wallpaperFolder.get(),
+    useBing.get(),
+    totalWorkspaces.get(),
+    showNumbers.get(),
+    hideEmptyWorkspaces.get(),
+    workspaceIcons.get(),
+    transparentItems.get(),
+    paddingSize.get(),
+  );
 };
 
 const setWallpaper = async (wallpaperName: string) => {
   wallpaperImage.set(wallpaperName);
   useBing.set(false); // Disable Bing wallpaper when a custom wallpaper is set
-  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperName, wallpaperFolder.get(), useBing, totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get(), transparentItems.get());
+  saveSettings(
+    currentTheme.get(),
+    currentMode.get(),
+    slideshow.get(),
+    wallpaperName,
+    wallpaperFolder.get(),
+    useBing,
+    totalWorkspaces.get(),
+    showNumbers.get(),
+    hideEmptyWorkspaces.get(),
+    workspaceIcons.get(),
+    transparentItems.get(),
+    paddingSize.get(),
+  );
   console.log(`Setting Wallpaper to: ${wallpaperName}`);
 
   const wallpaperImagePath = `${wallpaperFolder.get()}/${wallpaperName}`;
@@ -90,22 +135,29 @@ const setWallpaper = async (wallpaperName: string) => {
 
   try {
     // Create destination directory if it doesn't exist
-    await execAsync(['mkdir', '-p', destinationDir]);
-  // Ensure thumbnail cache directory exists when the component is created
-    
+    await execAsync(["mkdir", "-p", destinationDir]);
+    // Ensure thumbnail cache directory exists when the component is created
+
     // Copy the wallpaper file
-    await execAsync(['cp', wallpaperImagePath, destinationPath]);
-    
+    await execAsync(["cp", wallpaperImagePath, destinationPath]);
+
     // Set the wallpaper using swww
     await execAsync([
-      'swww', 'img', destinationPath,
-      '--transition-step', '100',
-      '--transition-fps', '120',
-      '--transition-type', 'grow',
-      '--transition-angle', '30',
-      '--transition-duration', '1'
+      "swww",
+      "img",
+      destinationPath,
+      "--transition-step",
+      "100",
+      "--transition-fps",
+      "120",
+      "--transition-type",
+      "grow",
+      "--transition-angle",
+      "30",
+      "--transition-duration",
+      "1",
     ]);
-    
+
     console.log("Wallpaper set successfully.");
   } catch (error) {
     console.error("Failed to set wallpaper:", error);
@@ -117,11 +169,11 @@ const setWallpaper = async (wallpaperName: string) => {
   const swwwCommand = `swww img "${destinationPath}" --transition-step 100 --transition-fps 120 --transition-type grow --transition-angle 30 --transition-duration 1`;
 
   // Ensure destination directory exists (needs sudo/pkexec)
-  exec([ 'mkdir', '-p', destinationDir])
-    .then(() => exec(['bash', '-c', copyCommand])) // Copy the wallpaper
-    .then(() => exec(['bash', '-c', swwwCommand])) // Set the wallpaper via swww
+  exec(["mkdir", "-p", destinationDir])
+    .then(() => exec(["bash", "-c", copyCommand])) // Copy the wallpaper
+    .then(() => exec(["bash", "-c", swwwCommand])) // Set the wallpaper via swww
     .then(() => console.log("Wallpaper set successfully."))
-    .catch(e => {
+    .catch((e) => {
       console.error("Failed to set wallpaper:", e);
       // Optionally show an error notification
       // Notif.notify({ title: "Wallpaper Error", body: "Failed to set wallpaper. Check permissions or logs." });
@@ -134,10 +186,22 @@ const setWallpaperDirectory = (wallpaperDirectory: string) => {
 
   wallpaperFolder.set(wallpaperDirectory);
   // For simplicity, let's keep the current wallpaper setting but it might become invalid.
-  saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperImage.get(), wallpaperDirectory, useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get(), transparentItems.get());
+  saveSettings(
+    currentTheme.get(),
+    currentMode.get(),
+    slideshow.get(),
+    wallpaperImage.get(),
+    wallpaperDirectory,
+    useBing.get(),
+    totalWorkspaces.get(),
+    showNumbers.get(),
+    hideEmptyWorkspaces.get(),
+    workspaceIcons.get(),
+    transparentItems.get(),
+    paddingSize.get(),
+  );
 
   console.log("Wallpaper directory set. UI refresh might be needed manually.");
-
 };
 
 const chooseWallpaperDirectory = () => {
@@ -145,7 +209,7 @@ const chooseWallpaperDirectory = () => {
     "Choose Wallpaper Directory",
     App.getWindow("control-center"), // Parent window if available
     Gtk.FileChooserAction.SELECT_FOLDER,
-    null // No buttons initially
+    null, // No buttons initially
   );
   chooser.add_button("Cancel", Gtk.ResponseType.CANCEL);
   chooser.add_button("Select", Gtk.ResponseType.ACCEPT);
@@ -180,7 +244,7 @@ const getWallpaperImagePaths = (directoryPath: string): string[] => {
     const enumerator = directory.enumerate_children(
       "standard::name,standard::type,standard::content-type", // Attributes needed
       Gio.FileQueryInfoFlags.NONE,
-      null
+      null,
     );
 
     let info;
@@ -188,14 +252,21 @@ const getWallpaperImagePaths = (directoryPath: string): string[] => {
       if (info.get_file_type() === Gio.FileType.REGULAR) {
         const mimeType = info.get_content_type();
         // More robust image type checking
-        if (mimeType && (mimeType.startsWith("image/") && !mimeType.endsWith("svg+xml"))) {
+        if (
+          mimeType &&
+          mimeType.startsWith("image/") &&
+          !mimeType.endsWith("svg+xml")
+        ) {
           images.push(GLib.build_filenamev([directoryPath, info.get_name()])); // Get full path
         }
       }
     }
     enumerator.close(null); // Close the enumerator
   } catch (e) {
-    console.error(`Failed to enumerate wallpaper directory ${directoryPath}:`, e);
+    console.error(
+      `Failed to enumerate wallpaper directory ${directoryPath}:`,
+      e,
+    );
   }
   console.log(`Images: ${images}`);
   return images;
@@ -215,16 +286,15 @@ export default () => {
 
   const imagePaths = Variable<string[]>([]);
 
-
   const updateImageList = () => {
     const currentDir = wallpaperFolder.get();
     const paths = getWallpaperImagePaths(currentDir);
     // Check if the paths actually changed before updating to avoid unnecessary redraws
     if (JSON.stringify(imagePaths.value) !== JSON.stringify(paths)) {
-        imagePaths.set(paths); // Update the variable, this will trigger the hook below
-        console.log("imagePaths updated in updateImageList:", paths);
+      imagePaths.set(paths); // Update the variable, this will trigger the hook below
+      console.log("imagePaths updated in updateImageList:", paths);
     } else {
-        console.log("imagePaths unchanged in updateImageList.");
+      console.log("imagePaths unchanged in updateImageList.");
     }
   };
 
@@ -232,15 +302,32 @@ export default () => {
     const oldDirectory = wallpaperFolder.get();
     if (oldDirectory === wallpaperDirectory) return; // No change
 
-    if (!wallpaperDirectory || !GLib.file_test(wallpaperDirectory, GLib.FileTest.IS_DIR)) {
-        console.warn(`Invalid or non-existent directory entered: ${wallpaperDirectory}`);
-        return;
+    if (
+      !wallpaperDirectory ||
+      !GLib.file_test(wallpaperDirectory, GLib.FileTest.IS_DIR)
+    ) {
+      console.warn(
+        `Invalid or non-existent directory entered: ${wallpaperDirectory}`,
+      );
+      return;
     }
-
 
     wallpaperFolder.set(wallpaperDirectory);
     // For simplicity, let's keep the current wallpaper setting but it might become invalid.
-    saveSettings(currentTheme.get(), currentMode.get(), slideshow.get(), wallpaperImage.get(), wallpaperDirectory, useBing.get(), totalWorkspaces.get(), showNumbers.get(), hideEmptyWorkspaces.get(), workspaceIcons.get(), transparentItems.get());
+    saveSettings(
+      currentTheme.get(),
+      currentMode.get(),
+      slideshow.get(),
+      wallpaperImage.get(),
+      wallpaperDirectory,
+      useBing.get(),
+      totalWorkspaces.get(),
+      showNumbers.get(),
+      hideEmptyWorkspaces.get(),
+      workspaceIcons.get(),
+      transparentItems.get(),
+      paddingSize.get(),
+    );
 
     console.log(`Wallpaper directory set to: ${wallpaperDirectory}`);
 
@@ -249,39 +336,50 @@ export default () => {
 
   updateImageList(); // Load images for the initial directory
 
-
   const thumbnailGrid = new Widget.Box({
     vertical: true,
     css: "min-height: 500px;",
     halign: Gtk.Align.CENTER,
-    setup: self => {
-        // Initial setup
-        updateImageList();
-        const paths = imagePaths.get();
-        console.log("Setting up thumbnail grid with paths:", paths);
-        
-        if (Array.isArray(paths)) {
-            const rows = chunkArray(paths, 2);
-            self.children = rows.map((row, rowIndex) => new Widget.Box({
-                key: `row-${rowIndex}`,
-                homogeneous: true,
-                spacing: spacing / 2,
-                className: "wallpaper-thumbnail-row",
-                children: row.map((imagePath) => {
-                    const imageName = GLib.path_get_basename(imagePath);
-                    const thumbPath = getThumbnailPath(imagePath);
-                    
-                    // Generate thumbnail if it doesn't exist
-                    if (!GLib.file_test(thumbPath, GLib.FileTest.EXISTS)) {
-                        generateThumbnailAsync(imagePath, thumbPath, THUMBNAIL_SIZE)
-                            .catch(e => console.error(`Thumbnail generation failed for ${imageName}:`, e));
-                    }
+    setup: (self) => {
+      // Initial setup
+      updateImageList();
+      const paths = imagePaths.get();
+      console.log("Setting up thumbnail grid with paths:", paths);
 
-                    return new Widget.Button({
-                        key: imageName,
-                        tooltip_text: imageName,
-                        className: bind(wallpaperImage).as(wp => `thumbnail-box ${wp === imageName ? 'active' : ''}`),
-                        css: `
+      if (Array.isArray(paths)) {
+        const rows = chunkArray(paths, 2);
+        self.children = rows.map(
+          (row, rowIndex) =>
+            new Widget.Box({
+              key: `row-${rowIndex}`,
+              homogeneous: true,
+              spacing: spacing / 2,
+              className: "wallpaper-thumbnail-row",
+              children: row.map((imagePath) => {
+                const imageName = GLib.path_get_basename(imagePath);
+                const thumbPath = getThumbnailPath(imagePath);
+
+                // Generate thumbnail if it doesn't exist
+                if (!GLib.file_test(thumbPath, GLib.FileTest.EXISTS)) {
+                  generateThumbnailAsync(
+                    imagePath,
+                    thumbPath,
+                    THUMBNAIL_SIZE,
+                  ).catch((e) =>
+                    console.error(
+                      `Thumbnail generation failed for ${imageName}:`,
+                      e,
+                    ),
+                  );
+                }
+
+                return new Widget.Button({
+                  key: imageName,
+                  tooltip_text: imageName,
+                  className: bind(wallpaperImage).as(
+                    (wp) => `thumbnail-box ${wp === imageName ? "active" : ""}`,
+                  ),
+                  css: `
                             background-image: url("${thumbPath}");
                             min-width: ${THUMBNAIL_SIZE}px;
                             min-height: ${THUMBNAIL_SIZE}px;
@@ -290,37 +388,51 @@ export default () => {
                             margin: ${spacing / 4}px;
                             border-radius: ${spacing / 2}px;
                         `,
-                        on_clicked: () => setWallpaper(imageName),
-                    });
-                }),
-            }));
-        }
+                  on_clicked: () => setWallpaper(imageName),
+                });
+              }),
+            }),
+        );
+      }
 
-        // Hook for updates
-        self.hook(imagePaths, () => {
-            const paths = imagePaths.get();
-            if (Array.isArray(paths)) {
-                const rows = chunkArray(paths, 2);
-                self.children = rows.map((row, rowIndex) => new Widget.Box({
-                    key: `row-${rowIndex}`,
-                    homogeneous: true,
-                    spacing: spacing / 2,
-                    className: "wallpaper-thumbnail-row",
-                    children: row.map((imagePath) => {
-                        const imageName = GLib.path_get_basename(imagePath);
-                        const thumbPath = getThumbnailPath(imagePath);
-                        
-                        // Generate thumbnail if it doesn't exist
-                        if (!GLib.file_test(thumbPath, GLib.FileTest.EXISTS)) {
-                            generateThumbnailAsync(imagePath, thumbPath, THUMBNAIL_SIZE)
-                                .catch(e => console.error(`Thumbnail generation failed for ${imageName}:`, e));
-                        }
+      // Hook for updates
+      self.hook(imagePaths, () => {
+        const paths = imagePaths.get();
+        if (Array.isArray(paths)) {
+          const rows = chunkArray(paths, 2);
+          self.children = rows.map(
+            (row, rowIndex) =>
+              new Widget.Box({
+                key: `row-${rowIndex}`,
+                homogeneous: true,
+                spacing: spacing / 2,
+                className: "wallpaper-thumbnail-row",
+                children: row.map((imagePath) => {
+                  const imageName = GLib.path_get_basename(imagePath);
+                  const thumbPath = getThumbnailPath(imagePath);
 
-                        return new Widget.Button({
-                            key: imageName,
-                            tooltip_text: imageName,
-                            className: bind(wallpaperImage).as(wp => `thumbnail-box ${wp === imageName ? 'active' : ''}`),
-                            css: `
+                  // Generate thumbnail if it doesn't exist
+                  if (!GLib.file_test(thumbPath, GLib.FileTest.EXISTS)) {
+                    generateThumbnailAsync(
+                      imagePath,
+                      thumbPath,
+                      THUMBNAIL_SIZE,
+                    ).catch((e) =>
+                      console.error(
+                        `Thumbnail generation failed for ${imageName}:`,
+                        e,
+                      ),
+                    );
+                  }
+
+                  return new Widget.Button({
+                    key: imageName,
+                    tooltip_text: imageName,
+                    className: bind(wallpaperImage).as(
+                      (wp) =>
+                        `thumbnail-box ${wp === imageName ? "active" : ""}`,
+                    ),
+                    css: `
                                 background-image: url("${thumbPath}");
                                 min-width: ${THUMBNAIL_SIZE}px;
                                 min-height: ${THUMBNAIL_SIZE}px;
@@ -329,17 +441,16 @@ export default () => {
                                 margin: ${spacing / 4}px;
                                 border-radius: ${spacing / 2}px;
                             `,
-                            on_clicked: () => setWallpaper(imageName),
-                        });
-                    }),
-                }));
-            }
-            self.show_all();
-        });
+                    on_clicked: () => setWallpaper(imageName),
+                  });
+                }),
+              }),
+          );
+        }
+        self.show_all();
+      });
     },
   });
-
-
 
   return (
     <Page label={"Themes"}>
@@ -352,16 +463,18 @@ export default () => {
         <box className="buttons-container" halign={Gtk.Align.CENTER}>
           <button
             onClick={() => setTheme(currentTheme.get(), "Light")}
-            className={bind(currentMode).as(mode =>
-              `mode-settings__button_left ${mode === "Light" ? "active" : ""}`
+            className={bind(currentMode).as(
+              (mode) =>
+                `mode-settings__button_left ${mode === "Light" ? "active" : ""}`,
             )}
           >
             <label label="Light" />
           </button>
           <button
             onClick={() => setTheme(currentTheme.get(), "Dark")}
-            className={bind(currentMode).as(mode =>
-              `mode-settings__button_right ${mode === "Dark" ? "active" : ""}`
+            className={bind(currentMode).as(
+              (mode) =>
+                `mode-settings__button_right ${mode === "Dark" ? "active" : ""}`,
             )}
           >
             <label label="Dark" />
@@ -369,28 +482,53 @@ export default () => {
         </box>
 
         <label label="Theme" className="theme" halign={Gtk.Align.CENTER} />
-        <box horizontal className="buttons-container" spacing={spacing} halign={Gtk.Align.CENTER}>
+        <box
+          horizontal
+          className="buttons-container"
+          spacing={spacing}
+          halign={Gtk.Align.CENTER}
+        >
           {/* Theme buttons */}
           <box vertical>
-            <button onClick={() => setTheme("Verdant", currentMode.get())} className={bind(currentTheme).as(t => `theme-buttons ${t === 'Verdant' ? 'active' : ''}`)}>
+            <button
+              onClick={() => setTheme("Verdant", currentMode.get())}
+              className={bind(currentTheme).as(
+                (t) => `theme-buttons ${t === "Verdant" ? "active" : ""}`,
+              )}
+            >
               <icon icon={icons.seasons.spring} className="icon" />
             </button>
             <label label="Verdant" className="label" />
           </box>
           <box vertical>
-            <button onClick={() => setTheme("Zephyr", currentMode.get())} className={bind(currentTheme).as(t => `theme-buttons ${t === 'Zephyr' ? 'active' : ''}`)}>
+            <button
+              onClick={() => setTheme("Zephyr", currentMode.get())}
+              className={bind(currentTheme).as(
+                (t) => `theme-buttons ${t === "Zephyr" ? "active" : ""}`,
+              )}
+            >
               <icon icon={icons.seasons.summer} />
             </button>
             <label label="Zephyr" className="label" />
           </box>
           <box vertical>
-            <button onClick={() => setTheme("Frolic", currentMode.get())} className={bind(currentTheme).as(t => `theme-buttons ${t === 'Frolic' ? 'active' : ''}`)}>
+            <button
+              onClick={() => setTheme("Frolic", currentMode.get())}
+              className={bind(currentTheme).as(
+                (t) => `theme-buttons ${t === "Frolic" ? "active" : ""}`,
+              )}
+            >
               <icon icon={icons.seasons.fall} />
             </button>
             <label label="Frolic" className="label" />
           </box>
           <box vertical>
-            <button onClick={() => setTheme("Glaciara", currentMode.get())} className={bind(currentTheme).as(t => `theme-buttons ${t === 'Glaciara' ? 'active' : ''}`)}>
+            <button
+              onClick={() => setTheme("Glaciara", currentMode.get())}
+              className={bind(currentTheme).as(
+                (t) => `theme-buttons ${t === "Glaciara" ? "active" : ""}`,
+              )}
+            >
               <icon icon={icons.seasons.winter} />
             </button>
             <label label="Glaciara" className="label" />
@@ -417,7 +555,11 @@ export default () => {
         <label label="Wallpaper" className="theme" halign={Gtk.Align.CENTER} />
 
         <box className="settings-row" vertical={false} spacing={spacing}>
-          <label label="Use Bing Wallpaper of the Day" hexpand={true} xalign={0} />
+          <label
+            label="Use Bing Wallpaper of the Day"
+            hexpand={true}
+            xalign={0}
+          />
           <switch
             active={bind(useBing)} // Correct: Binds the switch's visual state to the variable
             // Use 'notify::active' signal which fires *after* the state has changed
@@ -438,22 +580,30 @@ export default () => {
                 showNumbers.get(),
                 hideEmptyWorkspaces.get(),
                 workspaceIcons.get(),
-                transparentItems.get()
-              );              console.log(`Toggled Use Bing Wallpaper to: ${isActive}`); // Optional logging
+                transparentItems.get(),
+              );
+              console.log(`Toggled Use Bing Wallpaper to: ${isActive}`); // Optional logging
               HyprlockService.updateConfig(); // Update hyprlock config
               if (isActive) {
                 // When enabling Bing wallpaper
                 const bingPath = `${GLib.get_home_dir()}/.config/ags/bing.jpg`;
                 if (GLib.file_test(bingPath, GLib.FileTest.EXISTS)) {
-                  exec(`swww img "${bingPath}" --transition-step 100 --transition-fps 120 --transition-type grow --transition-angle 30 --transition-duration 1`);
+                  exec(
+                    `swww img "${bingPath}" --transition-step 100 --transition-fps 120 --transition-type grow --transition-angle 30 --transition-duration 1`,
+                  );
                 }
               } else {
                 // When disabling Bing wallpaper
                 const selectedWallpaper = wallpaperImage.get();
                 if (selectedWallpaper) {
-                  const fullPath = GLib.build_filenamev([wallpaperFolder.get(), selectedWallpaper]);
+                  const fullPath = GLib.build_filenamev([
+                    wallpaperFolder.get(),
+                    selectedWallpaper,
+                  ]);
                   if (GLib.file_test(fullPath, GLib.FileTest.EXISTS)) {
-                    exec(`swww img "${fullPath}" --transition-step 100 --transition-fps 120 --transition-type grow --transition-angle 30 --transition-duration 1`);
+                    exec(
+                      `swww img "${fullPath}" --transition-step 100 --transition-fps 120 --transition-type grow --transition-angle 30 --transition-duration 1`,
+                    );
                   }
                 }
               }
@@ -461,27 +611,25 @@ export default () => {
           />
         </box>
 
-
-
         {/* Slideshow switch could go here if uncommented */}
 
         <box vertical={false} spacing={spacing} className="settings-row">
-             <label label="Folder" xalign={0} />
-             <entry
-                hexpand={true}
-                // Bind the text property to the variable
-                text={bind(wallpaperFolder)}
-                // Update the directory when Enter is pressed
-                on_activate={self => {
-                    setWallpaperDirectory(self.text || ""); // Pass the current text
-                }}
-                // Optional: Update when focus is lost
-                on_focus_out_event={self => {
-                    setWallpaperDirectory(self.text || "");
-                    return false; // Allow event propagation
-                }}
-                tooltip_text="Enter the full path to your wallpaper directory and press Enter"
-             />
+          <label label="Folder" xalign={0} />
+          <entry
+            hexpand={true}
+            // Bind the text property to the variable
+            text={bind(wallpaperFolder)}
+            // Update the directory when Enter is pressed
+            on_activate={(self) => {
+              setWallpaperDirectory(self.text || ""); // Pass the current text
+            }}
+            // Optional: Update when focus is lost
+            on_focus_out_event={(self) => {
+              setWallpaperDirectory(self.text || "");
+              return false; // Allow event propagation
+            }}
+            tooltip_text="Enter the full path to your wallpaper directory and press Enter"
+          />
         </box>
 
         <box

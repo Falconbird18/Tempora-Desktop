@@ -1,16 +1,22 @@
 import { exec, execAsync, writeFileAsync } from "astal";
-import { currentTheme, currentMode } from "../widget/ControlCenter/pages/Themes";
-import { useBing } from "../widget/ControlCenter/pages/Themes";
+import { currentTheme, currentMode, useBing } from "./Settings";
 const { GLib } = imports.gi;
 
 export class HyprlockService {
-    private static generateConfig(colors: { background: string, primary: string, secondary: string, text: string, h1_font: string, paragraph_font: string }) {
-        const homeDir = GLib.get_home_dir();
-        const wallpaperPath = useBing()
-            ? `${homeDir}/.config/ags/bing.jpg`
-            : `${homeDir}/.config/ags/wallpaper.jpg`;
+  private static generateConfig(colors: {
+    background: string;
+    primary: string;
+    secondary: string;
+    text: string;
+    h1_font: string;
+    paragraph_font: string;
+  }) {
+    const homeDir = GLib.get_home_dir();
+    const wallpaperPath = useBing()
+      ? `${homeDir}/.config/ags/bing.jpg`
+      : `${homeDir}/.config/ags/wallpaper.jpg`;
 
-        return `$text_color = rgb(${colors.text})
+    return `$text_color = rgb(${colors.text})
 $background = rgb(${colors.background})
 $entry_border_color = rgb(${colors.secondary})
 $font_family = ${colors.paragraph_font}
@@ -104,82 +110,102 @@ label { # Status
     position = 30, -30
     halign = left
     valign = top
-}`
-    }
+}`;
+  }
 
-    private static async getThemeColors(): Promise<{ background: string, primary: string, secondary: string, text: string, h1_font: string, paragraph_font: string }> {
-        const homeDir = GLib.get_home_dir();
-        const theme = currentTheme.get();
-        const mode = currentMode.get();
-        const scssFile = `${homeDir}/.config/ags/style/${theme}${mode}/main.scss`;
-        const fontScssFile = `${homeDir}/.config/ags/style/${theme.toLowerCase()}.scss`;
+  private static async getThemeColors(): Promise<{
+    background: string;
+    primary: string;
+    secondary: string;
+    text: string;
+    h1_font: string;
+    paragraph_font: string;
+  }> {
+    const homeDir = GLib.get_home_dir();
+    const theme = currentTheme.get();
+    const mode = currentMode.get();
+    const scssFile = `${homeDir}/.config/ags/style/${theme}${mode}/main.scss`;
+    const fontScssFile = `${homeDir}/.config/ags/style/${theme.toLowerCase()}.scss`;
 
-        try {
-            // Read SCSS file content and extract color variables
-            const colorResult = await execAsync(`grep -E '$background:|\\$primary:|\\$secondary:|\\$text:|' "${scssFile}"`);
-            const fontResult = await execAsync(`grep -E '$h1-font:|\\$p-font:|' "${fontScssFile}"`);
-            
-            const colors = {
-                background: '00FF00',
-                primary: '562f10',
-                secondary: 'F0EDEA',
-                text: 'FF0000',
-                h1_font: 'Monaspace Radon',
-                paragraph_font: 'Monaspace Xenon'
-            };
+    try {
+      // Read SCSS file content and extract color variables
+      const colorResult = await execAsync(
+        `grep -E '$background:|\\$primary:|\\$secondary:|\\$text:|' "${scssFile}"`,
+      );
+      const fontResult = await execAsync(
+        `grep -E '$h1-font:|\\$p-font:|' "${fontScssFile}"`,
+      );
 
-            // Parse SCSS variables
-            const colorLines = colorResult.split('\n');
-            colorLines.forEach((line: string) => {
-                if (line.includes('$background:')) {
-                    colors.background = line.split('#')[1]?.trim().slice(0, 6) || colors.background;
-                } else if (line.includes('$primary:')) {
-                    colors.primary = line.split('#')[1]?.trim().slice(0, 6) || colors.primary;
-                } else if (line.includes('$secondary:')) {
-                    colors.secondary = line.split('#')[1]?.trim().slice(0, 6) || colors.secondary;
-                } else if (line.includes('$text:')) {
-                    colors.text = line.split('#')[1]?.trim().slice(0, 6) || colors.text;
-                }
-            });
+      const colors = {
+        background: "00FF00",
+        primary: "562f10",
+        secondary: "F0EDEA",
+        text: "FF0000",
+        h1_font: "Monaspace Radon",
+        paragraph_font: "Monaspace Xenon",
+      };
 
-            // Parse font variables
-            const fontLines = fontResult.split('\n');
-            fontLines.forEach((line: string) => {
-                if (line.includes('$h1_font:')) {
-                    colors.h1_font = line.split(':')[1]?.trim().replace(/;$/, '').replace(/"/g, '') || colors.h1_font;
-                } else if (line.includes('$paragraph_font:')) {
-                    colors.paragraph_font = line.split(':')[1]?.trim().replace(/;$/, '').replace(/"/g, '') || colors.paragraph_font;
-                }
-            });
-
-            return colors;
-        } catch (error) {
-            console.error('Error reading theme colors:', error);
-            // Return default colors if there's an error
-            return {
-                background: '00FF00',
-                primary: '562f10',
-                secondary: 'F0EDEA',
-                text: 'FF0000',
-                h1_font: 'Monaspace Radon',
-                paragraph_font: 'Monaspace Xenon'
-            };
+      // Parse SCSS variables
+      const colorLines = colorResult.split("\n");
+      colorLines.forEach((line: string) => {
+        if (line.includes("$background:")) {
+          colors.background =
+            line.split("#")[1]?.trim().slice(0, 6) || colors.background;
+        } else if (line.includes("$primary:")) {
+          colors.primary =
+            line.split("#")[1]?.trim().slice(0, 6) || colors.primary;
+        } else if (line.includes("$secondary:")) {
+          colors.secondary =
+            line.split("#")[1]?.trim().slice(0, 6) || colors.secondary;
+        } else if (line.includes("$text:")) {
+          colors.text = line.split("#")[1]?.trim().slice(0, 6) || colors.text;
         }
-    }
+      });
 
-    public static async updateConfig() {
-        const colors = await this.getThemeColors();
-        const config = this.generateConfig(colors);
-        const homeDir = GLib.get_home_dir();
-
-        try {
-            await writeFileAsync(`${homeDir}/.config/hypr/hyprlock.conf`, config);
-            console.log('Hyprlock config updated successfully');
-            console.log(`Hyprlock colors: Background, ${colors.background}, Primary: ${colors.primary}, Secondary: ${colors.secondary}, Text: ${colors.text}`);
-        } catch (error) {
-            console.error('Error updating hyprlock config:', error);
+      // Parse font variables
+      const fontLines = fontResult.split("\n");
+      fontLines.forEach((line: string) => {
+        if (line.includes("$h1_font:")) {
+          colors.h1_font =
+            line.split(":")[1]?.trim().replace(/;$/, "").replace(/"/g, "") ||
+            colors.h1_font;
+        } else if (line.includes("$paragraph_font:")) {
+          colors.paragraph_font =
+            line.split(":")[1]?.trim().replace(/;$/, "").replace(/"/g, "") ||
+            colors.paragraph_font;
         }
+      });
+
+      return colors;
+    } catch (error) {
+      console.error("Error reading theme colors:", error);
+      // Return default colors if there's an error
+      return {
+        background: "00FF00",
+        primary: "562f10",
+        secondary: "F0EDEA",
+        text: "FF0000",
+        h1_font: "Monaspace Radon",
+        paragraph_font: "Monaspace Xenon",
+      };
     }
+  }
+
+  public static async updateConfig() {
+    const colors = await this.getThemeColors();
+    const config = this.generateConfig(colors);
+    const homeDir = GLib.get_home_dir();
+
+    try {
+      await writeFileAsync(`${homeDir}/.config/hypr/hyprlock.conf`, config);
+      console.log("Hyprlock config updated successfully");
+      console.log(
+        `Hyprlock colors: Background, ${colors.background}, Primary: ${colors.primary}, Secondary: ${colors.secondary}, Text: ${colors.text}`,
+      );
+    } catch (error) {
+      console.error("Error updating hyprlock config:", error);
+    }
+  }
 }
 
 // Export the service
