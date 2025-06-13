@@ -1,8 +1,11 @@
 import { App, Gdk, Gtk } from "astal/gtk3";
-import { exec, execAsync } from "astal";
+import { exec, execAsync, writeFile } from "astal";
 const { GLib } = imports.gi;
 import { currentTheme, currentMode } from "./widget/ControlCenter/pages/Themes";
-import { transparentItems } from "./widget/ControlCenter/pages/AdvancedThemes";
+import {
+  transparentItems,
+  paddingSize,
+} from "./widget/ControlCenter/pages/AdvancedThemes"; // Import paddingSize
 import Bar from "./widget/Bar";
 import TaskBar from "./widget/TaskBar";
 import ControlCenter from "./widget/ControlCenter";
@@ -65,6 +68,18 @@ const applyTheme = async () => {
     await execAsync(`cp "${hyprThemeConfSource}" "${hyprThemeConfDest}"`);
     await execAsync(`cp -r "${ghosttySource}" "${ghosttyDest}"`);
     console.log("Config files copied");
+
+    // Write padding.scss
+    const currentPadding = paddingSize.get();
+
+    writeFile(
+      `${homeDir}/.config/ags/style/padding.scss`,
+      `$padding: ${currentPadding};`,
+    );
+    console.log(
+      `Padding SCSS file created/updated with value: ${currentPadding}`,
+    );
+
     await execAsync(`sass "${themePathScss}" "${themePathCss}"`);
     await execAsync(`sass "${spicetifyPathScss}" "${spicetifyPathCss}"`);
     console.log("Scss compiled");
@@ -144,6 +159,7 @@ async function main() {
   currentTheme.subscribe(applyTheme);
   currentMode.subscribe(applyTheme);
   transparentItems.subscribe(applyTheme);
+  paddingSize.subscribe(applyTheme); // Subscribe applyTheme to paddingSize changes
 }
 
 App.start({

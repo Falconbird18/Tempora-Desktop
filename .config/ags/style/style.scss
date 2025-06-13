@@ -1,3 +1,4 @@
+@import "./padding.scss";
 /*Components*/
 @mixin monospace {
     font-family: $monospace_font;
@@ -99,7 +100,6 @@
     border-radius: 100%;
     text-shadow: $text-shadow;
 }
-
 
 @mixin primary-button-inactive {
     font-size: $h2_size;
@@ -224,7 +224,7 @@
 
 .app-launcher__entry {
     @include textbox;
-    background: none
+    background: none;
 }
 
 .app-launcher__list {
@@ -356,7 +356,7 @@ label {
 }
 
 window.popup {
-    >* {
+    > * {
         border: none;
         box-shadow: none;
     }
@@ -492,14 +492,16 @@ switch:checked slider {
     }
 
     &.filled {
-        background-image: linear-gradient(45deg,
-                $primary 25%,
-                $background-2 25%,
-                $background-2 50%,
-                $primary 50%,
-                $primary 75%,
-                $background-2 75%,
-                $background-2 );
+        background-image: linear-gradient(
+            45deg,
+            $primary 25%,
+            $background-2 25%,
+            $background-2 50%,
+            $primary 50%,
+            $primary 75%,
+            $background-2 75%,
+            $background-2
+        );
         background-size: 8px 8px;
         border: 2px solid $primary;
         box-shadow: 0px 2px 0px 0px $secondary;
@@ -530,14 +532,16 @@ switch:checked slider {
         border: 2px solid $primary;
 
         &:hover {
-            background-image: linear-gradient(45deg,
-                    $primary 25%,
-                    $background-2 25%,
-                    $background-2 50%,
-                    $primary 50%,
-                    $primary 75%,
-                    $background-2 75%,
-                    $background-2 );
+            background-image: linear-gradient(
+                45deg,
+                $primary 25%,
+                $background-2 25%,
+                $background-2 50%,
+                $primary 50%,
+                $primary 75%,
+                $background-2 75%,
+                $background-2
+            );
             background-size: 8px 8px;
             border: 2px solid $primary;
             box-shadow: 0px 2px 0px 0px $secondary;
@@ -600,7 +604,6 @@ switch:checked slider {
         box-shadow: none;
         border: none;
     }
-
 }
 
 .bar__button {
@@ -683,7 +686,6 @@ switch:checked slider {
         min-width: calc($paragraph_size * 2);
     }
 }
-
 
 /* Number mode */
 .bar__workspaces-indicator-number {
@@ -929,7 +931,8 @@ switch:checked slider {
 
 .control-center__button-icon {
     @include secondary-button;
-    border-radius: $tertiary-radius $primary-radius $primary-radius $tertiary-radius;
+    border-radius: $tertiary-radius $primary-radius $primary-radius
+        $tertiary-radius;
     margin-left: 2px;
 
     &:hover {
@@ -962,7 +965,6 @@ switch:checked slider {
 
     &:hover {
         @include secondary-button-hover;
-
     }
 
     &.no-label {
@@ -987,7 +989,8 @@ switch:checked slider {
 
 .control-center__button {
     @include secondary-button;
-    border-radius: $primary-radius $tertiary-radius $tertiary-radius $primary-radius;
+    border-radius: $primary-radius $tertiary-radius $tertiary-radius
+        $primary-radius;
     margin-right: 2px;
 
     &.secondary {
@@ -1008,7 +1011,6 @@ switch:checked slider {
 
     &:hover {
         @include secondary-button-hover;
-
     }
 
     &.no-label {
@@ -1063,7 +1065,6 @@ switch:checked slider {
         margin: 0;
         border: none;
     }
-
 }
 
 .control-center-slider-icon {
@@ -1078,7 +1079,9 @@ switch:checked slider {
         border-radius: 100px;
         background-color: transparent;
         box-shadow: none;
-        transition: background-color $transition, color $transition;
+        transition:
+            background-color $transition,
+            color $transition;
     }
 
     & trough {
@@ -1582,7 +1585,7 @@ switch:checked slider {
 }
 
 .popup-menu__content {
-    >*>* {
+    > * > * {
         background: none;
     }
 }
@@ -1834,7 +1837,7 @@ switch:checked slider {
 
 .wallpaper-thumbnails-container {
     min-width: 360px;
-    padding: 20px
+    padding: 20px;
 }
 
 .thumbnail-box {
@@ -1880,7 +1883,6 @@ switch:checked slider {
         @include secondary-circular-button-active;
     }
 }
-
 
 .add-icon-form {
     @include card;
@@ -2013,8 +2015,6 @@ switch:checked slider {
     min-height: 100px;
     padding: 8px;
 }
-
-
 
 /*SideBar*/
 .sidebar-window {
@@ -2235,17 +2235,6 @@ table {
     color: #666;
     // text-align: center;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 .wallpaper-thumbnails-container {
     transition: all 0.2s ease-out;
