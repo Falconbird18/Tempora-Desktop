@@ -150,8 +150,13 @@ App.start({
   requestHandler(request: string, res: (response: any) => void) {
     const args = request.split(" ");
     if (args[0] == "toggle") {
-      toggleWindow(args[1]);
-      res("ok");
+      if (typeof args[1] === "string") {
+        toggleWindow(args[1]);
+        res("ok");
+      } else {
+        console.error("Toggle command requires a window name.");
+        res("error: missing window name");
+      }
     } else if (args[0] == "record") {
       if (args[1] == "start") {
         ScreenRecordService.start();
