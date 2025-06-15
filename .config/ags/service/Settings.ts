@@ -29,6 +29,7 @@ export const loadSettings = () => {
     workspaceIcons: {},
     barLocation: "top",
     transparentBarItems: false,
+    transparentBar: false,
     paddingSize: "10px", // Add default paddingSize
   };
 };
@@ -45,6 +46,7 @@ export const saveSettings = (
   hideEmptyWorkspaces: boolean,
   workspaceIcons: { [key: number]: string },
   transparentBarItems: boolean,
+  transparentBar: boolean,
   paddingSize: string, // Add paddingSize argument
 ) => {
   try {
@@ -62,7 +64,8 @@ export const saveSettings = (
       workspaceIcons,
       barLocation: barLocation.get().name,
       transparentBarItems,
-      paddingSize, // Save paddingSize
+      transparentBar,
+      paddingSize,
     });
     file.replace_contents(
       contents,
@@ -90,6 +93,7 @@ export const hideEmptyWorkspaces = Variable(settings.hideEmptyWorkspaces);
 export const showNumbers = Variable(settings.numbers);
 export const workspaceIcons = Variable(settings.workspaceIcons || {});
 export const transparentItems = Variable(settings.transparentBarItems);
+export const transparentBar = Variable(settings.transparentBar);
 export const paddingSize = Variable(settings.paddingSize);
 
 const BarLocations = {

@@ -199,9 +199,6 @@ label { # Status
     try {
       await writeFileAsync(`${homeDir}/.config/hypr/hyprlock.conf`, config);
       console.log("Hyprlock config updated successfully");
-      console.log(
-        `Hyprlock colors: Background, ${colors.background}, Primary: ${colors.primary}, Secondary: ${colors.secondary}, Text: ${colors.text}`,
-      );
     } catch (error) {
       console.error("Error updating hyprlock config:", error);
     }

@@ -129,8 +129,6 @@ const ModelButtons = () => (
 );
 
 const WebViewWidget = ({ url }: { url: Variable<string> }) => {
-  console.log("WebViewWidget: Start");
-
   // Create cookie manager and enable persistent storage
   const context = new WebKit2.WebContext();
   const cookieManager = context.get_cookie_manager();
@@ -142,7 +140,6 @@ const WebViewWidget = ({ url }: { url: Variable<string> }) => {
 
   // Create and configure the WebKit2 WebView with the context
   const webView = new WebKit2.WebView({ web_context: context });
-  console.log("WebViewWidget: WebView created");
 
   const settings = webView.get_settings();
   settings.set_enable_javascript(true);
@@ -166,21 +163,17 @@ const WebViewWidget = ({ url }: { url: Variable<string> }) => {
     vscrollbar_policy: Gtk.PolicyType.AUTOMATIC,
   });
   scrolledWindow.set_size_request(400, 400); // Explicit size to ensure it’s visible
-  console.log("WebViewWidget: ScrolledWindow created");
   scrolledWindow.add(webView);
 
   // Explicitly show the WebView and ScrolledWindow
   webView.show();
   scrolledWindow.show_all();
-  console.log("WebViewWidget: ScrolledWindow shown");
 
   // Subscribe to URL changes and load with delay
   url.subscribe((newUrl) => {
     if (newUrl) {
-      console.log(`WebViewWidget: Subscribed URL changed to ${newUrl}`);
       GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
         try {
-          console.log(`WebViewWidget: Loading ${newUrl}`);
           webView.load_uri(newUrl);
         } catch (error) {
           console.error("Error during load_uri:", error);
@@ -192,9 +185,7 @@ const WebViewWidget = ({ url }: { url: Variable<string> }) => {
 
   // Connect event handlers for load progress and errors
   webView.connect("load-changed", (self, loadEvent) => {
-    console.log(`WebView load event: ${loadEvent}`);
     if (loadEvent === WebKit2.LoadEvent.FINISHED) {
-      console.log("Load finished, current URI:", webView.get_uri());
       webView.queue_draw();
       scrolledWindow.queue_draw();
     }
@@ -203,8 +194,6 @@ const WebViewWidget = ({ url }: { url: Variable<string> }) => {
   webView.connect("load-failed", (self, loadEvent, failingUri, error) => {
     console.error(`Failed to load ${failingUri}: ${error.message}`);
   });
-
-  console.log("WebViewWidget: Event handlers connected");
 
   return scrolledWindow;
 };
@@ -218,7 +207,6 @@ const WebContent = () => {
   // Update webUrl when the model changes
   currentModel.subscribe((m) => {
     if (m?.type === "web") {
-      console.log(`WebContent: Setting webUrl to ${m.url}`);
       webUrl.set(m.url);
     } else {
       webUrl.set("");
@@ -318,9 +306,7 @@ const StartOllamaButton = bind(ollamaRunningStatus).as((isRunning) =>
   ),
 );
 
-function splitMessageParts(
-  text: string,
-): {
+function splitMessageParts(text: string): {
   type: "text" | "code" | "math" | "display_math";
   content: string;
   language?: string;
@@ -411,7 +397,6 @@ function formatMath(content: string, isDisplay: boolean = false): string {
 }
 
 async function queryGemini(prompt: string) {
-  console.log("Starting queryGemini with prompt:", prompt);
   try {
     const timestamp = new Date().toLocaleTimeString([], {
       hour12: false,
@@ -448,7 +433,6 @@ async function queryGemini(prompt: string) {
       flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_MERGE,
     });
     subprocess.init(null);
-    console.log("Gemini subprocess initialized");
     const stdout = new Gio.DataInputStream({
       base_stream: subprocess.get_stdout_pipe(),
     });
@@ -469,7 +453,6 @@ async function queryGemini(prompt: string) {
             (source, result) => {
               const [line] = stdout.read_line_finish_utf8(result);
               if (line === null) {
-                console.log("Gemini stream ended");
                 try {
                   const parsedArray = JSON.parse(fullResponse);
                   const geminiResponse =
@@ -507,7 +490,6 @@ async function queryGemini(prompt: string) {
             },
           );
         };
-        console.log("Starting to read Gemini stream");
         readNextLine();
       });
 
@@ -516,7 +498,6 @@ async function queryGemini(prompt: string) {
         subprocess.wait_async(null, (proc, result) => {
           try {
             subprocess.wait_finish(result);
-            console.log("Gemini subprocess completed");
             resolve();
           } catch (e) {
             reject(e);
@@ -524,7 +505,6 @@ async function queryGemini(prompt: string) {
         });
       });
 
-    console.log("Starting Gemini stream reading and waiting for subprocess");
     const readPromise = readStream();
     await waitForSubprocess();
     await readPromise;
@@ -694,7 +674,6 @@ async function queryOllama(prompt: string) {
       ]);
       return;
     }
-    console.log("Starting queryOllama with prompt:", prompt);
     try {
       chatHistory.set([
         ...chatHistory.get(),
@@ -736,7 +715,6 @@ async function queryOllama(prompt: string) {
               (source, result) => {
                 const [line] = stdout.read_line_finish_utf8(result);
                 if (line === null) {
-                  console.log("Stream ended");
                   if (!ollamaResponse)
                     chatHistory.set([
                       ...chatHistory.get(),
@@ -795,7 +773,6 @@ async function queryOllama(prompt: string) {
               },
             );
           };
-          console.log("Starting to read stream");
           readNextLine();
         });
 
@@ -804,7 +781,6 @@ async function queryOllama(prompt: string) {
           subprocess.wait_async(null, (proc, result) => {
             try {
               subprocess.wait_finish(result);
-              console.log("Subprocess completed");
               resolve();
             } catch (e) {
               reject(e);

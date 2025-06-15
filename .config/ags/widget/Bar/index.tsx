@@ -12,7 +12,7 @@ import Weather from "./items/Weather";
 import RecordingIndicator from "./items/RecordingIndicator";
 import SideBar from "./items/SideBar";
 import Media from "./items/Media";
-import { barLocation } from "../../service/Settings";
+import { barLocation, transparentBar } from "../../service/Settings";
 import { bind } from "astal";
 
 // declare global {
@@ -65,7 +65,9 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       vertical={bind(barLocation).as(
         (loc: { name: string }) => loc.name === "left" || loc.name === "right",
       )}
-      className="Bar"
+      // className={bind(transparentBar).as(
+      //   (transparent) => `bar${transparent ? " transparent" : ""}`,
+      // )}
       namespace="bar"
       gdkmonitor={gdkmonitor}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
@@ -76,7 +78,12 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
     >
       {bind(barLocation).as((loc: { name: string }) =>
         loc.name === "left" || loc.name === "right" ? (
-          <box className="bar" vertical>
+          <box
+            className={bind(transparentBar).as(
+              (transparent) => `bar${transparent ? " transparent" : ""}`,
+            )}
+            vertical
+          >
             <box vexpand={false} spacing={spacing}>
               <Start />
             </box>
@@ -88,7 +95,12 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
             </box>
           </box>
         ) : (
-          <centerbox className="bar" valign={Gtk.Align.CENTER}>
+          <centerbox
+            className={bind(transparentBar).as(
+              (transparent) => `bar${transparent ? " transparent" : ""}`,
+            )}
+            valign={Gtk.Align.CENTER}
+          >
             <Start />
             <Center />
             <End />

@@ -19,6 +19,7 @@ import {
   hideEmptyWorkspaces,
   workspaceIcons,
   transparentItems,
+  transparentBar,
   paddingSize,
 } from "../../../service/Settings";
 import HyprlockService from "../../../service/hyprlock";
@@ -81,6 +82,7 @@ const setTheme = (theme: string, mode: string) => {
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
     transparentItems.get(),
+    transparentBar.get(),
     paddingSize.get(),
   );
 };
@@ -99,6 +101,7 @@ const setSlideshow = (isSlideshow: boolean) => {
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
     transparentItems.get(),
+    transparentBar.get(),
     paddingSize.get(),
   );
 };
@@ -118,6 +121,7 @@ const setWallpaper = async (wallpaperName: string) => {
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
     transparentItems.get(),
+    transparentBar.get(),
     paddingSize.get(),
   );
   console.log(`Setting Wallpaper to: ${wallpaperName}`);
@@ -198,10 +202,11 @@ const setWallpaperDirectory = (wallpaperDirectory: string) => {
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
     transparentItems.get(),
+    transparentBar.get(),
     paddingSize.get(),
   );
 
-  console.log("Wallpaper directory set. UI refresh might be needed manually.");
+  console.log("Wallpaper directory set.");
 };
 
 const chooseWallpaperDirectory = () => {
@@ -268,7 +273,6 @@ const getWallpaperImagePaths = (directoryPath: string): string[] => {
       e,
     );
   }
-  console.log(`Images: ${images}`);
   return images;
 };
 
@@ -292,9 +296,7 @@ export default () => {
     // Check if the paths actually changed before updating to avoid unnecessary redraws
     if (JSON.stringify(imagePaths.value) !== JSON.stringify(paths)) {
       imagePaths.set(paths); // Update the variable, this will trigger the hook below
-      console.log("imagePaths updated in updateImageList:", paths);
     } else {
-      console.log("imagePaths unchanged in updateImageList.");
     }
   };
 
@@ -326,6 +328,7 @@ export default () => {
       hideEmptyWorkspaces.get(),
       workspaceIcons.get(),
       transparentItems.get(),
+      transparentBar.get(),
       paddingSize.get(),
     );
 
@@ -344,7 +347,6 @@ export default () => {
       // Initial setup
       updateImageList();
       const paths = imagePaths.get();
-      console.log("Setting up thumbnail grid with paths:", paths);
 
       if (Array.isArray(paths)) {
         const rows = chunkArray(paths, 2);
@@ -582,7 +584,7 @@ export default () => {
                 workspaceIcons.get(),
                 transparentItems.get(),
               );
-              console.log(`Toggled Use Bing Wallpaper to: ${isActive}`); // Optional logging
+              console.log(`Toggled Use Bing Wallpaper to: ${isActive}`);
               HyprlockService.updateConfig(); // Update hyprlock config
               if (isActive) {
                 // When enabling Bing wallpaper

@@ -1,19 +1,19 @@
 format = """
-[◖](fg:#eb308f)$os$username[◗](bg:#eb308f fg:#eb308f)$directory[◗](fg:#eb308f bg:#3979eb)$git_branch$git_status[◗](fg:#3979eb bg:#3979eb)$c$elixir$elm$golang$gradle$haskell$java$julia$nodejs$nim$rust$scala[◗](fg:#3979eb bg:#3979eb)$docker_context[◗](fg:#3979eb bg:#3979eb)$time[◗ ](fg:#3979eb)"""
+[◖](fg:#12de52)$os$username[◗](bg:#12de52 fg:#12de52)$directory[◗](fg:#12de52 bg:#de6e12)$git_branch$git_status[◗](fg:#de6e12 bg:#de6e12)$c$elixir$elm$golang$gradle$haskell$java$julia$nodejs$nim$rust$scala[◗](fg:#de6e12 bg:#de6e12)$docker_context[◗](fg:#de6e12 bg:#de6e12)$time[◗ ](fg:#de6e12)"""
 
 [username]
 show_always = true
-style_user = "bg:#eb308f"
-style_root = "bg:#eb308f"
+style_user = "bg:#12de52"
+style_root = "bg:#12de52"
 format = '[$user ]($style)'
 disabled = false
 
 [os]
-style = "bg:#eb308f"
+style = "bg:#12de52"
 disabled = true
 
 [directory]
-style = "bg:#eb308f"
+style = "bg:#12de52"
 format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
@@ -46,11 +46,11 @@ format = '[ $symbol ($version) ]($style)'
 
 [git_branch]
 symbol = ""
-style = "bg:#3979eb"
+style = "bg:#de6e12"
 format = '[ $symbol $branch ]($style)'
 
 [git_status]
-style = "bg:#3979eb"
+style = "bg:#de6e12"
 format = '[$all_status$ahead_behind ]($style)'
 
 [golang]
@@ -100,6 +100,6 @@ format = '[ $symbol ($version) ]($style)'
 [time]
 disabled = false
 time_format = "%R"
-style = "bg:#3979eb"
+style = "bg:#de6e12"
 format = '[ ♥ $time ]($style)'
 #This config was auto generated!

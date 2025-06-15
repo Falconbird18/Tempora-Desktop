@@ -573,6 +573,13 @@ switch:checked slider {
     margin: $outset_margin;
     border-radius: $secondary-radius;
     border: $primary-border;
+
+    &.transparent {
+        background: transparent;
+        border: none;
+        padding: 0;
+        box-shadow: none;
+    }
 }
 
 .arch-container {

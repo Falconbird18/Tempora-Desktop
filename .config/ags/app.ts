@@ -6,7 +6,10 @@ import {
   currentTheme,
   currentMode,
   transparentItems,
+  transparentBar,
 } from "./service/Settings";
+
+const osds = new Map<Gdk.Monitor, Gtk.Widget>();
 import { paddingSize } from "./widget/ControlCenter/pages/AdvancedThemes"; // Import paddingSize
 import Bar from "./widget/Bar";
 import TaskBar from "./widget/TaskBar";
@@ -57,11 +60,6 @@ const applyTheme = async () => {
     const hyprThemeConfSource = `${homeDir}/.config/hypr/hyprland/${theme}${mode}/theme.conf`;
     const hyprThemeConfDest = `${homeDir}/.config/hypr/hyprland/theme.conf`;
 
-    console.log("Theme Path CSS:", themePathCss);
-    console.log("Theme Path Scss:", themePathScss);
-
-    console.log("Config files copied");
-
     // Write padding.scss
     const currentPadding = paddingSize.get();
 
@@ -69,26 +67,17 @@ const applyTheme = async () => {
       `${homeDir}/.config/ags/style/padding.scss`,
       `$padding: ${currentPadding};`,
     );
-    console.log(
-      `Padding SCSS file created/updated with value: ${currentPadding}`,
-    );
     await execAsync(`cp "${hyprThemeConfSource}" "${hyprThemeConfDest}"`);
     await execAsync(`sass "${themePathScss}" "${themePathCss}"`);
     await execAsync(`sass "${spicetifyPathScss}" "${spicetifyPathCss}"`);
-    console.log("Scss compiled");
     App.reset_css();
     App.apply_css(themePathCss);
-    console.log("Css applied");
     await execAsync(hyprctl);
-    console.log("Hyprland reloaded");
     await execAsync(spicetify);
-    console.log("Spicetify reloaded");
     await execAsync(kittyCommand);
-    console.log("Kitty reloaded");
     await StarshipService.updateConfig();
-    console.log("Starship config updated");
     await KittyThemesService.generateAllThemes();
-    console.log("Kitty themes generated");
+    console.log("Theme applied");
   } catch (error: unknown) {
     console.error("Error applying theme:", error);
     if (error instanceof Gio.IOError) {
@@ -152,6 +141,7 @@ async function main() {
   currentTheme.subscribe(applyTheme);
   currentMode.subscribe(applyTheme);
   transparentItems.subscribe(applyTheme);
+  transparentBar.subscribe(applyTheme);
   paddingSize.subscribe(applyTheme); // Subscribe applyTheme to paddingSize changes
 }
 
@@ -170,9 +160,6 @@ App.start({
         ScreenRecordService.stop();
         res("Record stopped");
       }
-      return res("unknown command");
-    } else {
-      res("unknown command");
     }
   },
 });

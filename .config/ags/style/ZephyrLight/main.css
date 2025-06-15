@@ -455,6 +455,12 @@ switch:checked slider {
   border-radius: 10px;
   border: none;
 }
+.bar.transparent {
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+}
 
 .arch-container {
   padding: 10px 0px;

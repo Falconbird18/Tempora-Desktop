@@ -202,9 +202,6 @@ format = '[ ♥ $time ]($style)'
       );
 
       console.log("Starship config updated successfully");
-      console.log(
-        `colors: ${colors.primary}, ${colors.secondary}, ${colors.tertiary}`,
-      );
     } catch (error) {
       console.error("Error updating starship config:", error);
     }

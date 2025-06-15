@@ -258,9 +258,7 @@ switch:checked slider {
 .primary-button {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -285,9 +283,7 @@ switch:checked slider {
 .secondary-button {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -314,8 +310,7 @@ switch:checked slider {
 .primary-circular-button {
   font-size: 18px;
   font-weight: normal;
-  min-width: 42px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -330,21 +325,12 @@ switch:checked slider {
 }
 
 .primary-button-circular {
-  font-size: 18px;
-  font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
   background: #F5F9F8;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
-  font-family: "Open sans";
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  margin-right: 5px;
-  margin-left: 5px;
   border: none;
   background-size: 8px 8px;
-  border-radius: 8px;
   text-shadow: none;
   border-radius: 100%;
   padding: 0;
@@ -354,9 +340,7 @@ switch:checked slider {
 .primary-button-circular.active {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -375,29 +359,18 @@ switch:checked slider {
 }
 
 .primary-button-inactive {
-  font-size: 18px;
-  font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
   background: #F5F9F8;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
-  font-family: "Open sans";
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  margin-right: 5px;
-  margin-left: 5px;
   border: none;
   background-size: 8px 8px;
-  border-radius: 8px;
   text-shadow: none;
 }
 .primary-button-inactive:hover {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -461,7 +434,7 @@ switch:checked slider {
 
 /*Bar*/
 .taskbar-item {
-  padding: 8px;
+  padding: 10px;
   border-radius: 8px;
   transition: 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
@@ -476,12 +449,17 @@ switch:checked slider {
 }
 
 .bar {
-  min-height: 60px;
-  padding: 0 12px;
+  padding: 0 10px;
   background-image: linear-gradient(145deg, #F4ECF2, #F4ECF2);
   margin: 5px;
   border-radius: 4px;
   border: none;
+}
+.bar.transparent {
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
 }
 
 .arch-container {
@@ -491,9 +469,7 @@ switch:checked slider {
 .bar__item {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -508,9 +484,7 @@ switch:checked slider {
 .bar__item.transparent {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -529,9 +503,7 @@ switch:checked slider {
 .bar__button {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -557,9 +529,7 @@ switch:checked slider {
 .bar__button.transparent {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -587,8 +557,6 @@ switch:checked slider {
 }
 .bar__button.bar__recording-indicator {
   padding: 0;
-  min-height: 42px;
-  min-width: 42px;
   background: #e99898;
   color: #561049;
 }
@@ -629,9 +597,7 @@ switch:checked slider {
 .bar__workspaces-indicator:active {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -663,9 +629,7 @@ switch:checked slider {
 .bar__workspaces-indicator-number.active {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -726,9 +690,7 @@ switch:checked slider {
 .bar__workspaces-indicator.active, .bar__workspaces-indicator:active {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -760,9 +722,7 @@ switch:checked slider {
 .bar__workspaces-indicator-number.active {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -916,9 +876,7 @@ switch:checked slider {
 .control-center__page_header_button {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -986,9 +944,7 @@ switch:checked slider {
 .control-center__button-icon {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1017,9 +973,7 @@ switch:checked slider {
 .control-center__button-wide {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1034,9 +988,7 @@ switch:checked slider {
 .control-center__button-wide.secondary {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1083,9 +1035,7 @@ switch:checked slider {
 .control-center__button {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1102,9 +1052,7 @@ switch:checked slider {
 .control-center__button.secondary {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1226,9 +1174,7 @@ switch:checked slider {
 .control-center__powermenu-button {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1317,9 +1263,7 @@ switch:checked slider {
 .calendar__button__today {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1453,9 +1397,7 @@ switch:checked slider {
 .notification__close-button {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1507,9 +1449,7 @@ switch:checked slider {
 .notifications-window__clear {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1568,9 +1508,7 @@ switch:checked slider {
 .indicator .progress .fill {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1637,8 +1575,7 @@ switch:checked slider {
 .player__playpause {
   font-size: 18px;
   font-weight: normal;
-  min-width: 42px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1680,9 +1617,7 @@ switch:checked slider {
 .player__position-slider trough highlight {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1879,9 +1814,7 @@ switch:checked slider {
 .powermenu-button {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1901,9 +1834,7 @@ switch:checked slider {
 .powermenu__button {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -1981,9 +1912,7 @@ switch:checked slider {
 .mode-settings__button_left {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -2008,9 +1937,7 @@ switch:checked slider {
 .mode-settings__button_left.active {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -2031,9 +1958,7 @@ switch:checked slider {
 .mode-settings__button_right {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -2058,9 +1983,7 @@ switch:checked slider {
 .mode-settings__button_right.active {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -2089,9 +2012,7 @@ switch:checked slider {
 .theme-buttons {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -2154,8 +2075,7 @@ switch:checked slider {
 .workspace-button {
   font-size: 18px;
   font-weight: normal;
-  min-width: 42px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -2196,8 +2116,7 @@ switch:checked slider {
 .add-icon-button {
   font-size: 18px;
   font-weight: normal;
-  min-width: 42px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -2252,9 +2171,7 @@ switch:checked slider {
 .submit-button {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -2279,9 +2196,7 @@ switch:checked slider {
 .cancel-button {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -2318,9 +2233,7 @@ switch:checked slider {
 .delete-button-hidden {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -2343,9 +2256,7 @@ switch:checked slider {
 .delete-button-visible {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -2435,9 +2346,7 @@ switch:checked slider {
 .graph-metric-buttons button {
   font-size: 18px;
   font-weight: normal;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -2547,8 +2456,7 @@ switch:checked slider {
 .model-button {
   font-size: 18px;
   font-weight: normal;
-  min-width: 42px;
-  min-height: 42px;
+  padding: 10px;
   background: #ECDFEA;
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
@@ -2576,8 +2484,7 @@ switch:checked slider {
 .model-button.active {
   font-size: 18px;
   font-weight: normal;
-  min-width: 42px;
-  min-height: 42px;
+  padding: 10px;
   background: linear-gradient(45deg, #d161bd 25%, #d161bd 25%, #d161bd 50%, #d161bd 50%, #d161bd 75%, #d161bd 75%, #d161bd);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;

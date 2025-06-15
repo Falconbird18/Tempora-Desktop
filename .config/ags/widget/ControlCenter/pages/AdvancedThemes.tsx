@@ -19,6 +19,7 @@ import {
   hideEmptyWorkspaces,
   workspaceIcons,
   transparentItems,
+  transparentBar,
   settingsChanged,
   barLocation,
 } from "../../../service/Settings";
@@ -90,6 +91,7 @@ const setWorkspaces = (workspaces: number) => {
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
     transparentItems.get(),
+    transparentBar.get(),
     paddingSize.get(), // Add paddingSize here
   );
   settingsChanged.set(settingsChanged.get() + 1);
@@ -109,6 +111,7 @@ const setShowNumbers = (numbers: boolean) => {
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
     transparentItems.get(),
+    transparentBar.get(),
     paddingSize.get(), // Add paddingSize here
   );
   settingsChanged.set(settingsChanged.get() + 1);
@@ -128,6 +131,7 @@ const setHideEmptyWorkspaces = (hide: boolean) => {
     hide,
     workspaceIcons.get(),
     transparentItems.get(),
+    transparentBar.get(),
     paddingSize.get(), // Add paddingSize here
   );
   settingsChanged.set(settingsChanged.get() + 1);
@@ -153,6 +157,7 @@ const setWorkspaceIcon = (workspaceId: number, icon: string) => {
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
     transparentItems.get(),
+    transparentBar.get(),
     paddingSize.get(), // Add paddingSize here
   );
   settingsChanged.set(settingsChanged.get() + 1);
@@ -174,6 +179,7 @@ const removeWorkspaceIcon = (workspaceId: number) => {
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
     transparentItems.get(),
+    transparentBar.get(),
     paddingSize.get(), // Add paddingSize here
   );
   settingsChanged.set(settingsChanged.get() + 1);
@@ -193,6 +199,7 @@ const setBarLocation = (location: keyof typeof BarLocations) => {
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
     transparentItems.get(),
+    transparentBar.get(),
     paddingSize.get(), // Add paddingSize here
   );
   settingsChanged.set(settingsChanged.get() + 1);
@@ -213,7 +220,8 @@ const setPaddingSize = (size: string) => {
     hideEmptyWorkspaces.get(),
     workspaceIcons.get(),
     transparentItems.get(),
-    size, // Add paddingSize here
+    transparentBar.get(),
+    size,
   );
   settingsChanged.set(settingsChanged.get() + 1);
 };
@@ -436,20 +444,52 @@ export default () => {
                       hideEmptyWorkspaces.get(),
                       workspaceIcons.get(),
                       transparentItems.get(),
-                      paddingSize.get(), // Add paddingSize here
+                      transparentBar.get(),
+                      paddingSize.get(),
                     );
                     settingsChanged.set(settingsChanged.get() + 1);
                   }
-                  const homeDir = GLib.get_home_dir();
-                  const theme = currentTheme.get();
-                  const mode = currentMode.get();
-                  const themePathCss = `${homeDir}/.config/ags/style/${theme}${mode}/main.css`;
-                  const themePathScss = `${homeDir}/.config/ags/style/${theme}${mode}/main.scss`;
-                  execAsync(`sass "${themePathScss}" "${themePathCss}"`);
-                  console.log("Scss compiled");
-                  App.reset_css();
-                  App.apply_css(themePathCss);
-                  console.log("Css applied");
+                }}
+              />
+            </box>
+          </box>
+          <box horizontal halign={Gtk.Align.FILL} className="setting-box">
+            <label
+              label="Transparent Bar"
+              className="h3"
+              halign={Gtk.Align.START}
+              hexpand={false}
+              valign={Gtk.Align.CENTER}
+            />
+            <box
+              horizontal
+              halign={Gtk.Align.END}
+              hexpand={true}
+              valign={Gtk.Align.CENTER}
+            >
+              <switch
+                active={bind(transparentBar).as((trans) => trans)}
+                onNotifyActive={(self) => {
+                  const newValue = self.active;
+                  if (newValue !== transparentBar.get()) {
+                    transparentBar.set(newValue);
+                    saveSettings(
+                      currentTheme.get(),
+                      currentMode.get(),
+                      slideshow.get(),
+                      wallpaperImage.get(),
+                      wallpaperFolder.get(),
+                      useBing.get(),
+                      totalWorkspaces.get(),
+                      showNumbers.get(),
+                      hideEmptyWorkspaces.get(),
+                      workspaceIcons.get(),
+                      transparentItems.get(),
+                      transparentBar.get(),
+                      paddingSize.get(),
+                    );
+                    settingsChanged.set(settingsChanged.get() + 1);
+                  }
                 }}
               />
             </box>
