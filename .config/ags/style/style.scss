@@ -45,7 +45,7 @@
     background-color: $background-2;
     border-radius: $secondary-radius;
     border: $secondary-border;
-    padding: calc($padding/2);
+    padding: $padding;
     color: $text;
     font-family: $paragraph_font;
     font-size: $paragraph_size;
@@ -200,7 +200,6 @@
 .app-launcher__input {
     @include textbox;
     margin: 20px;
-    padding: 12px 22px;
 
     icon {
         margin-right: 20px;
@@ -210,6 +209,9 @@
 .app-launcher__entry {
     @include textbox;
     background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
 }
 
 .app-launcher__list {
@@ -704,9 +706,7 @@ switch:checked slider {
 /* Box around workspaces with windows */
 .bar-workspaces-active {
     @include card;
-    min-height: calc($paragraph_size * 1.5);
-    min-width: calc($paragraph_size * 1.5);
-    padding: 0;
+    padding: calc($padding / 2);
     margin: 0;
     background-color: $background;
 }

@@ -21,10 +21,10 @@
 }
 
 .app-launcher__input {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   border-radius: 4px;
   border: none;
-  padding: 5px;
+  padding: 10px;
   color: #561049;
   font-family: "Open sans";
   font-size: 14px;
@@ -32,17 +32,16 @@
   box-shadow: 0 0 0 transparent;
   caret-color: #561049;
   margin: 20px;
-  padding: 12px 22px;
 }
 .app-launcher__input icon {
   margin-right: 20px;
 }
 
 .app-launcher__entry {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   border-radius: 4px;
   border: none;
-  padding: 5px;
+  padding: 10px;
   color: #561049;
   font-family: "Open sans";
   font-size: 14px;
@@ -50,6 +49,9 @@
   box-shadow: 0 0 0 transparent;
   caret-color: #561049;
   background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
 }
 
 .app-launcher__list {
@@ -59,7 +61,7 @@
 }
 
 .app-launcher__item {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -81,7 +83,7 @@
   font-family: "Open sans";
   font-size: 11px;
   font-weight: 100;
-  color: #76516F;
+  color: #76516f;
 }
 .app-launcher__item icon {
   font-size: 24px;
@@ -89,7 +91,7 @@
 }
 .app-launcher__item:hover {
   box-shadow: 0 0 0 transparent;
-  background-color: #F5F9F8;
+  background-color: rgba(245, 249, 248, 0.8470588235);
 }
 .app-launcher__item:focus {
   background-color: #d161bd;
@@ -134,11 +136,11 @@
   font-family: "Open sans";
   font-weight: 100;
   font-size: 11px;
-  color: #76516F;
+  color: #76516f;
 }
 
 .card {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -176,7 +178,7 @@ image {
 slider {
   border: none;
   outline: none;
-  background: #F4ECF2;
+  background: rgba(244, 236, 242, 0.8470588235);
 }
 
 separator {
@@ -204,7 +206,7 @@ window.popup > * {
 window.popup menu {
   margin-top: 12px;
   border-radius: 26px;
-  background-color: #F4ECF2;
+  background-color: rgba(244, 236, 242, 0.8470588235);
   padding: 10px;
 }
 window.popup menu menuitem {
@@ -215,7 +217,7 @@ window.popup menu menuitem {
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 window.popup menu menuitem:hover {
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
 }
 window.popup menu menuitem:first-child {
   margin-top: 0;
@@ -225,24 +227,24 @@ window.popup menu menuitem:last-child {
 }
 
 switch {
-  border: 2px solid #76516F;
+  border: 2px solid #76516f;
   border-radius: 100px;
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
 }
 
 switch slider {
   box-shadow: none;
   border-radius: 100px;
-  background-color: #76516F;
+  background-color: #76516f;
 }
 
 switch:hover slider,
 switch:active slider {
-  background-color: #76516F;
+  background-color: #76516f;
 }
 
 switch:active {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
 }
 
 switch:checked {
@@ -251,7 +253,7 @@ switch:checked {
 }
 
 switch:checked slider {
-  background-color: #1ED2A5;
+  background-color: #1ed2a5;
 }
 
 /*Components*/
@@ -272,7 +274,7 @@ switch:checked slider {
   text-shadow: none;
 }
 .primary-button:hover {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 .primary-button:active {
@@ -284,7 +286,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -325,7 +327,7 @@ switch:checked slider {
 }
 
 .primary-button-circular {
-  background: #F5F9F8;
+  background: rgba(245, 249, 248, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
@@ -359,7 +361,7 @@ switch:checked slider {
 }
 
 .primary-button-inactive {
-  background: #F5F9F8;
+  background: rgba(245, 249, 248, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
@@ -396,22 +398,22 @@ switch:checked slider {
   box-shadow: 0 0 0 1px #561049;
 }
 .material-button.filled {
-  background-image: linear-gradient(45deg, #d161bd 25%, #ECDFEA 25%, #ECDFEA 50%, #d161bd 50%, #d161bd 75%, #ECDFEA 75%, #ECDFEA);
+  background-image: linear-gradient(45deg, #d161bd 25%, rgba(236, 223, 234, 0.8470588235) 25%, rgba(236, 223, 234, 0.8470588235) 50%, #d161bd 50%, #d161bd 75%, rgba(236, 223, 234, 0.8470588235) 75%, rgba(236, 223, 234, 0.8470588235));
   background-size: 8px 8px;
   border: 2px solid #d161bd;
-  box-shadow: 0px 2px 0px 0px #1ED2A5;
+  box-shadow: 0px 2px 0px 0px #1ed2a5;
   color: #561049;
-  text-shadow: -1.5px -1.5px 0 #F4ECF2, 1.5px -1.5px 0 #F4ECF2, -1.5px 1.5px 0 #F4ECF2, 1.5px 1.5px 0 #F4ECF2;
+  text-shadow: -1.5px -1.5px 0 rgba(244, 236, 242, 0.8470588235), 1.5px -1.5px 0 rgba(244, 236, 242, 0.8470588235), -1.5px 1.5px 0 rgba(244, 236, 242, 0.8470588235), 1.5px 1.5px 0 rgba(244, 236, 242, 0.8470588235);
 }
 .material-button.filled:hover, .material-button.filled:focus {
   background: #d161bd;
   background-size: 8px 8px;
-  color: #F4ECF2;
+  color: rgba(244, 236, 242, 0.8470588235);
 }
 .material-button.filled:active {
   background: #d161bd;
   background-size: 8px 8px;
-  color: #F4ECF2;
+  color: rgba(244, 236, 242, 0.8470588235);
 }
 .material-button.outlined {
   background: none;
@@ -419,11 +421,11 @@ switch:checked slider {
   border: 2px solid #d161bd;
 }
 .material-button.outlined:hover {
-  background-image: linear-gradient(45deg, #d161bd 25%, #ECDFEA 25%, #ECDFEA 50%, #d161bd 50%, #d161bd 75%, #ECDFEA 75%, #ECDFEA);
+  background-image: linear-gradient(45deg, #d161bd 25%, rgba(236, 223, 234, 0.8470588235) 25%, rgba(236, 223, 234, 0.8470588235) 50%, #d161bd 50%, #d161bd 75%, rgba(236, 223, 234, 0.8470588235) 75%, rgba(236, 223, 234, 0.8470588235));
   background-size: 8px 8px;
   border: 2px solid #d161bd;
-  box-shadow: 0px 2px 0px 0px #1ED2A5;
-  text-shadow: -1.5px -1.5px 0 #F4ECF2, 1.5px -1.5px 0 #F4ECF2, -1.5px 1.5px 0 #F4ECF2, 1.5px 1.5px 0 #F4ECF2;
+  box-shadow: 0px 2px 0px 0px #1ed2a5;
+  text-shadow: -1.5px -1.5px 0 rgba(244, 236, 242, 0.8470588235), 1.5px -1.5px 0 rgba(244, 236, 242, 0.8470588235), -1.5px 1.5px 0 rgba(244, 236, 242, 0.8470588235), 1.5px 1.5px 0 rgba(244, 236, 242, 0.8470588235);
 }
 .material-button.outlined:focus {
   background: #d161bd;
@@ -439,10 +441,10 @@ switch:checked slider {
   transition: 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 .taskbar-item:hover {
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
 }
 .taskbar-item:active {
-  background: #F5F9F8;
+  background: rgba(245, 249, 248, 0.8470588235);
 }
 .taskbar-item icon {
   font-size: 18px;
@@ -450,7 +452,7 @@ switch:checked slider {
 
 .bar {
   padding: 0 10px;
-  background-image: linear-gradient(145deg, #F4ECF2, #F4ECF2);
+  background-image: linear-gradient(145deg, rgba(244, 236, 242, 0.8470588235), rgba(244, 236, 242, 0.8470588235));
   margin: 5px;
   border-radius: 4px;
   border: none;
@@ -470,7 +472,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -485,7 +487,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -504,7 +506,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -530,7 +532,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -574,7 +576,7 @@ switch:checked slider {
 }
 
 .bar__item.primary_container {
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
 }
 
@@ -586,7 +588,7 @@ switch:checked slider {
   min-width: 11px;
   min-height: 11px;
   border-radius: 8px;
-  background-color: #F5F9F8;
+  background-color: rgba(245, 249, 248, 0.8470588235);
   box-shadow: 0 0 0 transparent;
   border: none;
   background-size: 8px 8px;
@@ -657,18 +659,16 @@ switch:checked slider {
 
 /* Box around workspaces with windows */
 .bar-workspaces-active {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 5px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  min-height: 21px;
-  min-width: 21px;
-  padding: 0;
+  padding: 5px;
   margin: 0;
-  background-color: #F4ECF2;
+  background-color: rgba(244, 236, 242, 0.8470588235);
 }
 
 .bar__workspaces-indicator {
@@ -679,7 +679,7 @@ switch:checked slider {
   min-width: 11px;
   min-height: 11px;
   border-radius: 8px;
-  background-color: #F5F9F8;
+  background-color: rgba(245, 249, 248, 0.8470588235);
   box-shadow: 0 0 0 transparent;
   border: none;
   background-size: 8px 8px;
@@ -742,7 +742,7 @@ switch:checked slider {
 
 /* Box around workspaces with windows */
 .bar__workspaces-active {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -752,7 +752,7 @@ switch:checked slider {
   min-height: 21px;
   min-width: 21px;
   padding: 0;
-  background-color: #F4ECF2;
+  background-color: rgba(244, 236, 242, 0.8470588235);
 }
 
 .bar__active-app {
@@ -790,7 +790,7 @@ switch:checked slider {
   min-width: 18px;
   min-height: 18px;
   background: #561049;
-  color: #ECDFEA;
+  color: rgba(236, 223, 234, 0.8470588235);
 }
 
 .bar__tray {
@@ -813,14 +813,14 @@ switch:checked slider {
 
 /*Control Center*/
 .control-center__container {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 5px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  background-color: #F4ECF2;
+  background-color: rgba(244, 236, 242, 0.8470588235);
   min-width: 450px;
   min-height: 800px;
 }
@@ -830,7 +830,7 @@ switch:checked slider {
 }
 
 .control-center__settings-container {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -840,7 +840,7 @@ switch:checked slider {
 }
 
 .control-center__wide-settings-container {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -890,7 +890,7 @@ switch:checked slider {
   text-shadow: none;
 }
 .control-center__page_header_button:hover {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 
@@ -900,7 +900,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   min-height: 80px;
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -922,7 +922,7 @@ switch:checked slider {
   font-size: 14px;
   font-family: "Open sans";
   min-height: 40px;
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -945,7 +945,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -974,7 +974,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -989,7 +989,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -1005,7 +1005,7 @@ switch:checked slider {
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 .control-center__button-wide.active:hover {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 .control-center__button-wide.active:active {
@@ -1026,7 +1026,7 @@ switch:checked slider {
   color: #561049;
 }
 .control-center__button-wide.recorder-indicator.active:hover {
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
 }
 .control-center__button-wide.recorder-indicator.active:active {
   background: #e99898;
@@ -1036,7 +1036,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -1053,7 +1053,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -1069,7 +1069,7 @@ switch:checked slider {
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 .control-center__button.active:hover {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 .control-center__button.active:active {
@@ -1090,14 +1090,14 @@ switch:checked slider {
   color: #561049;
 }
 .control-center__button.recorder-indicator.active:hover {
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
 }
 .control-center__button.recorder-indicator.active:active {
   background: #e99898;
 }
 
 .control-center__dropdown-menu {
-  background: #F4ECF2;
+  background: rgba(244, 236, 242, 0.8470588235);
   border-radius: 4px;
   padding: 24px;
 }
@@ -1140,7 +1140,7 @@ switch:checked slider {
 }
 .control-center-slider trough {
   border-radius: 8px;
-  background: #F5F9F8;
+  background: rgba(245, 249, 248, 0.8470588235);
   box-shadow: 0 0 0 transparent;
   min-height: 15px;
 }
@@ -1157,7 +1157,7 @@ switch:checked slider {
 }
 
 .muted .control-center__volume-slider highlight {
-  background-color: #F4ECF2;
+  background-color: rgba(244, 236, 242, 0.8470588235);
 }
 .muted .control-center__slider-icon {
   color: #561049;
@@ -1175,7 +1175,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -1203,7 +1203,7 @@ switch:checked slider {
 
 /*Dashboard*/
 .dashboard {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -1289,7 +1289,7 @@ switch:checked slider {
 }
 
 .calendar__button__other-month {
-  color: #76516F;
+  color: #76516f;
   font-family: "Open sans";
   font-size: 11px;
   font-weight: 100;
@@ -1310,12 +1310,12 @@ switch:checked slider {
   background: #d161bd;
 }
 .calendar__day.inactive {
-  color: #F4ECF2;
+  color: rgba(244, 236, 242, 0.8470588235);
 }
 
 /*Notification*/
 .notification {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -1331,7 +1331,7 @@ switch:checked slider {
   min-width: 24px;
   margin-right: 14px;
   border-radius: 8px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent;
   border: none;
 }
@@ -1359,7 +1359,7 @@ switch:checked slider {
 .notification__app-name,
 .notification__dot,
 .notification__time {
-  color: #76516F;
+  color: #76516f;
   font-size: 11px;
   font-weight: 100;
   font-family: "Open sans";
@@ -1367,7 +1367,7 @@ switch:checked slider {
 
 .notification__description {
   margin-bottom: 8px;
-  color: #76516F;
+  color: #76516f;
   font-size: 11px;
   font-weight: 100;
   font-family: "Open sans";
@@ -1398,7 +1398,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -1427,14 +1427,14 @@ switch:checked slider {
 
 /*NotificationsWindow*/
 .notifications-window {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 5px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  background: #F4ECF2;
+  background: rgba(244, 236, 242, 0.8470588235);
   min-width: 400px;
   min-height: 550px;
   margin-right: 5px;
@@ -1442,8 +1442,8 @@ switch:checked slider {
 .notifications-window .notification {
   border-radius: 4px;
   transition: border-radius 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  background-color: #ECDFEA;
-  box-shadow: 0px 2px 0px 0px #1ED2A5;
+  background-color: rgba(236, 223, 234, 0.8470588235);
+  box-shadow: 0px 2px 0px 0px #1ed2a5;
 }
 
 .notifications-window__clear {
@@ -1464,7 +1464,7 @@ switch:checked slider {
 }
 
 .notifications-window__clear:hover {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 
@@ -1487,20 +1487,20 @@ switch:checked slider {
 }
 
 .container {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 5px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  background: #F4ECF2;
+  background: rgba(244, 236, 242, 0.8470588235);
   margin-bottom: 20px;
 }
 
 .indicator .progress {
   border-radius: 8px;
-  background-color: #F5F9F8;
+  background-color: rgba(245, 249, 248, 0.8470588235);
   box-shadow: 0 0 0 transparent;
   margin: 25px;
   padding: 0px;
@@ -1525,7 +1525,7 @@ switch:checked slider {
   margin: -2px 0px;
 }
 .indicator .progress .fill.muted {
-  background-color: #F4ECF2;
+  background-color: rgba(244, 236, 242, 0.8470588235);
   color: #561049;
 }
 
@@ -1611,7 +1611,7 @@ switch:checked slider {
 .player__position-slider trough {
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
   border-radius: 4px;
-  background-color: #F5F9F8;
+  background-color: rgba(245, 249, 248, 0.8470588235);
   box-shadow: 0 0 0 transparent;
 }
 .player__position-slider trough highlight {
@@ -1644,11 +1644,11 @@ switch:checked slider {
 .player__indicator {
   min-width: 8px;
   min-height: 8px;
-  background: #F4ECF2;
+  background: rgba(244, 236, 242, 0.8470588235);
   border-radius: 100px;
   margin-bottom: 8px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  background: #76516F;
+  background: #76516f;
 }
 .player__indicator.selected {
   background: #561049;
@@ -1680,14 +1680,14 @@ switch:checked slider {
 }
 
 .popup-menu {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 5px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  background: linear-gradient(145deg, #F4ECF2, #F4ECF2);
+  background: linear-gradient(145deg, rgba(244, 236, 242, 0.8470588235), rgba(244, 236, 242, 0.8470588235));
   min-height: 400px;
 }
 .popup-menu.sink {
@@ -1734,7 +1734,7 @@ switch:checked slider {
   margin-right: 16px;
 }
 .popup-menu__item:hover {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
 }
 .popup-menu__item:last-child {
   margin-bottom: 20px;
@@ -1758,7 +1758,7 @@ switch:checked slider {
 .mixer__slider trough {
   margin-top: 6px;
   border-radius: 100px;
-  background-color: #F4ECF2;
+  background-color: rgba(244, 236, 242, 0.8470588235);
   min-height: 14px;
 }
 .mixer__slider trough highlight,
@@ -1776,13 +1776,13 @@ switch:checked slider {
 }
 
 .mixer__value {
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   border-radius: 100px;
   min-width: 56px;
 }
 
 .bluetooth__percentage {
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   border-radius: 100px;
   padding: 0px 12px;
@@ -1801,7 +1801,7 @@ switch:checked slider {
 
 /*PowerMenu*/
 .powermenu {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -1815,7 +1815,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -1835,7 +1835,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -1869,7 +1869,7 @@ switch:checked slider {
 }
 
 .verification {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -1900,7 +1900,7 @@ switch:checked slider {
 }
 
 .scrim {
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
 }
 
 /*ThemeSettings*/
@@ -1913,7 +1913,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -1959,7 +1959,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -2013,7 +2013,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -2062,21 +2062,21 @@ switch:checked slider {
 }
 
 .workspace-container {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 5px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  background-color: #F4ECF2;
+  background-color: rgba(244, 236, 242, 0.8470588235);
 }
 
 .workspace-button {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -2097,7 +2097,7 @@ switch:checked slider {
 }
 
 .advanced-container {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -2117,7 +2117,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -2127,7 +2127,7 @@ switch:checked slider {
   border: none;
   background-size: 8px 8px;
   border-radius: 100%;
-  background-color: #F4ECF2;
+  background-color: rgba(244, 236, 242, 0.8470588235);
 }
 .add-icon-button:hover {
   background-size: 8px 8px;
@@ -2142,24 +2142,24 @@ switch:checked slider {
 }
 
 .add-icon-form {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 5px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  background-color: #F4ECF2;
+  background-color: rgba(244, 236, 242, 0.8470588235);
   min-width: 320px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 
 .workspace-number-entry,
 .icon-entry {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   border-radius: 4px;
   border: none;
-  padding: 5px;
+  padding: 10px;
   color: #561049;
   font-family: "Open sans";
   font-size: 14px;
@@ -2185,7 +2185,7 @@ switch:checked slider {
   text-shadow: none;
 }
 .submit-button:hover {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 .submit-button:active {
@@ -2197,7 +2197,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -2221,7 +2221,7 @@ switch:checked slider {
 }
 
 .icon-card {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -2248,7 +2248,7 @@ switch:checked slider {
   opacity: 0;
 }
 .delete-button-hidden:hover {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
   opacity: 1;
 }
@@ -2273,7 +2273,7 @@ switch:checked slider {
 
 /*Weather*/
 .weather-window {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -2281,7 +2281,7 @@ switch:checked slider {
   margin-bottom: 5px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
   padding: 20px;
-  background: #F4ECF2;
+  background: rgba(244, 236, 242, 0.8470588235);
   min-width: 350px;
   /* May need adjustment */
 }
@@ -2294,10 +2294,10 @@ switch:checked slider {
 }
 
 .location_input {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   border-radius: 4px;
   border: none;
-  padding: 5px;
+  padding: 10px;
   color: #561049;
   font-family: "Open sans";
   font-size: 14px;
@@ -2326,7 +2326,7 @@ switch:checked slider {
 }
 
 .weather-info {
-  color: #76516F;
+  color: #76516f;
   font-family: "Open sans";
   font-size: 11px;
   font-weight: 100;
@@ -2347,7 +2347,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -2377,7 +2377,7 @@ switch:checked slider {
 
 /*SideBar*/
 .sidebar-window {
-  background: linear-gradient(145deg, #F4ECF2, #F4ECF2);
+  background: linear-gradient(145deg, rgba(244, 236, 242, 0.8470588235), rgba(244, 236, 242, 0.8470588235));
   min-height: 900px;
   min-width: 300px;
   border-radius: 4px;
@@ -2391,7 +2391,7 @@ switch:checked slider {
 }
 
 .sidebar-prompt-example {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -2421,7 +2421,7 @@ switch:checked slider {
 }
 
 .user-message {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -2434,21 +2434,21 @@ switch:checked slider {
 }
 
 .ollama-message {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 5px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  background-color: #F5F9F8;
+  background-color: rgba(245, 249, 248, 0.8470588235);
   font-size: 14px;
   font-family: "Open sans";
   font-weight: 300;
 }
 
 .model-buttons {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   border-radius: 8px;
   margin: 0;
 }
@@ -2457,7 +2457,7 @@ switch:checked slider {
   font-size: 18px;
   font-weight: normal;
   padding: 10px;
-  background: #ECDFEA;
+  background: rgba(236, 223, 234, 0.8470588235);
   color: #561049;
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   font-family: "Open sans";
@@ -2500,7 +2500,7 @@ switch:checked slider {
   margin: 0;
 }
 .model-button.active:hover {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   transition: background 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 .model-button.active:active {
@@ -2530,14 +2530,14 @@ switch:checked slider {
   font-family: "Open sans";
   font-weight: 100;
   font-size: 11px;
-  color: #76516F;
+  color: #76516f;
 }
 
 .message-input {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   border-radius: 4px;
   border: none;
-  padding: 5px;
+  padding: 10px;
   color: #561049;
   font-family: "Open sans";
   font-size: 14px;
@@ -2555,14 +2555,14 @@ switch:checked slider {
 }
 
 .code-block {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 5px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  background-color: #F5F9F8;
+  background-color: rgba(245, 249, 248, 0.8470588235);
 }
 .code-block label {
   font-family: "Monaspace Neon";
@@ -2627,18 +2627,18 @@ table th {
 }
 
 .keybinds-cheatsheet {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 5px;
   transition: all 0.2s cubic-bezier(0.85, 0, 0.15, 1);
-  background-color: #F4ECF2;
+  background-color: rgba(244, 236, 242, 0.8470588235);
 }
 
 .shortcut-box {
-  background-color: #ECDFEA;
+  background-color: rgba(236, 223, 234, 0.8470588235);
   box-shadow: 0 0 0 transparent, 0 0 0 transparent;
   border: none;
   padding: 10px;
@@ -2649,7 +2649,7 @@ table th {
 }
 
 .key-icon {
-  background-color: #F5F9F8;
+  background-color: rgba(245, 249, 248, 0.8470588235);
   border: none;
   border-radius: 4px;
   padding: 5px 7px;
