@@ -101,6 +101,7 @@
 @mixin primary-button-inactive {
     background: $background-3;
     color: $text;
+    padding: $padding;
     box-shadow: $outset, $border-shadow;
     transition: background $transition;
     border: $primary-border;
@@ -438,6 +439,18 @@ switch:checked slider {
     }
 }
 
+.secondary-circular-button {
+    @include secondary-circular-button;
+
+    &:hover {
+        @include secondary-circular-button-hover;
+    }
+
+    &:active {
+        @include secondary-circular-button-active;
+    }
+}
+
 .primary-circular-button {
     @include primary-circular-button;
 }
@@ -552,7 +565,7 @@ switch:checked slider {
 /*Bar*/
 
 .taskbar-item {
-    padding: $padding;
+    padding: calc($padding / 2);
     border-radius: $primary-radius;
     transition: $transition;
 
@@ -570,7 +583,7 @@ switch:checked slider {
 }
 
 .bar {
-    padding: 0 $padding;
+    padding: $padding;
     background-image: $background_gradient;
     margin: $outset_margin;
     border-radius: $secondary-radius;
@@ -585,7 +598,7 @@ switch:checked slider {
 }
 
 .arch-container {
-    padding: $padding 0px;
+    padding: 0;
 }
 
 .bar__item {
@@ -657,8 +670,8 @@ switch:checked slider {
     transition: all $transition;
 
     &.dot {
-        min-width: $subtext_size;
-        min-height: $subtext_size;
+        min-width: $h2_size;
+        min-height: $h2_size;
         border-radius: $primary-radius;
         background-color: $background-3;
         box-shadow: $outset;
@@ -673,7 +686,7 @@ switch:checked slider {
     &:active {
         @include primary-button;
         padding: 0;
-        min-height: $paragraph_size;
+        min-height: $h2_size;
         min-width: calc($paragraph_size * 2);
     }
 }
@@ -716,8 +729,8 @@ switch:checked slider {
     transition: all $transition;
 
     &.dot {
-        min-width: $subtext_size;
-        min-height: $subtext_size;
+        min-width: calc($h2_size / 2);
+        min-height: calc($h2_size / 2);
         border-radius: $primary-radius;
         background-color: $background-3;
         box-shadow: $outset;
@@ -733,15 +746,15 @@ switch:checked slider {
     &:active {
         @include primary-button;
         padding: 0;
-        min-height: $paragraph_size;
-        min-width: calc($paragraph_size * 2);
+        min-height: calc($h2_size / 2);
+        min-width: $h2_size;
     }
 }
 
 /* Number mode */
 .bar__workspaces-indicator-number {
-    min-width: $paragraph_size;
-    min-height: $paragraph_size;
+    min-width: $padding;
+    min-height: $padding;
     background-color: transparent;
     @include h2;
     transition: all $transition;

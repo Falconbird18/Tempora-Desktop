@@ -7,7 +7,7 @@ import Clock from "./items/Clock";
 import Tray from "./items/Tray";
 import SystemIndicators from "./items/SystemIndicators";
 import Notifications from "./items/Notifications";
-import Arch from "./items/Arch";
+import Logo from "./items/Logo";
 import Weather from "./items/Weather";
 import RecordingIndicator from "./items/RecordingIndicator";
 import SideBar from "./items/SideBar";
@@ -53,7 +53,7 @@ const End = () => {
       <Media />
       <SystemIndicators />
       <Tray />
-      <Arch />
+      <Logo />
     </box>
   );
 };
