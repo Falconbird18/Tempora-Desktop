@@ -36,6 +36,7 @@ import { initBingImageService } from "./lib/bing";
 import StarshipService from "./service/starship";
 import HyprlockService from "./service/hyprlock";
 import KittyThemesService from "./service/KittyThemes";
+import GroupService from "./service/groupbar";
 
 const applyTheme = async () => {
   const homeDir = GLib.get_home_dir();
@@ -77,6 +78,7 @@ const applyTheme = async () => {
     await execAsync(kittyCommand);
     await StarshipService.updateConfig();
     await KittyThemesService.generateAllThemes();
+    await GroupService.updateConfig();
     console.log("Theme applied");
   } catch (error: unknown) {
     console.error("Error applying theme:", error);

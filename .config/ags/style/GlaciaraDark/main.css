@@ -32,7 +32,6 @@
   box-shadow: 0 0 0 transparent;
   caret-color: #cad3f5;
   margin: 20px;
-  padding: 12px 22px;
 }
 .app-launcher__input icon {
   margin-right: 20px;
@@ -50,6 +49,9 @@
   box-shadow: 0 0 0 transparent;
   caret-color: #cad3f5;
   background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
 }
 
 .app-launcher__list {
@@ -62,7 +64,7 @@
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -141,7 +143,7 @@
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -258,9 +260,7 @@ switch:checked slider {
 .primary-button {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -285,9 +285,7 @@ switch:checked slider {
 .secondary-button {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -311,11 +309,37 @@ switch:checked slider {
   background-size: unset;
 }
 
+.secondary-circular-button {
+  font-size: 18px;
+  font-weight: 300;
+  padding: 5px;
+  background: rgba(32, 32, 32, 0.4941176471);
+  color: #cad3f5;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+  font-family: "Roboto";
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 1px;
+  margin-left: 1px;
+  border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
+  background-size: unset;
+  border-radius: 100%;
+}
+.secondary-circular-button:hover {
+  background-size: unset;
+  background-image: linear-gradient(-45deg, #3979eb, #eb308f);
+  text-shadow: none;
+  box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
+}
+.secondary-circular-button:active {
+  background: #3979eb;
+  box-shadow: 0 0 0 transparent;
+  background-size: unset;
+}
+
 .primary-circular-button {
   font-size: 18px;
   font-weight: 300;
-  min-width: 42px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -330,21 +354,13 @@ switch:checked slider {
 }
 
 .primary-button-circular {
-  font-size: 18px;
-  font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
   background: rgba(54, 61, 73, 0.4941176471);
   color: #cad3f5;
+  padding: 5px;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
-  font-family: "Roboto";
   transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  margin-right: 1px;
-  margin-left: 1px;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
   background-size: unset;
-  border-radius: 30px;
   text-shadow: none;
   border-radius: 100%;
   padding: 0;
@@ -354,9 +370,7 @@ switch:checked slider {
 .primary-button-circular.active {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -375,29 +389,19 @@ switch:checked slider {
 }
 
 .primary-button-inactive {
-  font-size: 18px;
-  font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
   background: rgba(54, 61, 73, 0.4941176471);
   color: #cad3f5;
+  padding: 5px;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
-  font-family: "Roboto";
   transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  margin-right: 1px;
-  margin-left: 1px;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
   background-size: unset;
-  border-radius: 30px;
   text-shadow: none;
 }
 .primary-button-inactive:hover {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -461,7 +465,7 @@ switch:checked slider {
 
 /*Bar*/
 .taskbar-item {
-  padding: 8px;
+  padding: 2.5px;
   border-radius: 30px;
   transition: 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
 }
@@ -476,24 +480,27 @@ switch:checked slider {
 }
 
 .bar {
-  min-height: 60px;
-  padding: 0 12px;
+  padding: 5px;
   background-image: linear-gradient(145deg, rgba(33, 37, 44, 0.1764705882), rgba(33, 37, 44, 0.1764705882));
   margin: 1px;
   border-radius: 30px;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
 }
+.bar.transparent {
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+}
 
 .arch-container {
-  padding: 10px 0px;
+  padding: 0;
 }
 
 .bar__item {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -508,9 +515,7 @@ switch:checked slider {
 .bar__item.transparent {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -529,9 +534,7 @@ switch:checked slider {
 .bar__button {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -557,9 +560,7 @@ switch:checked slider {
 .bar__button.transparent {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -587,8 +588,6 @@ switch:checked slider {
 }
 .bar__button.bar__recording-indicator {
   padding: 0;
-  min-height: 42px;
-  min-width: 42px;
   background: #e99898;
   color: #cad3f5;
 }
@@ -615,8 +614,8 @@ switch:checked slider {
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
 }
 .bar__workspaces-indicator.dot {
-  min-width: 11px;
-  min-height: 11px;
+  min-width: 18px;
+  min-height: 18px;
   border-radius: 30px;
   background-color: rgba(54, 61, 73, 0.4941176471);
   box-shadow: 0 0 0 transparent;
@@ -629,9 +628,7 @@ switch:checked slider {
 .bar__workspaces-indicator:active {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -644,7 +641,7 @@ switch:checked slider {
   border-radius: 30px;
   text-shadow: none;
   padding: 0;
-  min-height: 14px;
+  min-height: 18px;
   min-width: 28px;
 }
 
@@ -663,9 +660,7 @@ switch:checked slider {
 .bar__workspaces-indicator-number.active {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -696,13 +691,11 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  min-height: 21px;
-  min-width: 21px;
-  padding: 0;
+  padding: 2.5px;
   margin: 0;
   background-color: rgba(33, 37, 44, 0.1764705882);
 }
@@ -712,8 +705,8 @@ switch:checked slider {
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
 }
 .bar__workspaces-indicator.dot {
-  min-width: 11px;
-  min-height: 11px;
+  min-width: 9px;
+  min-height: 9px;
   border-radius: 30px;
   background-color: rgba(54, 61, 73, 0.4941176471);
   box-shadow: 0 0 0 transparent;
@@ -726,9 +719,7 @@ switch:checked slider {
 .bar__workspaces-indicator.active, .bar__workspaces-indicator:active {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -741,14 +732,14 @@ switch:checked slider {
   border-radius: 30px;
   text-shadow: none;
   padding: 0;
-  min-height: 14px;
-  min-width: 28px;
+  min-height: 9px;
+  min-width: 18px;
 }
 
 /* Number mode */
 .bar__workspaces-indicator-number {
-  min-width: 14px;
-  min-height: 14px;
+  min-width: 5px;
+  min-height: 5px;
   background-color: transparent;
   font-family: "Roboto";
   font-weight: 300;
@@ -760,9 +751,7 @@ switch:checked slider {
 .bar__workspaces-indicator-number.active {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -785,7 +774,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -856,7 +845,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -873,7 +862,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -883,7 +872,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -916,9 +905,7 @@ switch:checked slider {
 .control-center__page_header_button {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -945,7 +932,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -967,7 +954,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -986,9 +973,7 @@ switch:checked slider {
 .control-center__button-icon {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1017,9 +1002,7 @@ switch:checked slider {
 .control-center__button-wide {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1034,9 +1017,7 @@ switch:checked slider {
 .control-center__button-wide.secondary {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1083,9 +1064,7 @@ switch:checked slider {
 .control-center__button {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1102,9 +1081,7 @@ switch:checked slider {
 .control-center__button.secondary {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1226,9 +1203,7 @@ switch:checked slider {
 .control-center__powermenu-button {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1260,7 +1235,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -1317,9 +1292,7 @@ switch:checked slider {
 .calendar__button__today {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1374,7 +1347,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -1453,9 +1426,7 @@ switch:checked slider {
 .notification__close-button {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1488,7 +1459,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -1507,9 +1478,7 @@ switch:checked slider {
 .notifications-window__clear {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1550,7 +1519,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -1568,9 +1537,7 @@ switch:checked slider {
 .indicator .progress .fill {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1637,8 +1604,7 @@ switch:checked slider {
 .player__playpause {
   font-size: 18px;
   font-weight: 300;
-  min-width: 42px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1680,9 +1646,7 @@ switch:checked slider {
 .player__position-slider trough highlight {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1748,7 +1712,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -1869,7 +1833,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -1879,9 +1843,7 @@ switch:checked slider {
 .powermenu-button {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1901,9 +1863,7 @@ switch:checked slider {
 .powermenu__button {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -1941,7 +1901,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -1981,9 +1941,7 @@ switch:checked slider {
 .mode-settings__button_left {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2008,9 +1966,7 @@ switch:checked slider {
 .mode-settings__button_left.active {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2031,9 +1987,7 @@ switch:checked slider {
 .mode-settings__button_right {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2058,9 +2012,7 @@ switch:checked slider {
 .mode-settings__button_right.active {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2089,9 +2041,7 @@ switch:checked slider {
 .theme-buttons {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2144,7 +2094,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -2154,8 +2104,7 @@ switch:checked slider {
 .workspace-button {
   font-size: 18px;
   font-weight: 300;
-  min-width: 42px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2180,7 +2129,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -2196,8 +2145,7 @@ switch:checked slider {
 .add-icon-button {
   font-size: 18px;
   font-weight: 300;
-  min-width: 42px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2226,7 +2174,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -2252,9 +2200,7 @@ switch:checked slider {
 .submit-button {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2279,9 +2225,7 @@ switch:checked slider {
 .cancel-button {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2309,7 +2253,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -2318,9 +2262,7 @@ switch:checked slider {
 .delete-button-hidden {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2343,9 +2285,7 @@ switch:checked slider {
 .delete-button-visible {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2365,7 +2305,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -2435,9 +2375,7 @@ switch:checked slider {
 .graph-metric-buttons button {
   font-size: 18px;
   font-weight: 300;
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2485,7 +2423,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -2515,7 +2453,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -2528,7 +2466,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -2547,8 +2485,7 @@ switch:checked slider {
 .model-button {
   font-size: 18px;
   font-weight: 300;
-  min-width: 42px;
-  min-height: 42px;
+  padding: 5px;
   background: rgba(32, 32, 32, 0.4941176471);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2576,8 +2513,7 @@ switch:checked slider {
 .model-button.active {
   font-size: 18px;
   font-weight: 300;
-  min-width: 42px;
-  min-height: 42px;
+  padding: 5px;
   background: linear-gradient(-45deg, #3979eb, #eb308f);
   color: #cad3f5;
   box-shadow: 0 0 0 transparent, 0px 0px 0px #eb308f;
@@ -2651,7 +2587,7 @@ switch:checked slider {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -2723,7 +2659,7 @@ table th {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -2734,7 +2670,7 @@ table th {
   background-color: rgba(32, 32, 32, 0.4941176471);
   box-shadow: 0px 0px 0px #eb308f, 0 0 0 transparent;
   border: 0.25px solid rgba(32, 32, 32, 0.4941176471);
-  padding: 10px;
+  padding: 5px;
   border-radius: 30px;
   margin-bottom: 1px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
