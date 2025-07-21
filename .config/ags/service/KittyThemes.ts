@@ -26,7 +26,7 @@ foreground                      #${colors.text}
 background                      #${colors.background}
 selection_foreground           #${colors.secondary}
 selection_background           #${colors.primary}
-background_opacity             1.0
+background_opacity             ${theme === "Glaciara" ? 0.16 : 1.0}
 
 #: Cursor colors
 
