@@ -1011,13 +1011,18 @@ export default () => {
       scrimType="transparent"
       layer={Astal.Layer.OVERLAY}
       visible={false}
-      margin={12}
+      margin={5}
       vexpand={true}
       keymode={Astal.Keymode.EXCLUSIVE}
       name="SideBar"
       namespace="SideBar"
       exclusivity={Astal.Exclusivity.NORMAL}
-      anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT}
+      anchor={
+        Astal.WindowAnchor.TOP |
+        Astal.WindowAnchor.LEFT |
+        Astal.WindowAnchor.BOTTOM
+      }
+      valign={Gtk.Align.FILL}
       application={App}
       onKeyPressEvent={(self, event) => {
         const [keyEvent, keyCode] = event.get_keycode();

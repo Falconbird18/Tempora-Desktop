@@ -851,7 +851,6 @@ switch:checked slider {
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
   background-color: #2c2621;
   min-width: 450px;
-  min-height: 800px;
 }
 
 .control-center-label-container {
@@ -1351,70 +1350,75 @@ switch:checked slider {
   border-radius: 30px;
   margin-bottom: 2px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  padding: 14px 16px 14px 20px;
-  margin-right: 2px;
 }
 
 .notification__icon {
-  min-height: 24px;
-  min-width: 24px;
-  margin-right: 14px;
+  min-height: 48px; /* Larger icon size for better visibility */
+  min-width: 48px;
+  margin-right: 10px;
   border-radius: 30px;
-  background: #202020;
-  box-shadow: 0 0 0 transparent;
-  border: 2px solid #e06f12;
+  background: #202020; /* Kept background-2 for consistency if image is not present */
 }
 
 .notification__icon.telegram {
-  margin-top: 8px;
+  margin-top: 0; /* Align with text */
 }
 
 .notification__title {
-  font-size: 24px;
-  font-weight: normal;
+  font-size: 18px; /* Slightly smaller than h1, but still prominent */
+  font-weight: normal; /* Keep bold */
   font-family: "Monaspace Radon";
   color: #f5decc;
 }
 
 .notification__header {
-  margin-top: 6px;
+  margin-top: 10px;
   margin-bottom: 10px;
   font-family: "Monaspace Radon";
   font-weight: normal;
   font-size: 18px;
   color: #f5decc;
+  align-items: center; /* Vertically align items in the header */
 }
 
 .notification__app-name,
 .notification__dot,
 .notification__time {
   color: #bfaea1;
-  font-size: 11px;
-  font-weight: 100;
+  font-size: 14px; /* Use general font size for subtext */
+  font-weight: 300;
   font-family: "Monaspace Xenon";
 }
 
 .notification__description {
-  margin-bottom: 8px;
-  color: #bfaea1;
-  font-size: 11px;
-  font-weight: 100;
+  margin-bottom: 10px; /* Adjust spacing below description */
+  color: #f5decc;
+  font-size: 14px; /* Use general font size for subtext */
+  font-weight: 300;
   font-family: "Monaspace Xenon";
 }
 
 .notification__actions {
-  margin-top: 8px;
+  padding-top: 10px; /* Add padding to separate from description */
+  border-top: 2px solid #e06f12; /* Subtle separator */
 }
 
 .notification__action {
-  background: none;
-  transition: color 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  color: #e06f12;
-  border-radius: 100px;
-}
-.notification__action:hover {
+  font-size: 18px;
+  font-weight: normal;
+  padding: 10px;
+  background: linear-gradient(45deg, #e06f12 25%, #202020 25%, #202020 50%, #e06f12 50%, #e06f12 75%, #202020 75%, #202020);
   color: #f5decc;
-  transition: color 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
+  font-family: "Monaspace Radon";
+  transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  margin-right: 2px;
+  margin-left: 2px;
+  border: 2px solid #e06f12;
+  background-size: 8px 8px;
+  border-radius: 30px;
+  text-shadow: 2px 2px 0 #202020, 2px -2px 0 #202020, -2px 2px 0 #202020, -2px -2px 0 #202020, 2px 0px 0 #202020, 0px 2px 0 #202020, -2px 0px 0 #202020, 0px -2px 0 #202020;
+  /* Use primary button styling for actions */
 }
 .notification__action:first-child {
   margin-left: 0;
@@ -1436,22 +1440,20 @@ switch:checked slider {
   margin-left: 2px;
   border: 2px solid #e06f12;
   background-size: 8px 8px;
-  border-radius: 30px;
-}
-.notification__close-button:hover {
-  background-size: 8px 8px;
-  background-image: linear-gradient(45deg, #e06f12 25%, #202020 25%, #202020 50%, #e06f12 50%, #e06f12 75%, #202020 75%, #202020);
-  text-shadow: 2px 2px 0 #202020, 2px -2px 0 #202020, -2px 2px 0 #202020, -2px -2px 0 #202020, 2px 0px 0 #202020, 0px 2px 0 #202020, -2px 0px 0 #202020, 0px -2px 0 #202020;
-  box-shadow: 0 0 0 transparent, 0px 2px 0px #12de52;
+  border-radius: 100%;
+  /* Use a circular button for close */
+  margin-left: 10px;
 }
 
 /*NotificationsPopup*/
 .NotificationsPopup {
-  background: none;
+  background: none; /* Keep background none */
 }
 
 .notifications-popup {
-  min-width: 450px;
+  min-width: 400px; /* Adjust popup width */
+  max-width: 500px;
+  padding: 10px; /* Add some padding around the list of notifications */
 }
 
 /*NotificationsWindow*/
@@ -1463,16 +1465,18 @@ switch:checked slider {
   border-radius: 30px;
   margin-bottom: 2px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background: #2c2621;
   min-width: 400px;
-  min-height: 550px;
-  margin-right: 2px;
+  max-width: 500px; /* Set max-width */
+  min-height: 500px; /* Adjusted height */
 }
 .notifications-window .notification {
-  border-radius: 4px;
-  transition: border-radius 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
   background-color: #202020;
-  box-shadow: 0px 2px 0px 0px #12de52;
+  box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
+  border: 2px solid #e06f12;
+  padding: 10px;
+  border-radius: 30px;
+  margin-bottom: 2px;
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
 }
 
 .notifications-window__clear {
@@ -1497,11 +1501,18 @@ switch:checked slider {
   transition: background 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
 }
 
+.notifications-window__list revealer {
+  margin-bottom: 10px; /* Spacing between revealer items */
+}
 .notifications-window__list revealer .notification {
-  border-radius: 30px;
+  border-radius: 30px; /* Ensure consistent radius */
+  margin-bottom: 0; /* Handled by revealer margin-bottom */
+}
+.notifications-window__list revealer:last-child {
+  margin-bottom: 0; /* No margin after the last one */
 }
 .notifications-window__list revealer:last-child .notification {
-  margin-bottom: 10px;
+  margin-bottom: 0;
 }
 
 /*OSD*/
@@ -2407,7 +2418,6 @@ switch:checked slider {
 /*SideBar*/
 .sidebar-window {
   background: linear-gradient(145deg, #2c2621, #2c2621);
-  min-height: 900px;
   min-width: 300px;
   border-radius: 30px;
   border: 2px solid #e06f12;

@@ -14,30 +14,22 @@ import AdvancedSettings from "./pages/AdvancedThemes";
 export const controlCenterPage = Variable("main");
 
 export default () => {
-  const pageHeight = bind(controlCenterPage).as((v) => {
-    if (v != "main") {
-      return `
-			min-height: 500px;
-			`;
-    } else {
-      return `
-			min-height: 0px;`;
-    }
-  });
-
   return (
     <PopupWindow
       valign={Gtk.Align.FILL}
       scrimType="transparent"
       visible={false}
-      margin={12}
+      margin={5}
       name="control-center"
       namespace="control-center"
-      // className="ControlCenter"
       layer={Astal.Layer.OVERLAY}
       exclusivity={Astal.Exclusivity.NORMAL}
       keymode={Astal.Keymode.EXCLUSIVE}
-      anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT}
+      anchor={
+        Astal.WindowAnchor.TOP |
+        Astal.WindowAnchor.BOTTOM |
+        Astal.WindowAnchor.RIGHT
+      }
       application={App}
       onKeyPressEvent={(self, event) => {
         const [keyEvent, keyCode] = event.get_keycode();
@@ -50,17 +42,8 @@ export default () => {
         }
       }}
     >
-      <box
-        className="control-center"
-        vertical
-        spacing={spacing}
-        valign={Gtk.Align.START}
-      >
-        <box
-          className="control-center__container"
-          css={pageHeight}
-          valign={Gtk.Align.START}
-        >
+      <box spacing={spacing} valign={Gtk.Align.FILL} vertical>
+        <box className="control-center__container" valign={Gtk.Align.START}>
           <stack
             shown={bind(controlCenterPage)}
             transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}

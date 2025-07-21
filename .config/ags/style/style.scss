@@ -845,7 +845,6 @@ switch:checked slider {
     @include card;
     background-color: $background;
     min-width: 450px;
-    min-height: 800px;
 }
 
 .control-center-label-container {
@@ -1247,72 +1246,61 @@ switch:checked slider {
 
 .notification {
     @include card;
-    padding: 14px 16px 14px 20px;
-    margin-right: $outset_margin;
 }
 
 .notification__icon {
-    min-height: $h1_size;
-    min-width: $h1_size;
-    margin-right: 14px;
+    min-height: 48px; /* Larger icon size for better visibility */
+    min-width: 48px;
+    margin-right: $padding;
     border-radius: $primary-radius;
-    background: $background-2;
-    box-shadow: $inset;
-    border: $primary-border;
+    background: $background-2; /* Kept background-2 for consistency if image is not present */
 }
 
 .notification__icon.telegram {
-    margin-top: 8px;
+    margin-top: 0; /* Align with text */
 }
 
 .notification__title {
-    font-size: $h1_size;
-    font-weight: $h1_weight;
+    font-size: $h2_size; /* Slightly smaller than h1, but still prominent */
+    font-weight: $h1_weight; /* Keep bold */
     font-family: $h1_font;
     color: $text;
 }
 
 .notification__header {
-    margin-top: 6px;
-    margin-bottom: 10px;
+    margin-top: $padding;
+    margin-bottom: $padding;
     font-family: $h2_font;
     font-weight: $h2_weight;
     font-size: $h2_size;
     color: $text;
+    align-items: center; /* Vertically align items in the header */
 }
 
 .notification__app-name,
 .notification__dot,
 .notification__time {
     color: $subtext;
-    font-size: $subtext_size;
-    font-weight: $subtext_weight;
-    font-family: $subtext_font;
+    font-size: $paragraph_size; /* Use general font size for subtext */
+    font-weight: $paragraph_weight;
+    font-family: $paragraph_font;
 }
 
 .notification__description {
-    margin-bottom: 8px;
-    color: $subtext;
-    font-size: $subtext_size;
-    font-weight: $subtext_weight;
-    font-family: $subtext_font;
+    margin-bottom: $padding; /* Adjust spacing below description */
+    color: $text;
+    font-size: $paragraph_size; /* Use general font size for subtext */
+    font-weight: $paragraph_weight;
+    font-family: $paragraph_font;
 }
 
 .notification__actions {
-    margin-top: 8px;
+    padding-top: $padding; /* Add padding to separate from description */
+    border-top: $primary_border; /* Subtle separator */
 }
 
 .notification__action {
-    background: none;
-    transition: color $transition;
-    color: $primary;
-    border-radius: 100px;
-
-    &:hover {
-        color: $text;
-        transition: color $transition;
-    }
-
+    @include primary-button; /* Use primary button styling for actions */
     &:first-child {
         margin-left: 0;
     }
@@ -1323,37 +1311,32 @@ switch:checked slider {
 }
 
 .notification__close-button {
-    @include secondary-button;
-
-    &:hover {
-        @include secondary-button-hover;
-    }
+    @include secondary-circular-button; /* Use a circular button for close */
+    margin-left: $padding;
 }
 
 /*NotificationsPopup*/
 
 .NotificationsPopup {
-    background: none;
+    background: none; /* Keep background none */
 }
 
 .notifications-popup {
-    min-width: 450px;
+    min-width: 400px; /* Adjust popup width */
+    max-width: 500px;
+    padding: $padding; /* Add some padding around the list of notifications */
 }
 
 /*NotificationsWindow*/
 
 .notifications-window {
     @include card;
-    background: $background;
     min-width: 400px;
-    min-height: 550px;
-    margin-right: $outset_margin;
+    max-width: 500px; /* Set max-width */
+    min-height: 500px; /* Adjusted height */
 
     .notification {
-        border-radius: 4px;
-        transition: border-radius $transition;
-        background-color: $background-2;
-        box-shadow: 0px 2px 0px 0px $secondary;
+        @include card;
     }
 }
 
@@ -1367,14 +1350,17 @@ switch:checked slider {
 
 .notifications-window__list {
     revealer {
+        margin-bottom: $padding; /* Spacing between revealer items */
         .notification {
-            border-radius: $secondary-radius;
+            border-radius: $primary-radius; /* Ensure consistent radius */
+            margin-bottom: 0; /* Handled by revealer margin-bottom */
         }
     }
 
     revealer:last-child {
+        margin-bottom: 0; /* No margin after the last one */
         .notification {
-            margin-bottom: 10px;
+            margin-bottom: 0;
         }
     }
 }
@@ -2021,7 +2007,6 @@ switch:checked slider {
 /*SideBar*/
 .sidebar-window {
     background: $background_gradient;
-    min-height: 900px;
     min-width: 300px;
     border-radius: $secondary-radius;
     border: $primary-border;
