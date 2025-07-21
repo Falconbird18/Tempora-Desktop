@@ -256,9 +256,9 @@ declare namespace Gtk {
   class Button extends Container {
     constructor(props?: {
       className?: string;
-      on_primary_click?: (self: Button, event: Gdk.EventButton) => void;
-      on_secondary_click?: (self: Button, event: Gdk.EventButton) => void;
-      on_middle_click?: (self: Button, event: Gdk.EventButton) => void;
+      onPrimaryClick?: (self: Button, event: Gdk.EventButton) => void;
+      onSecondaryClick?: (self: Button, event: Gdk.EventButton) => void;
+      onMiddleClick?: (self: Button, event: Gdk.EventButton) => void;
       on_clicked?: (self: Button) => void; // Standard GTK signal
       child?: Gtk.Widget | null | undefined; // Child widget for the button
       cursor?: string; // CSS cursor style?
@@ -269,8 +269,8 @@ declare namespace Gtk {
     });
     child: Gtk.Widget | null; // Standard GTK property
     // Signals as properties for convenience/JSX
-    on_primary_click?: (self: Button, event: Gdk.EventButton) => void;
-    on_clicked?: (self: Button) => void;
+    onPrimaryClick?: (self: Button, event: Gdk.EventButton) => void;
+    onClicked?: (self: Button) => void;
     // Add other Button properties/methods
     [key: string]: any;
   }

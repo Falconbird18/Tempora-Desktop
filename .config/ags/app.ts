@@ -8,7 +8,6 @@ import {
   transparentItems,
   transparentBar,
 } from "./service/Settings";
-
 const osds = new Map<Gdk.Monitor, Gtk.Widget>();
 import { paddingSize } from "./widget/ControlCenter/pages/AdvancedThemes"; // Import paddingSize
 import Bar from "./widget/Bar";
@@ -95,33 +94,48 @@ async function main() {
   const notificationsPopups = new Map<Gdk.Monitor, Gtk.Widget>();
   const osds = new Map<Gdk.Monitor, Gtk.Widget>();
 
-  Notifications();
-  Weather();
-  SideBar();
-  Clipboard();
-  Screenshot();
-  ControlCenter();
-  Scrim({ scrimType: "opaque", className: "scrim" });
-  Scrim({ scrimType: "transparent", className: "transparent-scrim" });
-  SinkMenu();
-  MixerMenu();
-  Verification();
-  Powermenu();
-  Dashboard();
-  AppLauncher();
+  try {
+    Notifications();
+    Weather();
+    SideBar();
+    Clipboard();
+    Screenshot();
+    ControlCenter();
+    Scrim({ scrimType: "opaque", className: "scrim" });
+    Scrim({ scrimType: "transparent", className: "transparent-scrim" });
+    SinkMenu();
+    MixerMenu();
+    Verification();
+    Powermenu();
+    Dashboard();
+    AppLauncher();
+  } catch (error) {
+    console.error("Error initializing widgets:", error);
+  }
 
   for (const gdkmonitor of App.get_monitors()) {
-    bars.set(gdkmonitor, Bar(gdkmonitor));
-    taskBars.set(gdkmonitor, TaskBar(gdkmonitor));
-    notificationsPopups.set(gdkmonitor, NotificationsPopup(gdkmonitor));
-    osds.set(gdkmonitor, OSD(gdkmonitor));
+    try {
+      bars.set(gdkmonitor, Bar(gdkmonitor));
+      taskBars.set(gdkmonitor, TaskBar(gdkmonitor));
+      notificationsPopups.set(gdkmonitor, NotificationsPopup(gdkmonitor));
+      osds.set(gdkmonitor, OSD(gdkmonitor));
+    } catch (error) {
+      console.error(`Error creating widgets for monitor ${gdkmonitor}:`, error);
+    }
   }
 
   App.connect("monitor-added", (_: unknown, gdkmonitor: Gdk.Monitor) => {
-    bars.set(gdkmonitor, Bar(gdkmonitor));
-    taskBars.set(gdkmonitor, TaskBar(gdkmonitor));
-    notificationsPopups.set(gdkmonitor, NotificationsPopup(gdkmonitor));
-    osds.set(gdkmonitor, OSD(gdkmonitor));
+    try {
+      bars.set(gdkmonitor, Bar(gdkmonitor));
+      taskBars.set(gdkmonitor, TaskBar(gdkmonitor));
+      notificationsPopups.set(gdkmonitor, NotificationsPopup(gdkmonitor));
+      osds.set(gdkmonitor, OSD(gdkmonitor));
+    } catch (error) {
+      console.error(
+        `Error adding widgets for new monitor ${gdkmonitor}:`,
+        error,
+      );
+    }
   });
 
   App.connect("monitor-removed", (_: unknown, gdkmonitor: Gdk.Monitor) => {
