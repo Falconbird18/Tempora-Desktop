@@ -11,7 +11,6 @@ import Logo from "./items/Logo";
 import Weather from "./items/Weather";
 import RecordingIndicator from "./items/RecordingIndicator";
 import SideBar from "./items/SideBar";
-import Media from "./items/Media";
 import { barLocation, transparentBar } from "../../service/Settings";
 import { bind } from "astal";
 
@@ -50,7 +49,6 @@ const End = () => {
       <RecordingIndicator />
       <Weather />
       <Notifications />
-      <Media />
       <SystemIndicators />
       <Tray />
       <Logo />
