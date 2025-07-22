@@ -16,7 +16,7 @@ import {
   wind,
   loadLocation,
   setLocation,
-  weatherDescription, 
+  weatherDescription,
   WeatherIcon,
   forecast, // Import the new forecast variable
   ForecastDay, // Import @agsthe forecast type
@@ -58,45 +58,44 @@ const displayLocation = bind(location).as((value) => {
 
 const temperature = bind(realTemp).as((value) => {
   if (!value || value.includes("Unknown location;")) {
-      return "loading...";
+    return "loading...";
   }
   return value.trim();
 });
 
-
 const feelsTemperature = bind(feelsTemp).as((value) => {
   if (!value || value.includes("Unknown location;")) {
-      return "N/A";
+    return "N/A";
   }
   return value.trim();
 });
 const uv = bind(uvIndex).as((value) => {
   if (!value || value.includes("Unknown location;")) {
-      return "N/A";
+    return "N/A";
   }
   return value.trim();
 });
 const Wind = bind(wind).as((value) => {
   if (!value || value.includes("Unknown location;")) {
-      return "N/A";
+    return "N/A";
   }
   return value.trim();
 });
 const Precipitation = bind(precipitation).as((value) => {
   if (!value || value.includes("Unknown location;")) {
-      return "N/A";
+    return "N/A";
   }
   return value.trim();
 });
 const Pressure = bind(pressure).as((value) => {
   if (!value || value.includes("Unknown location;")) {
-      return "N/A";
+    return "N/A";
   }
   return value.trim();
 });
 const Humidity = bind(humidity).as((value) => {
   if (!value || value.includes("Unknown location;")) {
-      return "N/A";
+    return "N/A";
   }
   return value.trim();
 });
@@ -161,178 +160,218 @@ const getWeatherIcon = (description: string | undefined) => {
 
 // Helper function to determine temperature unit (simple check based on realTemp format)
 const getTemperatureUnit = () => {
-    const temp = realTemp.value || '';
-    return temp.includes('F') ? 'F' : 'C';
+  const temp = realTemp.value || "";
+  return temp.includes("F") ? "F" : "C";
 };
 
 // Widget to display a single day's forecast
 const ForecastDayWidget = (day: ForecastDay) => {
-    const unit = getTemperatureUnit();
-    const maxTemp = unit === 'F' ? day.maxTempF : day.maxTempC;
-    const minTemp = unit === 'F' ? day.minTempF : day.minTempC;
+  const unit = getTemperatureUnit();
+  const maxTemp = unit === "F" ? day.maxTempF : day.maxTempC;
+  const minTemp = unit === "F" ? day.minTempF : day.minTempC;
 
-    return (
-        <box vertical className="forecast-day" spacing={4} halign={Gtk.Align.CENTER}>
-            <label className="forecast-day-name" label={day.dayOfWeek} />
-            <icon icon={day.icon} className="forecast-icon" />
-            <label className="forecast-temp" label={`${maxTemp}°/${minTemp}°`} />
-            {/* Optional: Add description */}
-            {/* <label className="forecast-desc" label={day.description} /> */}
-        </box>
-    );
+  return (
+    <box
+      vertical
+      className="forecast-day"
+      spacing={4}
+      halign={Gtk.Align.CENTER}
+    >
+      <label className="forecast-day-name" label={day.dayOfWeek} />
+      <icon icon={day.icon} className="forecast-icon" />
+      <label className="forecast-temp" label={`${maxTemp}°/${minTemp}°`} />
+      {/* Optional: Add description */}
+      {/* <label className="forecast-desc" label={day.description} /> */}
+    </box>
+  );
 };
 
 // --- Forecast Graph ---
 
-type GraphMetricType = 'temp' | 'humidity' | 'wind' | 'precip' | 'pressure' | 'uv';
-const graphMetric = Variable<GraphMetricType>('temp');
+type GraphMetricType =
+  | "temp"
+  | "humidity"
+  | "wind"
+  | "precip"
+  | "pressure"
+  | "uv";
+const graphMetric = Variable<GraphMetricType>("temp");
 
-const getMetricData = (point: HourlyDataPoint, metric: GraphMetricType, unit: 'C' | 'F'): number => {
-    switch (metric) {
-        case 'temp': return unit === 'F' ? point.tempF : point.tempC;
-        case 'humidity': return point.humidity;
-        case 'wind': return point.windMiles; // Using Miles for now
-        case 'precip': return point.chanceOfRain; // Using chance of rain %
-        case 'pressure': return point.pressure; // Using hPa
-        case 'uv': return point.uvIndex;
-        default: return 0;
-    }
+const getMetricData = (
+  point: HourlyDataPoint,
+  metric: GraphMetricType,
+  unit: "C" | "F",
+): number => {
+  switch (metric) {
+    case "temp":
+      return unit === "F" ? point.tempF : point.tempC;
+    case "humidity":
+      return point.humidity;
+    case "wind":
+      return point.windMiles; // Using Miles for now
+    case "precip":
+      return point.chanceOfRain; // Using chance of rain %
+    case "pressure":
+      return point.pressure; // Using hPa
+    case "uv":
+      return point.uvIndex;
+    default:
+      return 0;
+  }
 };
 
-const getMetricLabel = (metric: GraphMetricType, unit: 'C' | 'F'): string => {
-     switch (metric) {
-        case 'temp': return `Temperature (°${unit})`;
-        case 'humidity': return 'Humidity (%)';
-        case 'wind': return 'Wind (mph)';
-        case 'precip': return 'Chance of Rain (%)';
-        case 'pressure': return 'Pressure (hPa)';
-        case 'uv': return 'UV Index';
-        default: return '';
-    }
-}
+const getMetricLabel = (metric: GraphMetricType, unit: "C" | "F"): string => {
+  switch (metric) {
+    case "temp":
+      return `Temperature (°${unit})`;
+    case "humidity":
+      return "Humidity (%)";
+    case "wind":
+      return "Wind (mph)";
+    case "precip":
+      return "Chance of Rain (%)";
+    case "pressure":
+      return "Pressure (hPa)";
+    case "uv":
+      return "UV Index";
+    default:
+      return "";
+  }
+};
 
 // Define ForecastGraph using Widget.DrawingArea directly for JSX compatibility
 const ForecastGraph = new Widget.DrawingArea({
-    className: "forecast-graph",
-    vexpand: true,
-    hexpand: true,
-    // Set a minimum height for the graph area
-    setup: self => self.set_size_request(-1, 100),
-    connections: [
-        // Redraw when data, metric, or theme changes
-        [hourlyForecast, self => self.queue_draw()],
-        [graphMetric, self => self.queue_draw()],
-        [Astal.Theme, self => self.queue_draw()],
-        // Draw signal
-        // ['draw', (self, cr: Cairo.Context) => {
-        //     // Clear the background first
-        //     cr.setSourceRGBA(0, 0, 0, 0); // Transparent
-        //     cr.paint();
+  className: "forecast-graph",
+  vexpand: true,
+  hexpand: true,
+  // Set a minimum height for the graph area
+  setup: (self) => self.set_size_request(-1, 100),
+  connections: [
+    // Redraw when data, metric, or theme changes
+    [hourlyForecast, (self) => self.queue_draw()],
+    [graphMetric, (self) => self.queue_draw()],
+    [Astal.Theme, (self) => self.queue_draw()],
+    // Draw signal
+    // ['draw', (self, cr: Cairo.Context) => {
+    //     // Clear the background first
+    //     cr.setSourceRGBA(0, 0, 0, 0); // Transparent
+    //     cr.paint();
 
-        //     const data = hourlyForecast.value;
-        //     const metric = graphMetric.value;
-        //     const unit = getTemperatureUnit();
-        //     const allocation = self.get_allocation();
-        //     const width = allocation.width;
-        //     const height = allocation.height;
-        //     const padding = 10; // Padding around the graph
-        //     const graphHeight = height - padding * 2;
-        //     const graphWidth = width - padding * 2;
+    //     const data = hourlyForecast.value;
+    //     const metric = graphMetric.value;
+    //     const unit = getTemperatureUnit();
+    //     const allocation = self.get_allocation();
+    //     const width = allocation.width;
+    //     const height = allocation.height;
+    //     const padding = 10; // Padding around the graph
+    //     const graphHeight = height - padding * 2;
+    //     const graphWidth = width - padding * 2;
 
-        //     if (!data || data.length < 2) {
-        //         console.log("Graph: No data or insufficient data:", data); // Insert this line
-        //         // Draw "Loading..." or "Not enough data"
-        //         cr.setSourceRGBA(0.8, 0.8, 0.8, 1); // Light gray, fully opaque
-        //         cr.selectFontFace("sans-serif", Cairo.FontSlant.NORMAL, Cairo.FontWeight.NORMAL);
-        //         cr.setFontSize(12);
-        //         const text = !data ? "Loading graph..." : "Not enough data";
-        //         const te = cr.textExtents(text);
-        //         cr.moveTo(width / 2 - te.width / 2, height / 2);
-        //         cr.showText(text);
-        //         return;
-        //     }
+    //     if (!data || data.length < 2) {
+    //         console.log("Graph: No data or insufficient data:", data); // Insert this line
+    //         // Draw "Loading..." or "Not enough data"
+    //         cr.setSourceRGBA(0.8, 0.8, 0.8, 1); // Light gray, fully opaque
+    //         cr.selectFontFace("sans-serif", Cairo.FontSlant.NORMAL, Cairo.FontWeight.NORMAL);
+    //         cr.setFontSize(12);
+    //         const text = !data ? "Loading graph..." : "Not enough data";
+    //         const te = cr.textExtents(text);
+    //         cr.moveTo(width / 2 - te.width / 2, height / 2);
+    //         cr.showText(text);
+    //         return;
+    //     }
 
-        //     const values = data.map(p => getMetricData(p, metric, unit));
-        //     let minValue = Math.min(...values);
-        //     let maxValue = Math.max(...values);
+    //     const values = data.map(p => getMetricData(p, metric, unit));
+    //     let minValue = Math.min(...values);
+    //     let maxValue = Math.max(...values);
 
-        //     // Avoid division by zero if all values are the same
-        //     if (minValue === maxValue) {
-        //         minValue -= 1;
-        //         maxValue += 1;
-        //     }
-        //     const valueRange = maxValue - minValue;
+    //     // Avoid division by zero if all values are the same
+    //     if (minValue === maxValue) {
+    //         minValue -= 1;
+    //         maxValue += 1;
+    //     }
+    //     const valueRange = maxValue - minValue;
 
-        //     // --- Draw the graph line ---
-        //     const theme = Astal.Theme.get_instance();
-        //     const color = theme.get_widget_style_context(self).get_color(Gtk.StateFlags.NORMAL);
-        //     cr.setSourceRGBA(1, 1, 1, 1); // White, fully opaque
-        //     cr.setLineWidth(2);
-        //     cr.setLineCap(Cairo.LineCap.ROUND);
-        //     cr.setLineJoin(Cairo.LineJoin.ROUND);
+    //     // --- Draw the graph line ---
+    //     const theme = Astal.Theme.get_instance();
+    //     const color = theme.get_widget_style_context(self).get_color(Gtk.StateFlags.NORMAL);
+    //     cr.setSourceRGBA(1, 1, 1, 1); // White, fully opaque
+    //     cr.setLineWidth(2);
+    //     cr.setLineCap(Cairo.LineCap.ROUND);
+    //     cr.setLineJoin(Cairo.LineJoin.ROUND);
 
-        //     for (let i = 0; i < data.length; i++) {
-        //         const x = padding + (i / (data.length - 1)) * graphWidth;
-        //         const y = padding + graphHeight - ((values[i] - minValue) / valueRange) * graphHeight;
+    //     for (let i = 0; i < data.length; i++) {
+    //         const x = padding + (i / (data.length - 1)) * graphWidth;
+    //         const y = padding + graphHeight - ((values[i] - minValue) / valueRange) * graphHeight;
 
-        //         if (i === 0) {
-        //             cr.moveTo(x, y);
-        //         } else {
-        //             cr.lineTo(x, y);
-        //         }
-        //     }
-        //     cr.stroke();
+    //         if (i === 0) {
+    //             cr.moveTo(x, y);
+    //         } else {
+    //             cr.lineTo(x, y);
+    //         }
+    //     }
+    //     cr.stroke();
 
-        //     // --- Draw Labels (Min/Max Value, Time) ---
-        //     cr.setSourceRGBA(1, 1, 1, 0.9); // Almost white, very visible
-        //     cr.selectFontFace("sans-serif", Cairo.FontSlant.NORMAL, Cairo.FontWeight.NORMAL);
-        //     cr.setFontSize(10);
+    //     // --- Draw Labels (Min/Max Value, Time) ---
+    //     cr.setSourceRGBA(1, 1, 1, 0.9); // Almost white, very visible
+    //     cr.selectFontFace("sans-serif", Cairo.FontSlant.NORMAL, Cairo.FontWeight.NORMAL);
+    //     cr.setFontSize(10);
 
-        //     // Max Value Label (top left)
-        //     const maxLabel = `${maxValue.toFixed(0)}`;
-        //     cr.moveTo(padding, padding - 2); // Position slightly above graph area
-        //     cr.showText(maxLabel);
+    //     // Max Value Label (top left)
+    //     const maxLabel = `${maxValue.toFixed(0)}`;
+    //     cr.moveTo(padding, padding - 2); // Position slightly above graph area
+    //     cr.showText(maxLabel);
 
-        //     // Min Value Label (bottom left)
-        //     const minLabel = `${minValue.toFixed(0)}`;
-        //     const minTe = cr.textExtents(minLabel);
-        //     cr.moveTo(padding, height - padding + minTe.height + 2); // Position slightly below graph area
-        //     cr.showText(minLabel);
+    //     // Min Value Label (bottom left)
+    //     const minLabel = `${minValue.toFixed(0)}`;
+    //     const minTe = cr.textExtents(minLabel);
+    //     cr.moveTo(padding, height - padding + minTe.height + 2); // Position slightly below graph area
+    //     cr.showText(minLabel);
 
-        //     // Time Labels (Start and End Hour)
-        //     const startLabel = `${data[0].time}:00`;
-        //     const startTe = cr.textExtents(startLabel);
-        //     cr.moveTo(padding, height - padding + startTe.height + 2); // Align with min value label
-        //     // cr.showText(startLabel); // Maybe too cluttered?
+    //     // Time Labels (Start and End Hour)
+    //     const startLabel = `${data[0].time}:00`;
+    //     const startTe = cr.textExtents(startLabel);
+    //     cr.moveTo(padding, height - padding + startTe.height + 2); // Align with min value label
+    //     // cr.showText(startLabel); // Maybe too cluttered?
 
-        //     const endLabel = `${data[data.length - 1].time}:00`;
-        //     const endTe = cr.textExtents(endLabel);
-        //     cr.moveTo(width - padding - endTe.width, height - padding + endTe.height + 2);
-        //     cr.showText(endLabel);
+    //     const endLabel = `${data[data.length - 1].time}:00`;
+    //     const endTe = cr.textExtents(endLabel);
+    //     cr.moveTo(width - padding - endTe.width, height - padding + endTe.height + 2);
+    //     cr.showText(endLabel);
 
-        //     // Current Metric Label (top right)
-        //     const metricLabel = getMetricLabel(metric, unit);
-        //     const metricTe = cr.textExtents(metricLabel);
-        //     cr.moveTo(width - padding - metricTe.width, padding - 2);
-        //     cr.showText(metricLabel);
-        // }],
-        ['draw', (self, cr: Cairo.Context) => {
-          const allocation = self.get_allocation();
-          const width = allocation.width;
-          const height = allocation.height;
-          console.log(`ForecastGraph draw signal: size <span class="math-inline">\{width\}x</span>{height}`); // Log size
-          // Draw a bright, semi-transparent rectangle covering the whole area
-          cr.setSourceRGBA(1, 0, 0, 0.5); // Red, 50% opacity
-          cr.rectangle(0, 0, width, height);
-          cr.fill();
-          // Draw simple text
-          cr.setSourceRGB(0, 0, 0); // Black text
-          cr.moveTo(10, 20);
-          cr.selectFontFace("sans-serif", Cairo.FontSlant.NORMAL, Cairo.FontWeight.NORMAL);
-          cr.setFontSize(12);
-          cr.showText(`Graph Area: <span class="math-inline">\{width\}x</span>{height}`);
-      }],
+    //     // Current Metric Label (top right)
+    //     const metricLabel = getMetricLabel(metric, unit);
+    //     const metricTe = cr.textExtents(metricLabel);
+    //     cr.moveTo(width - padding - metricTe.width, padding - 2);
+    //     cr.showText(metricLabel);
+    // }],
+    [
+      "draw",
+      (self, cr: Cairo.Context) => {
+        const allocation = self.get_allocation();
+        const width = allocation.width;
+        const height = allocation.height;
+        console.log(
+          `ForecastGraph draw signal: size <span class="math-inline">\{width\}x</span>{height}`,
+        ); // Log size
+        // Draw a bright, semi-transparent rectangle covering the whole area
+        cr.setSourceRGBA(1, 0, 0, 0.5); // Red, 50% opacity
+        cr.rectangle(0, 0, width, height);
+        cr.fill();
+        // Draw simple text
+        cr.setSourceRGB(0, 0, 0); // Black text
+        cr.moveTo(10, 20);
+        cr.selectFontFace(
+          "sans-serif",
+          Cairo.FontSlant.NORMAL,
+          Cairo.FontWeight.NORMAL,
+        );
+        cr.setFontSize(12);
+        cr.showText(
+          `Graph Area: <span class="math-inline">\{width\}x</span>{height}`,
+        );
+      },
     ],
+  ],
 });
 
 export default () => {
@@ -341,7 +380,7 @@ export default () => {
       scrimType="transparent"
       layer={Astal.Layer.OVERLAY}
       visible={false}
-      margin={12}
+      margin={5}
       vexpand={true}
       keymode={Astal.Keymode.EXCLUSIVE}
       name="weather"
@@ -378,10 +417,11 @@ export default () => {
         </box>
         {Entry}
         <box horizontal halign={Gtk.Align.START} spacing={spacing}>
-          <icon icon={desc.as((value) => WeatherIcon(value))}
-                  className="temperature"
-                  hexpand={false}
-                />
+          <icon
+            icon={desc.as((value) => WeatherIcon(value))}
+            className="temperature"
+            hexpand={false}
+          />
           <label
             label={temperature}
             className="temperature"
@@ -416,40 +456,64 @@ export default () => {
         </box>
         {/* Forecast Section */}
         <box
-            className="forecast-container"
-            homogeneous={true} // Make columns equal width
-            spacing={spacing * 1.5} // Add some space between days
-            margin_top={spacing} // Add margin above the forecast
+          className="forecast-container"
+          homogeneous={true} // Make columns equal width
+          spacing={spacing * 1.5} // Add some space between days
+          margin_top={spacing} // Add margin above the forecast
         >
-            {bind(forecast).as(fc => fc
+          {bind(forecast).as(
+            (fc) =>
+              fc
                 ? fc.map(ForecastDayWidget)
-                : [<label label="Loading forecast..." />] // Show loading or error message
-            )}
+                : [<label label="Loading forecast..." />], // Show loading or error message
+          )}
         </box>
         {/* Graph Section */}
         <box vertical spacing={spacing / 2} margin_top={spacing}>
-             {/* Metric Selection Buttons */}
-             <box homogeneous={true} spacing={spacing / 2} className="graph-metric-buttons">
-                 {(['temp', 'humidity', 'wind', 'precip', 'pressure', 'uv'] as GraphMetricType[]).map(metric => (
-                     <button
-                         // Use the standalone bind function here
-                         className={bind(graphMetric).as(m => m === metric ? 'active' : '')}
-                         onClicked={() => graphMetric.value = metric}
-                     >
-                         {/* Simple text label for buttons */}
-                         <label label={
-                             metric === 'temp' ? 'Temp' :
-                             metric === 'humidity' ? 'Humid' :
-                             metric === 'wind' ? 'Wind' :
-                             metric === 'precip' ? 'Rain' :
-                             metric === 'pressure' ? 'Pressure' :
-                             'UV'
-                         }/>
-                     </button>
-                 ))}
-             </box>
-             {/* The Graph */}
-             {ForecastGraph}
+          {/* Metric Selection Buttons */}
+          <box
+            homogeneous={true}
+            spacing={spacing / 2}
+            className="graph-metric-buttons"
+          >
+            {(
+              [
+                "temp",
+                "humidity",
+                "wind",
+                "precip",
+                "pressure",
+                "uv",
+              ] as GraphMetricType[]
+            ).map((metric) => (
+              <button
+                // Use the standalone bind function here
+                className={bind(graphMetric).as((m) =>
+                  m === metric ? "active" : "",
+                )}
+                onClicked={() => (graphMetric.value = metric)}
+              >
+                {/* Simple text label for buttons */}
+                <label
+                  label={
+                    metric === "temp"
+                      ? "Temp"
+                      : metric === "humidity"
+                        ? "Humid"
+                        : metric === "wind"
+                          ? "Wind"
+                          : metric === "precip"
+                            ? "Rain"
+                            : metric === "pressure"
+                              ? "Pressure"
+                              : "UV"
+                  }
+                />
+              </button>
+            ))}
+          </box>
+          {/* The Graph */}
+          {ForecastGraph}
         </box>
       </box>
     </PopupWindow>

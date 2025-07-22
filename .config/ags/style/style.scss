@@ -1129,7 +1129,6 @@ switch:checked slider {
 .control-center__powermenu-button {
     @include secondary-button;
     padding: 10px;
-    min-height: 0;
 }
 
 .control-center__settings-button,
@@ -1394,7 +1393,6 @@ switch:checked slider {
 .container {
     @include card;
     background: $background;
-    margin-bottom: 20px;
 }
 
 .indicator .progress {
@@ -1946,7 +1944,6 @@ switch:checked slider {
 
 .weather-window {
     @include card;
-    padding: 20px;
     background: $background;
     min-width: 350px;
     /* May need adjustment */
@@ -2020,13 +2017,8 @@ switch:checked slider {
 
 /*SideBar*/
 .sidebar-window {
-    background: $background_gradient;
-    min-height: 900px;
+    @include card;
     min-width: 300px;
-    border-radius: $secondary-radius;
-    border: $primary-border;
-    padding: 20px;
-    color: $text;
 }
 
 .sidebar-prompt-container {

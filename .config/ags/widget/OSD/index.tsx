@@ -79,6 +79,7 @@ export default (gdkmonitor: Gdk.Monitor) => (
     gdkmonitor={gdkmonitor}
     layer={Astal.Layer.OVERLAY}
     anchor={Astal.WindowAnchor.BOTTOM}
+    margin={5}
     setup={(self) => {
       self.add(
         <box className="osd" vertical={true}>

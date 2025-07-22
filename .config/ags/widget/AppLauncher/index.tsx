@@ -55,8 +55,13 @@ function getPinnedAppsGridWidget() {
   const allAppsList = apps.list || [];
   console.log("[AppLauncher] Total apps from apps.list:", allAppsList.length);
   if (allAppsList.length > 0) {
-    console.log("[AppLauncher] Properties of the first app found:", allAppsList[0]);
-    console.log("[AppLauncher] All enumerable properties of the first app (allAppsList[0]):");
+    console.log(
+      "[AppLauncher] Properties of the first app found:",
+      allAppsList[0],
+    );
+    console.log(
+      "[AppLauncher] All enumerable properties of the first app (allAppsList[0]):",
+    );
     for (const prop in allAppsList[0]) {
       try {
         console.log(`  Property '${prop}':`, (allAppsList[0] as any)[prop]);
@@ -66,24 +71,31 @@ function getPinnedAppsGridWidget() {
     }
   }
 
-  const pinnedAppWidgets = PINNED_APP_IDS
-    .map(pinned_id => {
-      console.log(`[AppLauncher] Trying to find pinned app with ID: ${pinned_id}`);
-      const app = allAppsList.find((a: AstalApps.Application) => {
-        if (a.entry && typeof a.entry === 'string' && a.entry === pinned_id) return true;
-        if (a.id && typeof a.id === 'string' && a.id === pinned_id) return true;
-        if (a.app_id && typeof a.app_id === 'string' && a.app_id === pinned_id) return true;
-        return false;
-      });
-      if (app) {
-        console.log(`[AppLauncher] Found app for ID ${pinned_id}:`, (app as any).name || (app as any).entry || (app as any).id || app);
-      }
-      return app ? AppItem(app) : null;
-    })
-    .filter(widget => widget !== null);
+  const pinnedAppWidgets = PINNED_APP_IDS.map((pinned_id) => {
+    console.log(
+      `[AppLauncher] Trying to find pinned app with ID: ${pinned_id}`,
+    );
+    const app = allAppsList.find((a: AstalApps.Application) => {
+      if (a.entry && typeof a.entry === "string" && a.entry === pinned_id)
+        return true;
+      if (a.id && typeof a.id === "string" && a.id === pinned_id) return true;
+      if (a.app_id && typeof a.app_id === "string" && a.app_id === pinned_id)
+        return true;
+      return false;
+    });
+    if (app) {
+      console.log(
+        `[AppLauncher] Found app for ID ${pinned_id}:`,
+        (app as any).name || (app as any).entry || (app as any).id || app,
+      );
+    }
+    return app ? AppItem(app) : null;
+  }).filter((widget) => widget !== null);
 
   if (pinnedAppWidgets.length === 0) {
-    PinnedAppGridWidgetCache = <label>No pinned apps found or configured.</label>;
+    PinnedAppGridWidgetCache = (
+      <label>No pinned apps found or configured.</label>
+    );
     return PinnedAppGridWidgetCache;
   }
 
@@ -92,17 +104,26 @@ function getPinnedAppsGridWidget() {
   for (let i = 0; i < pinnedAppWidgets.length; i += itemsPerRow) {
     const rowItems = pinnedAppWidgets.slice(i, i + itemsPerRow);
     rows.push(
-      <box horizontal spacing={10} className="pinned-apps-row" key={`pinned-row-${i / itemsPerRow}`}>
+      <box
+        horizontal
+        spacing={10}
+        className="pinned-apps-row"
+        key={`pinned-row-${i / itemsPerRow}`}
+      >
         {rowItems}
-      </box>
+      </box>,
     );
   }
-  PinnedAppGridWidgetCache = <box vertical spacing={10} className="pinned-apps-grid">{rows}</box>;
+  PinnedAppGridWidgetCache = (
+    <box vertical spacing={10} className="pinned-apps-grid">
+      {rows}
+    </box>
+  );
   return PinnedAppGridWidgetCache;
 }
 
 export default () => {
-  const appLauncherContent = query(currentQuery => {
+  const appLauncherContent = query((currentQuery) => {
     const trimmedQuery = currentQuery.trim();
 
     if (!trimmedQuery) {
@@ -119,7 +140,11 @@ export default () => {
       .fuzzy_query(currentQuery)
       .map((app: AstalApps.Application) => AppItem(app));
 
-    return <box className="app-launcher__list" vertical>{[...resultItems, ...appItems]}</box>;
+    return (
+      <box className="app-launcher__list" vertical>
+        {[...resultItems, ...appItems]}
+      </box>
+    );
   });
 
   const Entry = new Widget.Entry({
@@ -150,7 +175,7 @@ export default () => {
     <PopupWindow
       scrimType="opaque"
       visible={false}
-      margin={12}
+      margin={5}
       vexpand={true}
       name="app-launcher"
       namespace="app-launcher"
@@ -182,9 +207,7 @@ export default () => {
           <icon icon={icons.ui.search} />
           {Entry}
         </box>
-        <scrollable vexpand>
-          {appLauncherContent}
-        </scrollable>
+        <scrollable vexpand>{appLauncherContent}</scrollable>
       </box>
     </PopupWindow>
   );

@@ -30,14 +30,19 @@ export default () => {
       valign={Gtk.Align.FILL}
       scrimType="transparent"
       visible={false}
-      margin={12}
+      margin={5}
       name="control-center"
       namespace="control-center"
       // className="ControlCenter"
       layer={Astal.Layer.OVERLAY}
       exclusivity={Astal.Exclusivity.NORMAL}
       keymode={Astal.Keymode.EXCLUSIVE}
-      anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT}
+      anchor={
+        Astal.WindowAnchor.TOP |
+        Astal.WindowAnchor.RIGHT |
+        Astal.WindowAnchor.BOTTOM
+      }
+      vexpand={true}
       application={App}
       onKeyPressEvent={(self, event) => {
         const [keyEvent, keyCode] = event.get_keycode();

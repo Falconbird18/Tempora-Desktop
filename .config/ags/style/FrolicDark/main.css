@@ -1215,7 +1215,6 @@ switch:checked slider {
   background-size: 8px 8px;
   border-radius: 30px;
   padding: 10px;
-  min-height: 0;
 }
 
 .control-center__settings-button:hover,
@@ -1524,7 +1523,6 @@ switch:checked slider {
   margin-bottom: 2px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
   background: #2c2621;
-  margin-bottom: 20px;
 }
 
 .indicator .progress {
@@ -2309,7 +2307,6 @@ switch:checked slider {
   border-radius: 30px;
   margin-bottom: 2px;
   transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  padding: 20px;
   background: #2c2621;
   min-width: 350px;
   /* May need adjustment */
@@ -2406,13 +2403,14 @@ switch:checked slider {
 
 /*SideBar*/
 .sidebar-window {
-  background: linear-gradient(145deg, #2c2621, #2c2621);
-  min-height: 900px;
-  min-width: 300px;
-  border-radius: 30px;
+  background-color: #202020;
+  box-shadow: 0px 2px 0px #12de52, 0 0 0 transparent;
   border: 2px solid #e06f12;
-  padding: 20px;
-  color: #f5decc;
+  padding: 10px;
+  border-radius: 30px;
+  margin-bottom: 2px;
+  transition: all 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  min-width: 300px;
 }
 
 .sidebar-prompt-container {

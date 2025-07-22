@@ -137,6 +137,7 @@ const Player = ({ player, changePlayer }: PlayerProps) => {
       className={`player player-${player.busName}`}
       spacing={spacing}
       vexpand={true}
+      valign={Gtk.Align.FILL}
       setup={(self) =>
         self.hook(PlayerColors, "notify::colors", () => {
           updateColors(self, PlayerColors.colors, "image");
