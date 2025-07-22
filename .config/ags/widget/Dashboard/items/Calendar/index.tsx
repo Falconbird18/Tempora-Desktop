@@ -38,22 +38,16 @@ const weekDays = [
 
 const CalendarDay = (day, today) =>
   new Widget.Button({
-    className: `calendar__ ${today == 1 ? "calendar__button__today" : today == -1 ? "calendar__button__other-month" : ""}`,
-    child: new Widget.Overlay({
-      child: new Box({}),
-      overlays: [
-        new Label({
-          halign: CENTER,
-          className: "calendar__button_text",
-          label: String(day),
-        }),
-      ],
+    className: `calendar__button ${today == 1 ? "calendar__button__today" : today == -1 ? "calendar__button__other-month" : ""}`,
+    child: new Label({
+      halign: CENTER,
+      label: String(day),
     }),
   });
 
 export default () => {
   const calendarMonthYear = new Widget.Button({
-    // className: "calendar__monthyear",
+    className: "calendar__monthyear",
     onClicked: () => shiftCalendarXMonths(0),
     setup: (button) => {
       button.label = `${new Date().toLocaleString("default", { month: "long" })} ${new Date().getFullYear()}`;
@@ -70,7 +64,8 @@ export default () => {
     box.children = calendarJson.map(
       (row, i) =>
         new Widget.Box({
-          spacing: 18,
+          homogeneous: true,
+          spacing: 4,
           children: row.map((day, i) => CalendarDay(day.day, day.today)),
         }),
     );
@@ -89,7 +84,7 @@ export default () => {
   }
 
   const calendarHeader = new Widget.Box({
-    className: "h2",
+    className: "calendar__header",
     spacing: 8,
     setup: (box) => {
       box.pack_start(calendarMonthYear, false, false, 0);
@@ -98,14 +93,14 @@ export default () => {
           className: "spacing-h-5",
           children: [
             new Button({
-              className: "sidebar-calendar-monthshift-btn",
+              className: "calendar__button",
               onClicked: () => shiftCalendarXMonths(-1),
               child: new Widget.Icon({
                 icon: icons.ui.arrow.left,
               }),
             }),
             new Button({
-              className: "sidebar-calendar-monthshift-btn",
+              className: "calendar__button",
               onClicked: () => shiftCalendarXMonths(1),
               child: new Widget.Icon({
                 icon: icons.ui.arrow.right,
@@ -123,7 +118,8 @@ export default () => {
   const calendarDays = new Widget.Box({
     hexpand: true,
     vertical: true,
-    className: "paragraph",
+    spacing: 4,
+    className: "calendar__header-days",
     setup: (box) => {
       addCalendarChildren(box, calendarJson);
     },
@@ -139,14 +135,22 @@ export default () => {
         new Widget.Box({
           hexpand: true,
           vertical: true,
+          spacing: 12,
           children: [
             calendarHeader,
             new Widget.Box({
               homogeneous: true,
-              spacing: 12,
-              className: "h3",
-              children: weekDays.map((day, i) =>
-                CalendarDay(day.day, day.today),
+              spacing: 4,
+              className: "calendar__weekdays",
+              children: weekDays.map(
+                (day, i) =>
+                  new Widget.Button({
+                    className: "calendar__weekday",
+                    child: new Label({
+                      halign: CENTER,
+                      label: day.day,
+                    }),
+                  }),
               ),
             }),
             calendarDays,

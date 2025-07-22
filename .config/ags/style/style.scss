@@ -1149,11 +1149,9 @@ switch:checked slider {
 }
 
 .block {
-    padding: 20px;
     font-family: $paragraph_font;
     margin-bottom: $outset_margin;
     margin-right: $outset_margin;
-    background: transparent;
 }
 
 .placeholder {
@@ -1166,12 +1164,11 @@ switch:checked slider {
 }
 
 .calendar__header {
-    margin-top: 12px;
-    padding: 10px;
     font-family: $h2_font;
     font-size: $h2_size;
     font-weight: $h2_weight;
-    color: red;
+    color: $text;
+    margin-left: calc($padding + $paragraph_size);
 }
 
 .calendar__monthyear {
@@ -1183,36 +1180,21 @@ switch:checked slider {
     }
 }
 
-.calendar__weekdays {
-    color: $text;
-    color: red;
-    font-size: 100px;
-}
-
-.calendar__header-days {
-    font-size: $h3_size;
-    font-weight: $h3_weight;
-    font-family: $h3_font;
-    color: $text;
-}
-
-.calendar__button {
-    padding: 10px 12px;
-}
-
-.calendar__button__today {
-    @include primary-button;
-    font-size: 100px;
-    padding: 10px;
-    min-height: 0;
-}
-
 .calendar__button {
     color: $text;
     font-family: $paragraph_font;
     font-weight: $paragraph_weight;
     font-size: $paragraph_size;
-    font-size: 100px;
+    padding: $padding;
+    min-height: calc($paragraph_size + (2 * $padding));
+    min-width: calc($paragraph_size + (2 * $padding));
+}
+
+.calendar__button__today {
+    @include primary-button;
+    padding: 0;
+    min-height: calc($paragraph_size + (2 * $padding));
+    min-width: calc($paragraph_size + (2 * $padding));
 }
 
 .calendar__button__other-month {
@@ -1220,26 +1202,15 @@ switch:checked slider {
     font-family: $subtext_font;
     font-size: $subtext_size;
     font-weight: $subtext_weight;
-    font-size: 100px;
 }
 
 .calendar__weekday {
-    min-height: 40px;
-    min-width: 36px;
-}
-
-.calendar__day {
-    border-radius: 100px;
-    min-height: 40px;
-    min-width: 40px;
-
-    &.active {
-        background: $primary;
-    }
-
-    &.inactive {
-        color: $background;
-    }
+    min-height: calc($paragraph_size + (2 * $padding));
+    min-width: calc($paragraph_size + (2 * $padding));
+    color: $text;
+    font-family: $h3_font;
+    font-size: $h3_size;
+    font-weight: $h3_weight;
 }
 
 /*Notification*/

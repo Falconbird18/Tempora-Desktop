@@ -1241,11 +1241,9 @@ switch:checked slider {
 }
 
 .block {
-  padding: 20px;
   font-family: "Monaspace Xenon";
   margin-bottom: 2px;
   margin-right: 2px;
-  background: transparent;
 }
 
 .placeholder {
@@ -1256,12 +1254,11 @@ switch:checked slider {
 }
 
 .calendar__header {
-  margin-top: 12px;
-  padding: 10px;
   font-family: "Monaspace Radon";
   font-size: 18px;
   font-weight: normal;
-  color: red;
+  color: #f5decc;
+  margin-left: 24px;
 }
 
 .calendar__monthyear * {
@@ -1271,21 +1268,14 @@ switch:checked slider {
   color: #f5decc;
 }
 
-.calendar__weekdays {
-  color: #f5decc;
-  color: red;
-  font-size: 100px;
-}
-
-.calendar__header-days {
-  font-size: 16px;
-  font-weight: bold;
-  font-family: "Monaspace Xenon";
-  color: #f5decc;
-}
-
 .calendar__button {
-  padding: 10px 12px;
+  color: #f5decc;
+  font-family: "Monaspace Xenon";
+  font-weight: 300;
+  font-size: 14px;
+  padding: 10px;
+  min-height: 34px;
+  min-width: 34px;
 }
 
 .calendar__button__today {
@@ -1303,17 +1293,9 @@ switch:checked slider {
   background-size: 8px 8px;
   border-radius: 30px;
   text-shadow: 2px 2px 0 #202020, 2px -2px 0 #202020, -2px 2px 0 #202020, -2px -2px 0 #202020, 2px 0px 0 #202020, 0px 2px 0 #202020, -2px 0px 0 #202020, 0px -2px 0 #202020;
-  font-size: 100px;
-  padding: 10px;
-  min-height: 0;
-}
-
-.calendar__button {
-  color: #f5decc;
-  font-family: "Monaspace Xenon";
-  font-weight: 300;
-  font-size: 14px;
-  font-size: 100px;
+  padding: 0;
+  min-height: 34px;
+  min-width: 34px;
 }
 
 .calendar__button__other-month {
@@ -1321,24 +1303,15 @@ switch:checked slider {
   font-family: "Monaspace Xenon";
   font-size: 11px;
   font-weight: 100;
-  font-size: 100px;
 }
 
 .calendar__weekday {
-  min-height: 40px;
-  min-width: 36px;
-}
-
-.calendar__day {
-  border-radius: 100px;
-  min-height: 40px;
-  min-width: 40px;
-}
-.calendar__day.active {
-  background: #e06f12;
-}
-.calendar__day.inactive {
-  color: #2c2621;
+  min-height: 34px;
+  min-width: 34px;
+  color: #f5decc;
+  font-family: "Monaspace Xenon";
+  font-size: 16px;
+  font-weight: bold;
 }
 
 /*Notification*/
