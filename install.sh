@@ -86,7 +86,8 @@ fi
 # Install packages
 echo "Installing packages..."
 sudo pacman -S --needed hyprland wofi fish starship hyprpicker hyprlock hypridle wl-clipboard brightnessctl bluez-utils cliphist sddm git swww unzip grim libqalculate webkit2gtk-4.1 slurp playerctl polkit-gnome polkit-kde-agent xdg-desktop-portal-hyprland
-yay -S --needed quickshell nbfc-linux bibata-cursor-theme-bin wl-screenrec
+yay -S --needed quickshell nbfc-linux bibata-cursor-theme-bin
+# wl-screenrec
 echo "Packages installed."
 
 echo "Installing Open Sans..."
