@@ -10,7 +10,5 @@ ShellRoot {
 
     Windows.AppLauncher {
         id: mainLauncher
-        anchor.window: topBarWindow
-        anchor.edges: Edges.Bottom | Edges.Left
     }
 }

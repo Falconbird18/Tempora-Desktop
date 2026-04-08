@@ -5,12 +5,24 @@ import Quickshell
 import Quickshell.Io
 import "../components" as Components
 
-PopupWindow {
+PanelWindow {
     id: appLauncher
     implicitWidth: 400
     implicitHeight: 500
-    color: "#2e3440"
+    color: "transparent"
     visible: false
+
+    focusable: visible
+    exclusionMode: ExclusionMode.Ignore
+
+    anchors {
+        top: true
+        left: true
+    }
+    margins {
+        top: 40
+        left: 10
+    }
 
     property var allApps: []
 
@@ -31,10 +43,18 @@ PopupWindow {
 
     Rectangle {
         anchors.fill: parent
-        color: "transparent"
+        color: "#2e3440"
         border.color: "#4c566a"
         border.width: 2
         radius: 8
+
+        focus: true
+        Keys.onEscapePressed: appLauncher.visible = false
+        onActiveFocusChanged: {
+            if (!activeFocus && appLauncher.visible) {
+                appLauncher.visible = false;
+            }
+        }
 
         ColumnLayout {
             anchors.fill: parent
@@ -56,6 +76,7 @@ PopupWindow {
 
             TextField {
                 id: searchInput
+                focus: true
                 Layout.fillWidth: true
                 placeholderText: "Search apps..."
                 color: "#eceff4"
