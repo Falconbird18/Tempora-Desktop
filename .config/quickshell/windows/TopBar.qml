@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import "../components" as Components
+import "../widgets" as Widgets
 
 PanelWindow {
     id: topBar
@@ -17,43 +18,35 @@ PanelWindow {
     // We expect the parent (ShellRoot) to pass in a reference to the launcher
     property var launcherRef: null
 
-    Row {
+    Item {
         anchors.fill: parent
         anchors.leftMargin: 10
         anchors.rightMargin: 10
-        spacing: 10
 
-        Components.Button {
-            text: "Menu"
-            width: 80
-            anchors.verticalCenter: parent.verticalCenter
-            onClicked: {
-                if (topBar.launcherRef) {
-                    topBar.launcherRef.toggle();
+        Row {
+            anchors.left: parent.left
+            height: parent.height
+            spacing: 10
+
+            Components.Button {
+                text: "Menu"
+                width: 80
+                anchors.verticalCenter: parent.verticalCenter
+                onClicked: {
+                    if (topBar.launcherRef) {
+                        topBar.launcherRef.toggle();
+                    }
                 }
             }
-        }
 
-        Item {
-            // Spacer
-            width: parent.width - 200
-            height: parent.height
-        }
-
-        Text {
-            text: Qt.formatDateTime(new Date(), "hh:mm ap")
-            color: "#eceff4"
-            font.pointSize: 11
-            font.bold: true
-            anchors.verticalCenter: parent.verticalCenter
-
-            // Simple timer to update the clock
-            Timer {
-                interval: 1000
-                running: true
-                repeat: true
-                onTriggered: parent.text = Qt.formatDateTime(new Date(), "hh:mm ap")
+            Widgets.WorkspacesWidget {
+                anchors.verticalCenter: parent.verticalCenter
             }
+        }
+
+        Widgets.ClockWidget {
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
         }
     }
 }
