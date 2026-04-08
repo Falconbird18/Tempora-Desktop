@@ -12,7 +12,7 @@ PanelWindow {
         right: true
     }
 
-    height: 36
+    implicitHeight: 36
     color: "#2e3440"
 
     // We expect the parent (ShellRoot) to pass in a reference to the launcher

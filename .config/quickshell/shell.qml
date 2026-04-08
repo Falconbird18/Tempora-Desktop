@@ -3,11 +3,14 @@ import Quickshell
 import "windows" as Windows
 
 ShellRoot {
-    Windows.AppLauncher {
-        id: mainLauncher
+    Windows.TopBar {
+        id: topBarWindow
+        launcherRef: mainLauncher
     }
 
-    Windows.TopBar {
-        launcherRef: mainLauncher
+    Windows.AppLauncher {
+        id: mainLauncher
+        anchor.window: topBarWindow
+        anchor.edges: Edges.Bottom | Edges.Left
     }
 }
