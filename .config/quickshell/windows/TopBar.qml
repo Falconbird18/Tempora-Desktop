@@ -17,6 +17,7 @@ PanelWindow {
 
     // We expect the parent (ShellRoot) to pass in a reference to the launcher
     property var launcherRef: null
+    property var quickSettingsRef: null
 
     Item {
         anchors.fill: parent
@@ -48,6 +49,12 @@ PanelWindow {
         Widgets.ClockWidget {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
+
+            onClicked: {
+                if (topBar.quickSettingsRef) {
+                    topBar.quickSettingsRef.toggle();
+                }
+            }
         }
     }
 }
