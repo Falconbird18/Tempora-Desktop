@@ -8,7 +8,7 @@ import "../components" as Components
 
 PanelWindow {
     id: appLauncher
-    implicitWidth: 400
+    implicitWidth: 700
     implicitHeight: 500
     color: "transparent"
     visible: false
@@ -18,11 +18,9 @@ PanelWindow {
 
     anchors {
         top: true
-        left: true
     }
     margins {
-        top: 40
-        left: 10
+        top: 250
     }
 
     property var allApps: []

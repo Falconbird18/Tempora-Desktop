@@ -38,10 +38,11 @@ PanelWindow {
                     }
                 }
             }
+        }
 
-            Widgets.WorkspacesWidget {
-                anchors.verticalCenter: parent.verticalCenter
-            }
+        Widgets.WorkspacesWidget {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
         }
 
         Widgets.ClockWidget {
