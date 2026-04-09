@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
+import Qt5Compat.GraphicalEffects
 
 PanelWindow {
     id: osdWindow
@@ -62,6 +63,11 @@ PanelWindow {
                 sourceSize.width: 24
                 sourceSize.height: 24
                 Layout.alignment: Qt.AlignVCenter
+
+                layer.enabled: true
+                layer.effect: ColorOverlay {
+                    color: "#eceff4"
+                }
 
                 source: {
                     if (osdType === "volume") {
