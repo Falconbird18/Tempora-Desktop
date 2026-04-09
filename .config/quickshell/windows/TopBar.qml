@@ -13,7 +13,7 @@ PanelWindow {
     }
 
     implicitHeight: 36
-    color: "#2e3440"
+    color: "#2e3440dd"
 
     // We expect the parent (ShellRoot) to pass in a reference to the launcher
     property var launcherRef: null

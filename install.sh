@@ -120,7 +120,7 @@ fi
 
 echo "Installing glass effects"
 hyprpm add https://github.com/hyprnux/hyprglass
-hyprpm enable HyprGlass
+hyprpm enable hyprglass
 
 echo "Config files installed."
 
