@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 import "../components" as Components
 
 PanelWindow {
@@ -25,6 +26,15 @@ PanelWindow {
     }
 
     property var allApps: []
+
+    GlobalShortcut {
+        name: "toggle-launcher"
+        description: "Toggle app launcher"
+
+        onPressed: {
+            appLauncher.toggle();
+        }
+    }
 
     function toggle() {
         visible = !visible;
