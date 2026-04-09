@@ -16,4 +16,8 @@ ShellRoot {
     Windows.QuickSettings {
         id: quickSettings
     }
+
+    Windows.OsdWindow {
+        id: osdWindow
+    }
 }

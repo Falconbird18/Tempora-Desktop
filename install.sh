@@ -85,7 +85,7 @@ fi
 
 # Install packages
 echo "Installing packages..."
-sudo pacman -S --needed hyprland wofi fish starship hyprpicker hyprlock hypridle wl-clipboard brightnessctl bluez-utils cliphist sddm git swww unzip grim libqalculate webkit2gtk-4.1 slurp playerctl polkit-gnome polkit-kde-agent xdg-desktop-portal-hyprland
+sudo pacman -S --needed hyprland wofi fish starship hyprpicker hyprlock hypridle wl-clipboard brightnessctl bluez-utils cliphist sddm git swww unzip grim libqalculate webkit2gtk-4.1 slurp playerctl polkit-gnome polkit-kde-agent xdg-desktop-portal-hyprland cmake
 yay -S --needed quickshell nbfc-linux bibata-cursor-theme-bin
 # wl-screenrec
 echo "Packages installed."
@@ -117,6 +117,10 @@ fi
 if [ -f "$REPO_DIR/.config/sddm/sddm.conf" ]; then
     sudo cp "$REPO_DIR/.config/sddm/sddm.conf" /etc/
 fi
+
+echo "Installing glass effects"
+hyprpm add https://github.com/hyprnux/hyprglass
+hyprpm enable HyprGlass
 
 echo "Config files installed."
 
