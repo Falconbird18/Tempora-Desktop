@@ -118,10 +118,6 @@ if [ -f "$REPO_DIR/.config/sddm/sddm.conf" ]; then
     sudo cp "$REPO_DIR/.config/sddm/sddm.conf" /etc/
 fi
 
-echo "Installing glass effects"
-hyprpm add https://github.com/hyprnux/hyprglass
-hyprpm enable hyprglass
-
 echo "Config files installed."
 
 echo "Adding wallpaper images..."
