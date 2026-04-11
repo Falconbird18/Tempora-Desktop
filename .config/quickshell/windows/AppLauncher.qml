@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 import "../components" as Components
+import "../"
 
 PanelWindow {
     id: appLauncher
@@ -51,7 +52,7 @@ PanelWindow {
 
     Rectangle {
         anchors.fill: parent
-        color: "#2e3440aa"
+        color: Qt.alpha(Theme.primaryBackground, Theme.primaryAlpha)
         border.color: "#4c566a"
         border.width: 2
         radius: 8

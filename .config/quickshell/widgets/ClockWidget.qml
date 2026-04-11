@@ -1,8 +1,9 @@
 import QtQuick
+import "../"
 
 Rectangle {
     id: root
-    color: mouseArea.containsMouse ? "#4c566a" : "#2e3440" // Nord background color
+    color: mouseArea.containsMouse ? Theme.hover : Qt.alpha(Theme.primaryBackground, 0.8)
     radius: 14
     width: clockText.paintedWidth + 24
     height: 28

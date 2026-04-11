@@ -1,14 +1,15 @@
 import QtQuick
 import Quickshell.Hyprland
+import "../"
 
 Rectangle {
     id: root
-    color: "#2e3440"
+    color: Qt.alpha(Theme.primaryBackground, 0.8)
     radius: 14
     height: 28
     width: workspacesRow.width + 16
 
-    border.color: "#3b4252"
+    border.color: Theme.primary
     border.width: 1
 
     property int activeWorkspace: Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 1
@@ -39,7 +40,7 @@ Rectangle {
                 height: 12
                 radius: 6
 
-                color: root.activeWorkspace === index + 1 ? "#88c0d0" : "#4c566a"
+                color: root.activeWorkspace === index + 1 ? Theme.primary : "#4c566a"
 
                 Behavior on width {
                     NumberAnimation {

@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import "../components" as Components
 import "../widgets" as Widgets
+import "../"
 
 PanelWindow {
     id: topBar
@@ -13,7 +14,7 @@ PanelWindow {
     }
 
     implicitHeight: 36
-    color: "#2e3440dd"
+    color: Qt.alpha(Theme.primaryBackground, Theme.primaryAlpha)
 
     // We expect the parent (ShellRoot) to pass in a reference to the launcher
     property var launcherRef: null

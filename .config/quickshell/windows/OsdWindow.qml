@@ -46,7 +46,7 @@ PanelWindow {
 
     Rectangle {
         anchors.fill: parent
-        color: "#2e3440dd"
+        color: Qt.alpha(Theme.primaryBackground, Theme.primaryAlpha)
         radius: 30
         border.color: "#4c566a"
         border.width: 2
