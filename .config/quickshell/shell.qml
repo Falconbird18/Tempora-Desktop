@@ -20,4 +20,8 @@ ShellRoot {
     Windows.OsdWindow {
         id: osdWindow
     }
+
+    Windows.NotificationPopup {
+        id: notificationPopup
+    }
 }
