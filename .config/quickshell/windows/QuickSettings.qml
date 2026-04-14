@@ -56,9 +56,7 @@ PanelWindow {
         Rectangle {
             anchors.fill: parent
             color: Qt.alpha(Theme.primaryBackground, Theme.primaryAlpha)
-            border.color: "#4c566a"
-            border.width: 2
-            radius: 8
+            radius: Theme.secondaryRadius
         }
 
         ColumnLayout {
@@ -70,8 +68,10 @@ PanelWindow {
 
             Text {
                 text: "Quick Settings"
-                color: "#eceff4"
-                font.pointSize: 16
+                color: Theme.textDark
+                font.family: Theme.headingTwoFamily
+                font.pixelSize: Theme.headingTwoSize
+                font.weight: Theme.headingTwoWeight
                 font.bold: true
             }
 

@@ -18,10 +18,8 @@ Button {
 
     background: Rectangle {
         implicitWidth: 100
-        implicitHeight: 32
-        color: control.hovered ? control.hoverColor : control.bgColor
-        radius: 6
-        border.color: "#4c566a"
-        border.width: 1
+        implicitHeight: Theme.normalHeight
+        color: control.hovered ? control.hoverColor : Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha)
+        radius: Theme.primaryRadius
     }
 }

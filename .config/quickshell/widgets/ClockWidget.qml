@@ -3,13 +3,10 @@ import "../"
 
 Rectangle {
     id: root
-    color: mouseArea.containsMouse ? Theme.hover : Qt.alpha(Theme.primaryBackground, 0.8)
-    radius: 14
+    color: mouseArea.containsMouse ? Theme.hover : Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha)
+    radius: Theme.primaryRadius
     width: clockText.paintedWidth + 24
-    height: 28
-
-    border.color: "#3b4252"
-    border.width: 1
+    height: Theme.normalHeight
 
     signal clicked
 
@@ -24,10 +21,10 @@ Rectangle {
     Text {
         id: clockText
         anchors.centerIn: parent
-        color: "#eceff4" // Nord text color
-        font.family: "Inter, sans-serif"
-        font.pixelSize: 13
-        font.weight: Font.DemiBold
+        color: Theme.textDark
+        font.family: Theme.paragraphFont
+        font.pixelSize: Theme.paragraphSize
+        font.weight: Theme.paragraphWeight
     }
 
     Timer {
@@ -35,11 +32,11 @@ Rectangle {
         running: true
         repeat: true
         onTriggered: {
-            clockText.text = Qt.formatDateTime(new Date(), "ddd, MMM d   •   h:mm ap");
+            clockText.text = Qt.formatDateTime(new Date(), "ddd, MMM d  •  h:mm ap");
         }
     }
 
     Component.onCompleted: {
-        clockText.text = Qt.formatDateTime(new Date(), "ddd, MMM d   •   h:mm ap");
+        clockText.text = Qt.formatDateTime(new Date(), "ddd, MMM d  •  h:mm ap");
     }
 }
