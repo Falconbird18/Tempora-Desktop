@@ -99,6 +99,12 @@ PanelWindow {
                 Components.Button {
                     text: "Bluetooth"
                     Layout.fillWidth: true
+                    onClicked: {
+                        console.log("Bluetooth button clicked!");
+                        mainView.visible = false;
+                        bluetoothPage.visible = true;
+                        bluetoothPage.refresh();
+                    }
                 }
             }
 
@@ -130,6 +136,18 @@ PanelWindow {
             visible: false
             onBackRequested: {
                 wifiPage.visible = false;
+                mainView.visible = true;
+            }
+        }
+
+        Components.BluetoothPage {
+            id: bluetoothPage
+            authPromptRef: quickSettings.authPromptRef
+            anchors.fill: parent
+            anchors.margins: 15
+            visible: false
+            onBackRequested: {
+                bluetoothPage.visible = false;
                 mainView.visible = true;
             }
         }
