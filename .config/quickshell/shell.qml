@@ -15,6 +15,11 @@ ShellRoot {
 
     Windows.QuickSettings {
         id: quickSettings
+        authPromptRef: authPrompt
+    }
+
+    Windows.AuthPromptWindow {
+        id: authPrompt
     }
 
     Windows.OsdWindow {

@@ -14,6 +14,8 @@ PanelWindow {
     color: "transparent"
     visible: false
 
+    property var authPromptRef
+
     focusable: visible
     exclusionMode: ExclusionMode.Ignore
 
@@ -35,29 +37,36 @@ PanelWindow {
     function toggle() {
         visible = !visible;
         if (visible) {
-            forceActiveFocus();
+            mainRect.forceActiveFocus();
         }
     }
 
-    Rectangle {
+    FocusScope {
+        id: mainRect
         anchors.fill: parent
-        color: Qt.alpha(Theme.primaryBackground, Theme.primaryAlpha)
-        border.color: "#4c566a"
-        border.width: 2
-        radius: 8
-
         focus: true
         Keys.onEscapePressed: quickSettings.visible = false
+
         onActiveFocusChanged: {
             if (!activeFocus && quickSettings.visible) {
                 quickSettings.visible = false;
             }
         }
 
+        Rectangle {
+            anchors.fill: parent
+            color: Qt.alpha(Theme.primaryBackground, Theme.primaryAlpha)
+            border.color: "#4c566a"
+            border.width: 2
+            radius: 8
+        }
+
         ColumnLayout {
+            id: mainView
             anchors.fill: parent
             anchors.margins: 15
             spacing: 10
+            visible: true
 
             Text {
                 text: "Quick Settings"
@@ -79,6 +88,12 @@ PanelWindow {
                 Components.Button {
                     text: "Wi-Fi"
                     Layout.fillWidth: true
+                    onClicked: {
+                        console.log("Wi-Fi button clicked!");
+                        mainView.visible = false;
+                        wifiPage.visible = true;
+                        wifiPage.refresh();
+                    }
                 }
 
                 Components.Button {
@@ -104,6 +119,18 @@ PanelWindow {
 
             Item {
                 Layout.fillHeight: true
+            }
+        }
+
+        Components.WifiPage {
+            id: wifiPage
+            authPromptRef: quickSettings.authPromptRef
+            anchors.fill: parent
+            anchors.margins: 15
+            visible: false
+            onBackRequested: {
+                wifiPage.visible = false;
+                mainView.visible = true;
             }
         }
     }
