@@ -9,8 +9,8 @@ import "../"
 
 PanelWindow {
     id: quickSettings
-    implicitWidth: 350
-    implicitHeight: 250
+    implicitWidth: 380
+    implicitHeight: 480
     color: "transparent"
     visible: false
 
@@ -38,7 +38,72 @@ PanelWindow {
         visible = !visible;
         if (visible) {
             mainRect.forceActiveFocus();
+            getVolume.running = true;
+            getBrightness.running = true;
         }
+    }
+
+    Process {
+        id: setVolume
+        property int volumeTarget: 50
+        command: ["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", (volumeTarget / 100).toFixed(2)]
+    }
+
+    Process {
+        id: getVolume
+        command: ["sh", "-c", "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print int($2 * 100)}'"]
+        stdout: SplitParser {
+            onRead: data => {
+                let val = parseInt(data.trim());
+                if (!isNaN(val)) {
+                    volumeSlider.value = val;
+                }
+            }
+        }
+    }
+
+    Process {
+        id: setBrightness
+        property int brightnessTarget: 50
+        command: ["brightnessctl", "s", brightnessTarget + "%"]
+    }
+
+    Process {
+        id: getBrightness
+        command: ["sh", "-c", "brightnessctl -m | awk -F, '{print int($4)}'"]
+        stdout: SplitParser {
+            onRead: data => {
+                let val = parseInt(data.trim());
+                if (!isNaN(val)) {
+                    brightnessSlider.value = val;
+                }
+            }
+        }
+    }
+
+    Process {
+        id: toggleCaffeineOn
+        command: ["systemctl", "mask", "sleep.target", "suspend.target", "hibernate.target", "hybrid-sleep.target"]
+    }
+
+    Process {
+        id: toggleCaffeineOff
+        command: ["systemctl", "unmask", "sleep.target", "suspend.target", "hibernate.target", "hybrid-sleep.target"]
+    }
+
+    Process {
+        id: toggleDnd
+        command: ["dunstctl", "set-paused", "toggle"]
+    }
+
+    Process {
+        id: nightLightOn
+        command: ["gammastep", "-O", "4500"]
+    }
+
+    Process {
+        id: nightLightOff
+        command: ["pkill", "gammastep"]
     }
 
     FocusScope {
@@ -62,17 +127,21 @@ PanelWindow {
         ColumnLayout {
             id: mainView
             anchors.fill: parent
-            anchors.margins: 15
-            spacing: 10
+            anchors.margins: 20
+            spacing: 15
             visible: true
 
-            Text {
-                text: "Quick Settings"
-                color: Theme.textDark
-                font.family: Theme.headingTwoFamily
-                font.pixelSize: Theme.headingTwoSize
-                font.weight: Theme.headingTwoWeight
-                font.bold: true
+            RowLayout {
+                Layout.fillWidth: true
+                Text {
+                    text: "Quick Settings"
+                    color: Theme.textDark
+                    font.family: Theme.headingTwoFamily
+                    font.pixelSize: Theme.headingTwoSize
+                    font.weight: Theme.headingTwoWeight
+                    font.bold: true
+                    Layout.fillWidth: true
+                }
             }
 
             Rectangle {
@@ -81,15 +150,91 @@ PanelWindow {
                 color: "#4c566a"
             }
 
-            RowLayout {
+            ColumnLayout {
                 Layout.fillWidth: true
-                spacing: 15
+                spacing: 10
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 10
+                    Text {
+                        text: "Vol"
+                        color: Theme.textDark
+                        font.family: Theme.paragraphFamily
+                        font.pixelSize: Theme.paragraphSize
+                        font.bold: true
+                        Layout.preferredWidth: 40
+                    }
+                    Slider {
+                        id: volumeSlider
+                        from: 0
+                        to: 100
+                        value: 50
+                        Layout.fillWidth: true
+                        onMoved: {
+                            setVolume.volumeTarget = value;
+                            setVolume.running = true;
+                        }
+                    }
+                    Text {
+                        text: Math.round(volumeSlider.value) + "%"
+                        color: Theme.textDark
+                        font.family: Theme.paragraphFamily
+                        font.pixelSize: 12
+                        Layout.preferredWidth: 30
+                        horizontalAlignment: Text.AlignRight
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 10
+                    Text {
+                        text: "Brt"
+                        color: Theme.textDark
+                        font.family: Theme.paragraphFamily
+                        font.pixelSize: Theme.paragraphSize
+                        font.bold: true
+                        Layout.preferredWidth: 40
+                    }
+                    Slider {
+                        id: brightnessSlider
+                        from: 0
+                        to: 100
+                        value: 50
+                        Layout.fillWidth: true
+                        onMoved: {
+                            setBrightness.brightnessTarget = value;
+                            setBrightness.running = true;
+                        }
+                    }
+                    Text {
+                        text: Math.round(brightnessSlider.value) + "%"
+                        color: Theme.textDark
+                        font.family: Theme.paragraphFamily
+                        font.pixelSize: 12
+                        Layout.preferredWidth: 30
+                        horizontalAlignment: Text.AlignRight
+                    }
+                }
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                height: 1
+                color: "#4c566a"
+            }
+
+            GridLayout {
+                Layout.fillWidth: true
+                columns: 2
+                rowSpacing: 10
+                columnSpacing: 10
 
                 Components.Button {
                     text: "Wi-Fi"
                     Layout.fillWidth: true
                     onClicked: {
-                        console.log("Wi-Fi button clicked!");
                         mainView.visible = false;
                         wifiPage.visible = true;
                         wifiPage.refresh();
@@ -100,26 +245,59 @@ PanelWindow {
                     text: "Bluetooth"
                     Layout.fillWidth: true
                     onClicked: {
-                        console.log("Bluetooth button clicked!");
                         mainView.visible = false;
                         bluetoothPage.visible = true;
                         bluetoothPage.refresh();
                     }
                 }
-            }
-
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 15
 
                 Components.Button {
-                    text: "Audio"
+                    id: caffeineBtn
+                    property bool isActive: false
+                    text: isActive ? "Caffeine: ON" : "Caffeine: OFF"
                     Layout.fillWidth: true
+                    onClicked: {
+                        isActive = !isActive;
+                        if (isActive) {
+                            toggleCaffeineOn.running = true;
+                        } else {
+                            toggleCaffeineOff.running = true;
+                        }
+                    }
                 }
 
                 Components.Button {
-                    text: "Display"
+                    text: "Do Not Disturb"
                     Layout.fillWidth: true
+                    onClicked: {
+                        toggleDnd.running = true;
+                    }
+                }
+
+                Components.Button {
+                    id: nightLightBtn
+                    property bool isActive: false
+                    text: isActive ? "Night Light: ON" : "Night Light: OFF"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        isActive = !isActive;
+                        if (isActive) {
+                            nightLightOn.running = true;
+                        } else {
+                            nightLightOff.running = true;
+                        }
+                    }
+                }
+
+                Components.Button {
+                    id: airplaneBtn
+                    property bool isActive: false
+                    text: isActive ? "Airplane: ON" : "Airplane: OFF"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        isActive = !isActive;
+                        console.log("Toggled Airplane mode to " + isActive);
+                    }
                 }
             }
 
@@ -132,7 +310,7 @@ PanelWindow {
             id: wifiPage
             authPromptRef: quickSettings.authPromptRef
             anchors.fill: parent
-            anchors.margins: 15
+            anchors.margins: 20
             visible: false
             onBackRequested: {
                 wifiPage.visible = false;
@@ -144,7 +322,7 @@ PanelWindow {
             id: bluetoothPage
             authPromptRef: quickSettings.authPromptRef
             anchors.fill: parent
-            anchors.margins: 15
+            anchors.margins: 20
             visible: false
             onBackRequested: {
                 bluetoothPage.visible = false;
