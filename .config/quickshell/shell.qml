@@ -3,10 +3,14 @@ import Quickshell
 import "windows" as Windows
 
 ShellRoot {
-    Windows.TopBar {
-        id: topBarWindow
-        launcherRef: mainLauncher
-        quickSettingsRef: quickSettings
+    Instantiator {
+        model: Quickshell.screens
+
+        delegate: Windows.TopBar {
+            screen: modelData
+            launcherRef: mainLauncher
+            quickSettingsRef: quickSettings
+        }
     }
 
     Windows.AppLauncher {
