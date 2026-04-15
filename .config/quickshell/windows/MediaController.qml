@@ -64,8 +64,6 @@ PanelWindow {
         anchors.fill: parent
         color: Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha)
         radius: Theme.primaryRadius
-        border.color: Qt.alpha(Theme.tertiaryBackground, 0.5)
-        border.width: 1
 
         Row {
             anchors.fill: parent
@@ -115,8 +113,9 @@ PanelWindow {
                         Text {
                             text: mediaController.player && mediaController.player.trackTitle ? mediaController.player.trackTitle : "No Media Playing"
                             color: Theme.textDark
-                            font.bold: true
-                            font.pointSize: 11
+                            font.family: Theme.headingOneFamily
+                            font.pointSize: Theme.headingOneSize
+                            font.weight: Theme.headingOneWeight
                             elide: Text.ElideRight
                             width: parent.width
                         }

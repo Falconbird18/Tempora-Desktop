@@ -4,16 +4,15 @@ import QtQuick.Controls.Basic
 
 Button {
     id: control
-    property color bgColor: "#2e3440"
-    property color hoverColor: "#3b4252"
-    property color textColor: "#eceff4"
 
     contentItem: Text {
         text: control.text
-        color: control.textColor
+        color: Theme.textDark
+        font.family: Theme.paragraphOneFamily
+        font.pointSize: Theme.paragraphOneSize
+        font.weight: Theme.paragraphOneWeight
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        font.pointSize: 11
         elide: Text.ElideRight
         width: control.width
         leftPadding: 10
@@ -23,7 +22,7 @@ Button {
     background: Rectangle {
         implicitWidth: 100
         implicitHeight: Theme.normalHeight
-        color: control.hovered ? control.hoverColor : Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha)
+        color: control.hovered ? Qt.alpha(Theme.tertiaryBackground, Theme.tertiaryAlpha) : Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha)
         radius: Theme.primaryRadius
     }
 }

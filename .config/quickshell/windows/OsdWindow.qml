@@ -63,25 +63,25 @@ PanelWindow {
                 sourceSize.height: Theme.headingFourSize
                 Layout.alignment: Qt.AlignVCenter
 
-                layer.enabled: true
-                layer.effect: ColorOverlay {
-                    color: Theme.textDark
-                }
+                // layer.enabled: true
+                // layer.effect: ColorOverlay {
+                //     color: Theme.textDark
+                // }
 
                 source: {
                     if (osdType === "volume") {
                         if (osdMuted || osdValue === 0)
-                            return "file:///usr/share/icons/breeze/status/24/audio-volume-muted.svg";
+                            return Qt.resolvedUrl("../../../core/assets/duotone/speaker-x-duotone.svg");
                         if (osdValue < 30)
-                            return "file:///usr/share/icons/breeze/status/24/audio-volume-low.svg";
-                        if (osdValue < 70)
-                            return "file:///usr/share/icons/breeze/status/24/audio-volume-medium.svg";
-                        return "file:///usr/share/icons/breeze/status/24/audio-volume-high.svg";
+                            return Qt.resolvedUrl("../../../core/assets/duotone/speaker-none-duotone.svg");
+                        if (osdValue < 60)
+                            return Qt.resolvedUrl("../../../core/assets/duotone/speaker-low-duotone.svg");
+                        return Qt.resolvedUrl("../../../core/assets/duotone/speaker-high-duotone.svg");
                     } else {
                         // Fallback generic icons since breeze lacks specific display brightness ones
                         if (osdValue < 30)
                             return "file:///usr/share/icons/Pop/scalable/status/display-brightness-low-symbolic.svg";
-                        if (osdValue < 70)
+                        if (osdValue < 60)
                             return "file:///usr/share/icons/Pop/scalable/status/display-brightness-medium-symbolic.svg";
                         return "file:///usr/share/icons/Pop/scalable/status/display-brightness-high-symbolic.svg";
                     }

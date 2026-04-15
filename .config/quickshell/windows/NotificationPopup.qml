@@ -26,6 +26,7 @@ PanelWindow {
         id: server
 
         onNotification: notification => {
+            console.log("Notification received: appName=", notification.appName, "summary=", notification.summary, "body=", notification.body, "appIcon=", notification.appIcon, "expireTimeout=", notification.expireTimeout);
             notification.tracked = true;
         }
     }
@@ -33,12 +34,13 @@ PanelWindow {
     // Notifications List
     ListView {
         id: notificationList
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height
         spacing: 10
         model: server.trackedNotifications
 
         delegate: Rectangle {
-            width: ListView.view.width
+            width: notificationList.width
             height: layout.implicitHeight + 24
             color: "#1e1e2e" // dark theme background
             radius: 12
@@ -48,19 +50,31 @@ PanelWindow {
             // Notification close timer (optional auto-dismiss after 5 seconds)
             Timer {
                 interval: modelData.expireTimeout > 0 ? modelData.expireTimeout : 5000
-                running: true
+                running: modelData.expireTimeout !== 0
                 onTriggered: modelData.dismiss()
             }
 
             RowLayout {
                 id: layout
-                anchors.fill: parent
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
                 anchors.margins: 12
                 spacing: 12
 
                 // Icon
                 Image {
-                    source: modelData.appIcon !== "" ? modelData.appIcon : "image://icon/dialog-information"
+                    source: {
+                        if (modelData.image)
+                            return modelData.image;
+                        if (!modelData.appIcon)
+                            return "image://icon/dialog-information";
+                        if (modelData.appIcon.startsWith("file://") || modelData.appIcon.startsWith("qrc://") || modelData.appIcon.startsWith("image://"))
+                            return modelData.appIcon;
+                        if (modelData.appIcon.startsWith("/"))
+                            return "file://" + modelData.appIcon;
+                        return "image://icon/" + modelData.appIcon;
+                    }
                     Layout.preferredWidth: 48
                     Layout.preferredHeight: 48
                     fillMode: Image.PreserveAspectCrop
