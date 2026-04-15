@@ -79,19 +79,19 @@ echo "Pacman updated."
 # Install yay
 if ! command -v yay &> /dev/null; then
     echo "Installing yay..."
-    sudo pacman -S --needed yay
+    sudo pacman -S --needed libnotify jq yay
     echo "Yay installed."
 fi
 
 # Install packages
 echo "Installing packages..."
-sudo pacman -S --needed hyprland wofi fish starship hyprpicker hyprlock hypridle wl-clipboard brightnessctl bluez-utils cliphist sddm git swww unzip grim libqalculate webkit2gtk-4.1 slurp playerctl polkit-gnome polkit-kde-agent xdg-desktop-portal-hyprland cmake
+sudo pacman -S --needed libnotify jq hyprland wofi fish starship hyprpicker hyprlock hypridle wl-clipboard brightnessctl bluez-utils cliphist sddm git swww unzip grim libqalculate webkit2gtk-4.1 slurp playerctl polkit-gnome polkit-kde-agent xdg-desktop-portal-hyprland cmake
 yay -S --needed quickshell nbfc-linux bibata-cursor-theme-bin
 # wl-screenrec
 echo "Packages installed."
 
 echo "Installing Open Sans..."
-sudo pacman -S --needed ttf-opensans
+sudo pacman -S --needed libnotify jq ttf-opensans
 echo "Open Sans installed."
 
 # Copy the config files from local directory

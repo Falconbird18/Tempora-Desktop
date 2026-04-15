@@ -29,4 +29,8 @@ ShellRoot {
     Windows.NotificationPopup {
         id: notificationPopup
     }
+
+    Windows.ScreenshotPopup {
+        id: screenshotPopup
+    }
 }
