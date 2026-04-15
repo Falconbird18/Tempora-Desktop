@@ -22,9 +22,9 @@ Rectangle {
         id: clockText
         anchors.centerIn: parent
         color: Theme.textDark
-        font.family: Theme.paragraphFont
-        font.pixelSize: Theme.paragraphSize
-        font.weight: Theme.paragraphWeight
+        font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
+        font.pixelSize: Theme.paragraphOneSize !== undefined ? Theme.paragraphOneSize : 16
+        font.weight: Theme.paragraphOneWeight !== undefined ? Theme.paragraphOneWeight : 400
     }
 
     Timer {

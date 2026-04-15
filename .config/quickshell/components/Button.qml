@@ -14,6 +14,10 @@ Button {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         font.pointSize: 11
+        elide: Text.ElideRight
+        width: control.width
+        leftPadding: 10
+        rightPadding: 10
     }
 
     background: Rectangle {

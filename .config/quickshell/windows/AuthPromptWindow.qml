@@ -10,7 +10,7 @@ PanelWindow {
     color: "transparent"
     visible: false
     focusable: visible
-    
+
     // Cover the entire screen
     anchors {
         top: true
@@ -49,10 +49,10 @@ PanelWindow {
             anchors.centerIn: parent
             width: 400
             height: 200
-            color: Theme.bgDark
-            border.color: Theme.border
-            border.width: Theme.borderWidth
-            radius: Theme.radius
+            color: Theme.bgDark !== undefined ? Theme.bgDark : "#1E1E2E"
+            border.color: Theme.border !== undefined ? Theme.border : "#313244"
+            border.width: Theme.borderWidth !== undefined ? Theme.borderWidth : 2
+            radius: Theme.radius !== undefined ? Theme.radius : 12
 
             ColumnLayout {
                 anchors.fill: parent
@@ -61,8 +61,8 @@ PanelWindow {
 
                 Text {
                     text: authPrompt.promptText
-                    color: Theme.fg
-                    font.pointSize: Theme.fontLarge
+                    color: Theme.fg !== undefined ? Theme.fg : "#CDD6F4"
+                    font.pointSize: Theme.fontLarge !== undefined ? Theme.fontLarge : 24
                     font.bold: true
                     Layout.fillWidth: true
                     wrapMode: Text.Wrap
@@ -74,43 +74,46 @@ PanelWindow {
                     echoMode: TextInput.Password
                     Layout.fillWidth: true
                     placeholderText: "Password"
-                    font.pointSize: Theme.fontSize
-                    
+                    font.pointSize: Theme.fontSize !== undefined ? Theme.fontSize : 14
+
                     background: Rectangle {
-                        color: Theme.hover
-                        radius: Theme.innerRadius
-                        border.color: passwordInput.activeFocus ? Theme.primary : Theme.border
+                        color: Theme.hover !== undefined ? Theme.hover : "#45475A"
+                        radius: Theme.innerRadius !== undefined ? Theme.innerRadius : 8
+                        border.color: passwordInput.activeFocus ? (Theme.primary !== undefined ? Theme.primary : "#7D13CE") : (Theme.border !== undefined ? Theme.border : "#313244")
                         border.width: 1
                     }
-                    color: Theme.fg
+                    color: Theme.fg !== undefined ? Theme.fg : "#CDD6F4"
 
                     onAccepted: {
                         var pwd = text;
                         authPrompt.visible = false;
-                        if (acceptCallback) acceptCallback(pwd);
+                        if (acceptCallback)
+                            acceptCallback(pwd);
                     }
                 }
 
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: 15
-                    
+
                     Components.Button {
                         text: "Cancel"
                         Layout.fillWidth: true
                         onClicked: {
                             authPrompt.visible = false;
-                            if (cancelCallback) cancelCallback();
+                            if (cancelCallback)
+                                cancelCallback();
                         }
                     }
-                    
+
                     Components.Button {
                         text: "Authenticate"
                         Layout.fillWidth: true
                         onClicked: {
                             var pwd = passwordInput.text;
                             authPrompt.visible = false;
-                            if (acceptCallback) acceptCallback(pwd);
+                            if (acceptCallback)
+                                acceptCallback(pwd);
                         }
                     }
                 }

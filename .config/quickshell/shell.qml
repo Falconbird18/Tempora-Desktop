@@ -10,11 +10,16 @@ ShellRoot {
             screen: modelData
             launcherRef: mainLauncher
             quickSettingsRef: quickSettings
+            mediaControllerRef: mediaController
         }
     }
 
     Windows.AppLauncher {
         id: mainLauncher
+    }
+
+    Windows.MediaController {
+        id: mediaController
     }
 
     Windows.QuickSettings {

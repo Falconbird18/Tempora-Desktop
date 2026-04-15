@@ -53,9 +53,7 @@ PanelWindow {
     Rectangle {
         anchors.fill: parent
         color: Qt.alpha(Theme.primaryBackground, Theme.primaryAlpha)
-        border.color: "#4c566a"
-        border.width: 2
-        radius: 8
+        radius: Theme.primaryRadius
 
         focus: true
         Keys.onEscapePressed: appLauncher.visible = false
@@ -72,15 +70,16 @@ PanelWindow {
 
             Text {
                 text: "Applications"
-                color: "#eceff4"
-                font.pointSize: 16
-                font.bold: true
+                color: Theme.textDark
+                font.family: Theme.headingOneFamily !== undefined ? Theme.headingOneFamily : "Baskervville"
+                font.pointSize: Theme.headingOneSize !== undefined ? Theme.headingOneSize : 73
+                font.weight: Theme.headingOneWeight !== undefined ? Theme.headingOneWeight : 400
             }
 
             Rectangle {
                 Layout.fillWidth: true
                 height: 1
-                color: "#4c566a"
+                color: Theme.textDark
             }
 
             TextField {
@@ -88,13 +87,13 @@ PanelWindow {
                 focus: true
                 Layout.fillWidth: true
                 placeholderText: "Search apps..."
-                color: "#eceff4"
-                font.pixelSize: 14
+                color: Theme.textDark
+                font.family: Theme.headingTwoFamily !== undefined ? Theme.headingTwoFamily : "Open Sans"
+                font.pixelSize: Theme.headingTwoSize !== undefined ? Theme.headingTwoSize : 45
+                font.weight: Theme.headingTwoWeight !== undefined ? Theme.headingTwoWeight : 300
                 background: Rectangle {
-                    color: "#3b4252"
-                    radius: 5
-                    border.color: searchInput.activeFocus ? "#88c0d0" : "transparent"
-                    border.width: 1
+                    color: Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha)
+                    radius: Theme.secondaryRadius
                 }
                 onTextChanged: {
                     appModel.clear();
@@ -128,8 +127,8 @@ PanelWindow {
                     height: 48
 
                     background: Rectangle {
-                        color: del.hovered ? "#4c566a" : "transparent"
-                        radius: 6
+                        color: del.hovered ? Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha) : "transparent"
+                        radius: Theme.secondaryRadius
                     }
 
                     contentItem: Row {
@@ -147,8 +146,10 @@ PanelWindow {
                         }
                         Text {
                             text: model.name
-                            color: "#eceff4"
-                            font.pixelSize: 14
+                            color: Theme.textDark
+                            font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
+                            font.pixelSize: Theme.paragraphOneSize !== undefined ? Theme.paragraphOneSize : 16
+                            font.weight: Theme.paragraphOneWeight !== undefined ? Theme.paragraphOneWeight : 400
                             anchors.verticalCenter: parent.verticalCenter
                         }
                     }

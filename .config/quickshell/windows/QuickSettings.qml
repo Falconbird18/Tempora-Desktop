@@ -136,9 +136,9 @@ PanelWindow {
                 Text {
                     text: "Quick Settings"
                     color: Theme.textDark
-                    font.family: Theme.headingTwoFamily
-                    font.pixelSize: Theme.headingTwoSize
-                    font.weight: Theme.headingTwoWeight
+                    font.family: Theme.headingTwoFamily !== undefined ? Theme.headingTwoFamily : "Open Sans"
+                    font.pixelSize: Theme.headingTwoSize !== undefined ? Theme.headingTwoSize : 45
+                    font.weight: Theme.headingTwoWeight !== undefined ? Theme.headingTwoWeight : 300
                     font.bold: true
                     Layout.fillWidth: true
                 }
@@ -160,8 +160,8 @@ PanelWindow {
                     Text {
                         text: "Vol"
                         color: Theme.textDark
-                        font.family: Theme.paragraphFamily
-                        font.pixelSize: Theme.paragraphSize
+                        font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
+                        font.pixelSize: Theme.paragraphOneSize !== undefined ? Theme.paragraphOneSize : 16
                         font.bold: true
                         Layout.preferredWidth: 40
                     }
@@ -179,7 +179,7 @@ PanelWindow {
                     Text {
                         text: Math.round(volumeSlider.value) + "%"
                         color: Theme.textDark
-                        font.family: Theme.paragraphFamily
+                        font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
                         font.pixelSize: 12
                         Layout.preferredWidth: 30
                         horizontalAlignment: Text.AlignRight
@@ -192,8 +192,8 @@ PanelWindow {
                     Text {
                         text: "Brt"
                         color: Theme.textDark
-                        font.family: Theme.paragraphFamily
-                        font.pixelSize: Theme.paragraphSize
+                        font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
+                        font.pixelSize: Theme.paragraphOneSize !== undefined ? Theme.paragraphOneSize : 16
                         font.bold: true
                         Layout.preferredWidth: 40
                     }
@@ -211,7 +211,7 @@ PanelWindow {
                     Text {
                         text: Math.round(brightnessSlider.value) + "%"
                         color: Theme.textDark
-                        font.family: Theme.paragraphFamily
+                        font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
                         font.pixelSize: 12
                         Layout.preferredWidth: 30
                         horizontalAlignment: Text.AlignRight

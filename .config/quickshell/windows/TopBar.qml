@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import Quickshell.Services.Mpris
 import "../components" as Components
 import "../widgets" as Widgets
 import "../"
@@ -19,6 +20,7 @@ PanelWindow {
     // We expect the parent (ShellRoot) to pass in a reference to the launcher
     property var launcherRef: null
     property var quickSettingsRef: null
+    property var mediaControllerRef: null
 
     Item {
         anchors.fill: parent
@@ -37,6 +39,20 @@ PanelWindow {
                 onClicked: {
                     if (topBar.launcherRef) {
                         topBar.launcherRef.toggle();
+                    }
+                }
+            }
+
+            Components.Button {
+                id: mediaButton
+                property var player: Mpris.players.values && Mpris.players.values.length > 0 ? Mpris.players.values[0] : null
+                text: player && player.trackTitle ? player.trackTitle : "No Media"
+                width: 150
+                anchors.verticalCenter: parent.verticalCenter
+                onClicked: {
+                    if (topBar.mediaControllerRef) {
+                        let pos = mediaButton.mapToItem(null, 0, mediaButton.height);
+                        topBar.mediaControllerRef.toggle(pos.x, topBar.height + 5);
                     }
                 }
             }

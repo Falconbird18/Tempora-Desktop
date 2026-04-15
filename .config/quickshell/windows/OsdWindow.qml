@@ -48,9 +48,7 @@ PanelWindow {
     Rectangle {
         anchors.fill: parent
         color: Qt.alpha(Theme.primaryBackground, Theme.primaryAlpha)
-        radius: 30
-        border.color: "#4c566a"
-        border.width: 2
+        radius: Theme.primaryRadius
 
         RowLayout {
             anchors.fill: parent
@@ -61,13 +59,13 @@ PanelWindow {
 
             Image {
                 id: iconImage
-                sourceSize.width: 24
-                sourceSize.height: 24
+                sourceSize.width: Theme.headingFourSize
+                sourceSize.height: Theme.headingFourSize
                 Layout.alignment: Qt.AlignVCenter
 
                 layer.enabled: true
                 layer.effect: ColorOverlay {
-                    color: "#eceff4"
+                    color: Theme.textDark
                 }
 
                 source: {
@@ -111,8 +109,8 @@ PanelWindow {
                 background: Rectangle {
                     implicitWidth: 150
                     implicitHeight: 8
-                    color: "#3b4252"
-                    radius: 4
+                    color: Theme.secondaryBackground
+                    radius: Theme.secondaryRadius
                 }
 
                 contentItem: Item {
@@ -122,7 +120,7 @@ PanelWindow {
                     Rectangle {
                         width: progressBar.visualPosition * parent.width
                         height: parent.height
-                        color: osdType === "volume" ? "#88c0d0" : "#ebcb8b"
+                        color: osdType === "volume" ? Theme.primary : "#ebcb8b"
                         radius: 4
                     }
                 }
@@ -130,9 +128,10 @@ PanelWindow {
 
             Text {
                 text: osdValue + "%"
-                color: "#eceff4"
-                font.pixelSize: 14
-                font.bold: true
+                color: Theme.textDark
+                font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
+                font.pixelSize: Theme.paragraphOneSize !== undefined ? Theme.paragraphOneSize : 16
+                font.weight: Theme.paragraphOneWeight !== undefined ? Theme.paragraphOneWeight : 400
                 Layout.alignment: Qt.AlignVCenter
                 Layout.minimumWidth: 40
                 horizontalAlignment: Text.AlignRight
