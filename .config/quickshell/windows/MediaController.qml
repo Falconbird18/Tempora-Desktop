@@ -25,7 +25,30 @@ PanelWindow {
         left: xOffset
     }
 
-    property var player: Mpris.players.values && Mpris.players.values.length > 0 ? Mpris.players.values[0] : null
+    property var player: null
+
+    function updatePlayer() {
+        if (!Mpris.players || !Mpris.players.values || Mpris.players.values.length === 0) {
+            player = null;
+            return;
+        }
+        for (let i = 0; i < Mpris.players.values.length; ++i) {
+            if (Mpris.players.values[i].isPlaying) {
+                player = Mpris.players.values[i];
+                return;
+            }
+        }
+        player = Mpris.players.values[0];
+    }
+
+    Timer {
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered: updatePlayer()
+    }
+
+    Component.onCompleted: updatePlayer()
 
     function toggle(x, y) {
         if (visible) {

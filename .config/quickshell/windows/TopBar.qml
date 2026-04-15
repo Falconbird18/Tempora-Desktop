@@ -45,7 +45,7 @@ PanelWindow {
 
             Components.Button {
                 id: mediaButton
-                property var player: Mpris.players.values && Mpris.players.values.length > 0 ? Mpris.players.values[0] : null
+                property var player: topBar.mediaControllerRef ? topBar.mediaControllerRef.player : null
                 text: player && player.trackTitle ? player.trackTitle : "No Media"
                 width: 150
                 anchors.verticalCenter: parent.verticalCenter
