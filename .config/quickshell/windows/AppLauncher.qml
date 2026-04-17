@@ -68,25 +68,11 @@ PanelWindow {
             anchors.margins: 15
             spacing: 10
 
-            Text {
-                text: "Applications"
-                color: Theme.textDark
-                font.family: Theme.headingOneFamily !== undefined ? Theme.headingOneFamily : "Baskervville"
-                font.pointSize: Theme.headingOneSize !== undefined ? Theme.headingOneSize : 73
-                font.weight: Theme.headingOneWeight !== undefined ? Theme.headingOneWeight : 400
-            }
-
-            Rectangle {
-                Layout.fillWidth: true
-                height: 1
-                color: Theme.textDark
-            }
-
             TextField {
                 id: searchInput
                 focus: true
                 Layout.fillWidth: true
-                placeholderText: "Search apps..."
+                placeholderText: "Type to search..."
                 color: Theme.textDark
                 font.family: Theme.headingTwoFamily !== undefined ? Theme.headingTwoFamily : "Open Sans"
                 font.pixelSize: Theme.headingTwoSize !== undefined ? Theme.headingTwoSize : 45

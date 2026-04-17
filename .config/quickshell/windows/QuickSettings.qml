@@ -15,6 +15,7 @@ PanelWindow {
     visible: false
 
     property var authPromptRef
+    property var settingsWindowRef
 
     focusable: visible
     exclusionMode: ExclusionMode.Ignore
@@ -141,6 +142,25 @@ PanelWindow {
                     font.weight: Theme.headingTwoWeight !== undefined ? Theme.headingTwoWeight : 300
                     font.bold: true
                     Layout.fillWidth: true
+                }
+
+                Image {
+                    source: "image://icon/preferences-system"
+                    Layout.preferredWidth: 24
+                    Layout.preferredHeight: 24
+                    Layout.alignment: Qt.AlignVCenter
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            console.log("Settings icon clicked! settingsWindowRef:", quickSettings.settingsWindowRef);
+                            if (quickSettings.settingsWindowRef) {
+                                quickSettings.settingsWindowRef.toggle();
+                                quickSettings.visible = false;
+                            }
+                        }
+                    }
                 }
             }
 

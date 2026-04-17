@@ -32,14 +32,22 @@ Rectangle {
 
             delegate: Rectangle {
                 required property int index
+                property bool isActive: root.activeWorkspace === index + 1
 
-                width: root.activeWorkspace === index + 1 ? 24 : 12
-                height: 12
-                radius: 6
+                width: Settings.workspaceStyle === "numbers" ? 24 : (isActive ? 24 : 12)
+                height: Settings.workspaceStyle === "numbers" ? 24 : 12
+                radius: Settings.workspaceStyle === "numbers" ? 12 : 6
 
-                color: root.activeWorkspace === index + 1 ? Theme.primary : Qt.alpha(Theme.tertiaryBackground, Theme.tertiaryAlpha)
+                color: isActive ? Theme.primary : Qt.alpha(Theme.tertiaryBackground, Theme.tertiaryAlpha)
 
                 Behavior on width {
+                    NumberAnimation {
+                        duration: 200
+                        easing.type: Easing.OutExpo
+                    }
+                }
+
+                Behavior on height {
                     NumberAnimation {
                         duration: 200
                         easing.type: Easing.OutExpo
@@ -50,6 +58,15 @@ Rectangle {
                     ColorAnimation {
                         duration: 200
                     }
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    text: (index + 1).toString()
+                    color: isActive ? "#ffffff" : Theme.textDark
+                    visible: Settings.workspaceStyle === "numbers"
+                    font.pixelSize: 12
+                    font.bold: true
                 }
 
                 MouseArea {

@@ -28,6 +28,69 @@ PanelWindow {
     property int osdValue: 50
     property bool osdMuted: false
 
+    // Derive the user's home directory from Quickshell.shellDir when possible.
+    // This avoids hardcoding /home/username. The heuristic looks for a leading
+    // "/home/<user>" prefix inside Quickshell.shellDir (or file:// variant).
+    property string userHome: (function () {
+            try {
+                var sd = "";
+                if (typeof Quickshell !== "undefined" && Quickshell.shellDir) {
+                    sd = Quickshell.shellDir.toString();
+                } else {
+                    // Fallback: try resolved URL of current QML file (may be qrc)
+                    sd = Qt.resolvedUrl(".").toString();
+                }
+
+                // Remove file:// prefix if present
+                if (sd.indexOf("file://") === 0) {
+                    sd = sd.replace("file://", "");
+                }
+
+                // Normalize trailing slashes
+                while (sd.length > 1 && sd.endsWith("/"))
+                    sd = sd.slice(0, -1);
+
+                var parts = sd.split("/");
+                // parts[0] is "" for leading slash, so parts[1] === "home"
+                if (parts.length >= 3 && parts[1] === "home") {
+                    return "/" + parts[1] + "/" + parts[2];
+                }
+
+                // If not obvious, attempt to search for a /home/<user> segment
+                for (var i = 0; i < parts.length - 1; ++i) {
+                    if (parts[i] === "home" && (i + 1) < parts.length) {
+                        return "/" + parts[i] + "/" + parts[i + 1];
+                    }
+                }
+            } catch (e) {
+                console.log("OsdWindow: userHome derivation error:", e);
+            }
+            return "";
+        })()
+
+    // Compute icon base dynamically. If userHome couldn't be derived, iconBase
+    // will be empty and we fall back to image provider icons.
+    property string iconBase: (function () {
+            try {
+                if (userHome && userHome.length > 0) {
+                    return "file://" + userHome + "/.icons/phosphor-core/assets/duotone";
+                }
+                // As a last-ditch attempt, if Quickshell.shellDir exists and includes a home path,
+                // try to synthesize one similarly (this is redundant with userHome but kept defensive).
+                if (typeof Quickshell !== "undefined" && Quickshell.shellDir) {
+                    var sd2 = Quickshell.shellDir.toString();
+                    if (sd2.indexOf("file://") === 0)
+                        sd2 = sd2.replace("file://", "");
+                    var p2 = sd2.split("/");
+                    if (p2.length >= 3 && p2[1] === "home")
+                        return "file://" + "/" + p2[1] + "/" + p2[2] + "/.icons/phosphor-core/assets/duotone";
+                }
+            } catch (e) {
+                console.log("OsdWindow: iconBase derivation error:", e);
+            }
+            return "";
+        })()
+
     Timer {
         id: hideTimer
         interval: 2000
@@ -69,32 +132,29 @@ PanelWindow {
                 // }
 
                 source: {
-                    if (osdType === "volume") {
-                        if (osdMuted || osdValue === 0)
-                            return Qt.resolvedUrl("../../../core/assets/duotone/speaker-x-duotone.svg");
-                        if (osdValue < 30)
-                            return Qt.resolvedUrl("../../../core/assets/duotone/speaker-none-duotone.svg");
-                        if (osdValue < 60)
-                            return Qt.resolvedUrl("../../../core/assets/duotone/speaker-low-duotone.svg");
-                        return Qt.resolvedUrl("../../../core/assets/duotone/speaker-high-duotone.svg");
-                    } else {
-                        // Fallback generic icons since breeze lacks specific display brightness ones
-                        if (osdValue < 30)
-                            return "file:///usr/share/icons/Pop/scalable/status/display-brightness-low-symbolic.svg";
-                        if (osdValue < 60)
-                            return "file:///usr/share/icons/Pop/scalable/status/display-brightness-medium-symbolic.svg";
-                        return "file:///usr/share/icons/Pop/scalable/status/display-brightness-high-symbolic.svg";
-                    }
-                }
+                    var src = "";
+                    // If iconBase is available, prefer the installed phosphor svg files,
+                    // otherwise fall back to the platform image provider so we always have something.
+                    var haveIconBase = (iconBase && iconBase.length > 0);
 
-                onStatusChanged: {
-                    if (status === Image.Error) {
-                        if (osdType === "brightness") {
-                            source = "image://icon/preferences-desktop-display";
-                        } else if (osdType === "volume") {
-                            source = "image://icon/audio-card";
+                    if (osdType === "volume") {
+                        if (osdMuted || osdValue === 0) {
+                            src = iconBase + "/speaker-x-duotone.svg";
+                        } else if (osdValue < 30) {
+                            src = iconBase + "/speaker-none-duotone.svg";
+                        } else if (osdValue < 60) {
+                            src = iconBase + "/speaker-low-duotone.svg";
+                        } else {
+                            src = iconBase + "/speaker-high-duotone.svg";
                         }
+                    } else {
+                        // For brightness, use system symbolic icons (these are usually available)
+                        if (osdValue < 50)
+                            src = iconBase + "/sun-dim-duotone.svg";
+                        else
+                            src = iconBase + "/sun-duotone.svg";
                     }
+                    return src;
                 }
             }
 

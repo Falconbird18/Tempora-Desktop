@@ -25,6 +25,11 @@ ShellRoot {
     Windows.QuickSettings {
         id: quickSettings
         authPromptRef: authPrompt
+        settingsWindowRef: settingsWindow
+    }
+
+    Windows.SettingsWindow {
+        id: settingsWindow
     }
 
     Windows.AuthPromptWindow {
