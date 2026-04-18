@@ -107,7 +107,8 @@ fi
 
 # Helpful packages list (adjusted for Arch default, apt users will get best-effort)
 COMMON_PACKAGES=(libnotify jq git unzip)
-ARCH_PACKAGES=(hyprland wofi fish starship hyprpicker hyprlock hypridle wl-clipboard brightnessctl bluez-utils cliphist sddm swww grim slurp playerctl polkit-gnome polkit-kde-agent xdg-desktop-portal-hyprland xdg-desktop-portal-kde cmake ttf-opensans)
+ARCH_PACKAGES=(hyprland wofi fish starship hyprpicker hyprlock hypridle wl-clipboard brightnessctl bluez-utils cliphist sddm swww grim slurp playerctl polkit-gnome polkit-kde-agent xdg-desktop-portal-hyprland xdg-desktop-portal-kde cmake )
+AUR_PACKAGES=(ttf-google-fonts-typewolf)
 DEBIAN_PACKAGES=(wl-clipboard brightnessctl bluez-utils xdg-desktop-portal-webkit webkit2gtk-dev swww unzip playerctl polkit-gnome polkit-gnome-authentication-agent-1 fonts-open-sans)
 
 if [ -n "$PKG" ]; then
@@ -131,6 +132,9 @@ if command -v pacman >/dev/null 2>&1 && ! command -v yay >/dev/null 2>&1; then
         warn "git or makepkg not found; cannot auto-install yay."
     fi
 fi
+
+log "Installing AUR packages."
+yay -S --needed "${AUR_PACKAGES[@]}" || warn "Some yay installs failed"
 
 echo
 # ---------------------------
