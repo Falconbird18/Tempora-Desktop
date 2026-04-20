@@ -4,85 +4,149 @@ import hashlib
 import json
 import mimetypes
 import os
+import subprocess
 import urllib.parse
 import xml.etree.ElementTree as ET
+import zipfile
 from urllib.parse import unquote
 
 XBEL_PATH = os.path.expanduser("~/.local/share/recently-used.xbel")
 CONFIG_PATH = os.path.expanduser("~/.config/quickshell/projects.json")
 
-# Global cache for app icons
-APP_ICON_MAP = {}
+APP_DICT = {}
 
 
-def build_app_icon_map():
-    """Scans system .desktop files to map application IDs, names, and execs to their correct icons."""
-    global APP_ICON_MAP
-    if APP_ICON_MAP:
+def build_app_dict():
+    global APP_DICT
+    if APP_DICT:
         return
+    try:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        list_apps_path = os.path.join(script_dir, "list_apps.py")
+        res = subprocess.run(
+            ["python3", list_apps_path], capture_output=True, text=True
+        )
+        apps = json.loads(res.stdout)
 
-    dirs = [
-        "/usr/share/applications",
-        os.path.expanduser("~/.local/share/applications"),
-        "/var/lib/flatpak/exports/share/applications",
-        "/var/lib/snapd/desktop/applications",
-    ]
+        for app in apps:
+            dname = app.get("desktop", "")
+            if dname:
+                APP_DICT[dname] = app
+                APP_DICT[dname.lower()] = app
 
-    for d in dirs:
-        if not os.path.exists(d):
-            continue
-        for root, _, files in os.walk(d):
-            for f in files:
-                if f.endswith(".desktop"):
-                    path = os.path.join(root, f)
-                    try:
-                        with open(path, "r", encoding="utf-8", errors="ignore") as f_in:
-                            in_desktop_entry = False
-                            name = ""
-                            icon = ""
-                            exec_bin = ""
-                            for line in f_in:
-                                line = line.strip()
-                                if line == "[Desktop Entry]":
-                                    in_desktop_entry = True
-                                elif line.startswith("[") and in_desktop_entry:
-                                    break
-                                elif in_desktop_entry:
-                                    if line.startswith("Name=") and not name:
-                                        name = line[5:].strip()
-                                    elif line.startswith("Icon=") and not icon:
-                                        icon = line[5:].strip()
-                                    elif line.startswith("Exec=") and not exec_bin:
-                                        exec_val = line[5:].strip().split(" ")[0]
-                                        exec_bin = os.path.basename(exec_val)
+            # Also key by human name for things like "Document Viewer"
+            name = app.get("name", "")
+            if name:
+                APP_DICT[name] = app
 
-                            app_id = f.replace(".desktop", "")
-                            if icon:
-                                APP_ICON_MAP[app_id] = icon
-                                APP_ICON_MAP[app_id.lower()] = icon
-                                if name:
-                                    APP_ICON_MAP[name] = icon
-                                if exec_bin:
-                                    APP_ICON_MAP[exec_bin] = icon
-                    except Exception:
-                        pass
+            # Key by Exec bin
+            exe = app.get("exec", "")
+            if exe:
+                exe_bin = os.path.basename(exe.split(" ")[0])
+                APP_DICT[exe_bin] = app
+    except Exception:
+        pass
+
+
+def get_default_desktop_file(filepath):
+    try:
+        mime = mimetypes.guess_type(filepath)[0]
+        if not mime:
+            res = subprocess.run(
+                ["file", "-b", "--mime-type", filepath], capture_output=True, text=True
+            )
+            mime = res.stdout.strip()
+        if mime:
+            res = subprocess.run(["gio", "mime", mime], capture_output=True, text=True)
+            for line in res.stdout.split("\n"):
+                if line.startswith("Default application for"):
+                    desktop_file = line.split(":")[-1].strip()
+                    return desktop_file.replace(".desktop", "")
+    except Exception:
+        pass
+    return ""
+
+
+def create_text_thumbnail(filepath):
+    uri = "file://" + urllib.parse.quote(os.path.abspath(filepath))
+    md5_hash = hashlib.md5(uri.encode("utf-8")).hexdigest()
+    thumb_out = f"/tmp/text_thumb_{md5_hash}.svg"
+    if os.path.exists(thumb_out):
+        return thumb_out
+
+    try:
+        with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
+            lines = [f.readline().rstrip("\n") for _ in range(20)]
+
+        # Strip trailing empty lines to look nicer
+        while lines and not lines[-1]:
+            lines.pop()
+
+        svg_content = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+    <rect width="100%" height="100%" fill="#2e3440" rx="15"/>
+    <text x="15" y="30" font-family="monospace" font-size="12" fill="#d8dee9">
+"""
+        y = 30
+        for line in lines:
+            line = line.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+            if len(line) > 40:
+                line = line[:37] + "..."
+            svg_content += f'        <tspan x="15" y="{y}">{line}</tspan>\n'
+            y += 14
+
+        svg_content += """    </text>
+</svg>"""
+        with open(thumb_out, "w", encoding="utf-8") as f:
+            f.write(svg_content)
+        return thumb_out
+    except Exception:
+        return ""
 
 
 def get_freedesktop_thumbnail(filepath):
-    """
-    Checks the standard Linux thumbnail cache for a pre-rendered thumbnail of the file.
-    This works for PDFs, Blender files, videos, documents, etc. (handled by file managers).
-    """
     uri = "file://" + urllib.parse.quote(os.path.abspath(filepath))
     md5_hash = hashlib.md5(uri.encode("utf-8")).hexdigest()
 
-    # Prioritize high quality, then normal
+    if filepath.lower().endswith(".mscz"):
+        try:
+            thumb_out = f"/tmp/mscz_thumb_{md5_hash}.png"
+            if os.path.exists(thumb_out):
+                return thumb_out
+            with zipfile.ZipFile(filepath, "r") as z:
+                if "Thumbnails/thumbnail.png" in z.namelist():
+                    with open(thumb_out, "wb") as f:
+                        f.write(z.read("Thumbnails/thumbnail.png"))
+                    return thumb_out
+        except Exception:
+            pass
+
+    # Text previews
+    ext = filepath.lower().split(".")[-1]
+    if ext in [
+        "tex",
+        "html",
+        "js",
+        "py",
+        "rs",
+        "cpp",
+        "c",
+        "h",
+        "qml",
+        "json",
+        "xml",
+        "txt",
+        "md",
+        "sh",
+        "conf",
+        "ini",
+    ]:
+        return create_text_thumbnail(filepath)
+
     for size in ["large", "normal"]:
         thumb_path = os.path.expanduser(f"~/.cache/thumbnails/{size}/{md5_hash}.png")
         if os.path.exists(thumb_path):
             return thumb_path
 
-    # Legacy fallback path
     thumb_path = os.path.expanduser(f"~/.thumbnails/normal/{md5_hash}.png")
     if os.path.exists(thumb_path):
         return thumb_path
@@ -152,12 +216,11 @@ def get_recent_files(limit=15):
                 continue
 
             path = unquote(href[7:])
-            if not os.path.exists(path):
+            if not os.path.exists(path) or os.path.isdir(path):
                 continue
 
             file_mtime = os.path.getmtime(path)
 
-            # Extract the bookmark's modified time
             modified_str = bookmark.get("modified", "")
             xbel_modified_ts = 0
             if modified_str:
@@ -173,9 +236,6 @@ def get_recent_files(limit=15):
                 except Exception:
                     pass
 
-            # Core logic: if the app logged this file (xbel_modified_ts) significantly
-            # later than the file's actual modification time, it means it was merely OPENED,
-            # not EDITED. We allow a 2-minute (120s) buffer for delayed disk writes.
             if xbel_modified_ts > 0 and (xbel_modified_ts - file_mtime > 120):
                 continue
 
@@ -184,16 +244,24 @@ def get_recent_files(limit=15):
                 if elem.tag.endswith("application"):
                     app_name = elem.get("name", app_name)
 
-            # --- Icon Mapping ---
-            app_icon = APP_ICON_MAP.get(
-                app_name, APP_ICON_MAP.get(app_name.lower(), app_name)
-            )
+            # Use app dict from list_apps.py
+            app_data = APP_DICT.get(app_name)
 
-            # Fallback for generic file dialog portals that aren't real apps
-            if "org.freedesktop.impl.portal.desktop" in app_name:
+            # If portal or not found, figure out default app for file
+            if not app_data or "portal.desktop" in app_name:
+                desktop_file = get_default_desktop_file(path)
+                app_data = APP_DICT.get(desktop_file)
+
+            if app_data:
+                app_icon = app_data.get("icon", "text-x-generic")
+                exec_cmd = app_data.get("exec", f"xdg-open '{path}'")
+
+                if exec_cmd != f"xdg-open '{path}'":
+                    exec_cmd = f"{exec_cmd} '{path}'"
+            else:
                 app_icon = "text-x-generic"
+                exec_cmd = f"xdg-open '{path}'"
 
-            # Check for a freedesktop rendered thumbnail
             thumb_path = get_freedesktop_thumbnail(path)
 
             bookmarks.append(
@@ -202,7 +270,8 @@ def get_recent_files(limit=15):
                     "path": path,
                     "app": app_name,
                     "icon": app_icon,
-                    "thumb": thumb_path,  # Expose the thumbnail path for the UI
+                    "thumb": thumb_path,
+                    "exec": exec_cmd,
                     "pinned": False,
                     "time": format_mtime(file_mtime),
                     "file_type": get_file_type(path),
@@ -210,7 +279,6 @@ def get_recent_files(limit=15):
                 }
             )
 
-        # Sort by actual edit time, most recent first
         bookmarks.sort(key=lambda x: x.get("mtime", 0), reverse=True)
 
         for b in bookmarks[:limit]:
@@ -225,8 +293,7 @@ def get_recent_files(limit=15):
 
 
 def main():
-    # Build the app icon dictionary once before parsing files
-    build_app_icon_map()
+    build_app_dict()
 
     projects = []
     seen_paths = set()
@@ -245,7 +312,6 @@ def main():
             projects.append(r)
             seen_paths.add(path)
 
-    # Output must be on a single line for QML's SplitParser
     print(json.dumps(projects, separators=(",", ":")))
 
 

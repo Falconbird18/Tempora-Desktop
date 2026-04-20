@@ -165,7 +165,7 @@ PanelWindow {
                                 anchors.fill: parent
                                 hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
-                                onClicked: launchApp("xdg-open '" + model.path + "'")
+                                onClicked: launchApp(model.exec ? model.exec : "xdg-open '" + model.path + "'")
                             }
 
                             ColumnLayout {

@@ -4,7 +4,7 @@ import configparser
 
 def get_apps():
     apps = []
-    dirs = ["/usr/share/applications", os.path.expanduser("~/.local/share/applications")]
+    dirs = ["/usr/share/applications", os.path.expanduser("~/.local/share/applications"), "/var/lib/flatpak/exports/share/applications", "/var/lib/snapd/desktop/applications"]
     seen = set()
     for d in dirs:
         if not os.path.exists(d): continue
@@ -28,7 +28,7 @@ def get_apps():
                             icon = entry.get("Icon", "")
                             
                             if exe:
-                                apps.append({"name": name, "exec": exe, "icon": icon})
+                                apps.append({"name": name, "exec": exe, "icon": icon, "desktop": f.replace(".desktop", "")})
                     except:
                         pass
     
