@@ -19,14 +19,13 @@ QtObject {
     property real primaryRadius: 32.0
     property real secondaryRadius: 16.0
     property real innerRadius: 8.0
-    property real borderWidth: 2.0
 
     // Height
     property real normalHeight: 32
 
     // Borders
     property color primaryBorderColor: "#ffffff"
-    property real primaryBorderWidth: 2.0
+    property real primaryBorderWidth: 1
 
     // Spacing
     property real spacingFour: 4.0
@@ -38,7 +37,7 @@ QtObject {
     property string headingOneFamily: "Baskervville"
     property real headingOneSize: 73
     property int headingOneWeight: 400
-    property string headingTwoFamily: "Open Sans"
+    property string headingTwoFamily: "Baskervville"
     property real headingTwoSize: 45.0
     property int headingTwoWeight: 300
     property string headingThreeFamily: "Open Sans"

@@ -63,7 +63,8 @@ PanelWindow {
                 anchors.fill: parent
                 color: Qt.alpha(Theme.primaryBackground, Theme.primaryAlpha)
                 radius: Theme.primaryRadius
-                // border.color: Theme.primaryBorderColor
+                border.color: Theme.primaryBorderColor
+                border.width: Theme.primaryBorderWidth
             }
 
             Components.IconButton {
@@ -103,153 +104,164 @@ PanelWindow {
             }
         }
 
-        ColumnLayout {
+        Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
             visible: searchInput.text.length === 0
-            spacing: 15
+            color: Qt.alpha(Theme.primaryBackground, Theme.primaryAlpha)
+            radius: Theme.primaryRadius
+            border.color: Theme.primaryBorderColor
+            border.width: Theme.primaryBorderWidth
 
-            RowLayout {
-                Layout.fillWidth: true
-
-                Text {
-                    text: "Recent projects"
-                    color: Theme.textDark
-                    font.family: Theme.headingTwoFamily !== undefined ? Theme.headingTwoFamily : "Open Sans"
-                    font.pixelSize: 36
-                    font.weight: Theme.headingTwoWeight !== undefined ? Theme.headingTwoWeight : 300
-                    Layout.fillWidth: true
-                }
-
-                Components.IconButton {
-                    icon: "arrow-right-duotone.svg"
-                    size: 32
-                }
-            }
-
-            ListView {
-                id: projectList
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                orientation: ListView.Horizontal
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: Theme.spacingSixteen // This emulates CSS padding
                 spacing: 15
-                clip: true
-                model: ListModel {
-                    id: projectModel
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: Theme.spacingSixteen
+
+                    Text {
+                        text: "Recent projects"
+                        color: Theme.textDark
+                        font.family: Theme.headingTwoFamily
+                        font.pixelSize: Theme.headingTwoSize
+                        font.weight: Theme.headingTwoWeight
+                        Layout.fillWidth: true
+                    }
+
+                    Components.IconButton {
+                        icon: "arrow-right-duotone.svg"
+                        size: 32
+                    }
                 }
 
-                delegate: Rectangle {
-                    width: 220
-                    height: ListView.view.height
-                    color: "transparent"
+                ListView {
+                    id: projectList
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    orientation: ListView.Horizontal
+                    spacing: 15
+                    clip: true
+                    model: ListModel {
+                        id: projectModel
+                    }
 
-                    Rectangle {
-                        anchors.fill: parent
-                        color: Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha)
-                        radius: Theme.secondaryRadius
-                        border.color: projMouse.containsMouse ? "#d74141" : "transparent"
-                        border.width: 1
+                    delegate: Rectangle {
+                        width: 220
+                        height: ListView.view.height
+                        color: "transparent"
 
-                        MouseArea {
-                            id: projMouse
+                        Rectangle {
                             anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: launchApp("xdg-open '" + model.path + "'")
-                        }
+                            color: projMouse.containsMouse ? Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha) : "transparent"
+                            radius: Theme.secondaryRadius
+                            border.color: projMouse.containsMouse ? Theme.secondary : "transparent"
+                            border.width: 1
 
-                        ColumnLayout {
-                            anchors.fill: parent
-                            spacing: 0
-
-                            Item {
-                                Layout.fillWidth: true
-                                Layout.preferredHeight: parent.height * 0.65
-
-                                Image {
-                                    id: thumb
-                                    anchors.fill: parent
-                                    anchors.margins: 10
-                                    source: model.file_type && model.file_type.indexOf("image") !== -1 ? "file://" + model.path + "?m=" + Date.now() : (model.icon ? "image://icon/" + model.icon : "image://icon/text-x-generic")
-                                    onStatusChanged: {
-                                        if (status === Image.Error) {
-                                            source = "image://icon/text-x-generic";
-                                        }
-                                    }
-                                    fillMode: Image.PreserveAspectCrop
-                                    clip: true
-                                    asynchronous: true
-                                    cache: false
-                                    sourceSize: Qt.size(300, 300)
-                                }
-
-                                Image {
-                                    source: model.icon ? "image://icon/" + model.icon : ""
-                                    onStatusChanged: {
-                                        if (status === Image.Error) {
-                                            source = "image://icon/application-x-executable";
-                                        }
-                                    }
-                                    width: 24
-                                    height: 24
-                                    anchors.top: parent.top
-                                    anchors.left: parent.left
-                                    anchors.margins: 15
-                                }
+                            MouseArea {
+                                id: projMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: launchApp("xdg-open '" + model.path + "'")
                             }
 
-                            Item {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
+                            ColumnLayout {
+                                anchors.fill: parent
+                                spacing: 0
 
-                                ColumnLayout {
-                                    anchors.fill: parent
-                                    anchors.margins: 10
-                                    spacing: 5
+                                Item {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: parent.height * 0.65
 
-                                    Text {
-                                        text: model.name
-                                        color: Theme.textDark
-                                        font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
-                                        font.pixelSize: 20
-                                        font.weight: Theme.paragraphOneWeight !== undefined ? Theme.paragraphOneWeight : 400
-                                        Layout.fillWidth: true
-                                        elide: Text.ElideRight
-                                    }
-
-                                    RowLayout {
-                                        Layout.fillWidth: true
-                                        spacing: 8
-
-                                        Rectangle {
-                                            color: Qt.rgba(215 / 255, 65 / 255, 65 / 255, 0.15)
-                                            border.color: "#d74141"
-                                            radius: 12
-                                            Layout.preferredWidth: timeText.width + 16
-                                            Layout.preferredHeight: 24
-
-                                            Text {
-                                                id: timeText
-                                                text: model.time ? model.time : ""
-                                                color: "#d74141"
-                                                font.pixelSize: 12
-                                                anchors.centerIn: parent
+                                    Image {
+                                        id: thumb
+                                        anchors.fill: parent
+                                        anchors.margins: 10
+                                        source: model.file_type && model.file_type.indexOf("image") !== -1 ? "file://" + model.path + "?m=" + Date.now() : (model.icon ? "image://icon/" + model.icon : "image://icon/text-x-generic")
+                                        onStatusChanged: {
+                                            if (status === Image.Error) {
+                                                source = "image://icon/text-x-generic";
                                             }
                                         }
+                                        fillMode: Image.PreserveAspectCrop
+                                        clip: true
+                                        asynchronous: true
+                                        cache: false
+                                        sourceSize: Qt.size(300, 300)
+                                    }
 
-                                        Rectangle {
-                                            color: Qt.rgba(138 / 255, 43 / 255, 226 / 255, 0.15)
-                                            border.color: "#8a2be2"
-                                            radius: 12
-                                            Layout.preferredWidth: typeText.width + 16
-                                            Layout.preferredHeight: 24
+                                    Image {
+                                        source: model.icon ? "image://icon/" + model.icon : ""
+                                        onStatusChanged: {
+                                            if (status === Image.Error) {
+                                                source = "image://icon/application-x-executable";
+                                            }
+                                        }
+                                        width: 24
+                                        height: 24
+                                        anchors.top: parent.top
+                                        anchors.left: parent.left
+                                        anchors.margins: 15
+                                    }
+                                }
 
-                                            Text {
-                                                id: typeText
-                                                text: model.file_type ? model.file_type : ""
-                                                color: "#8a2be2"
-                                                font.pixelSize: 12
-                                                anchors.centerIn: parent
+                                Item {
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+
+                                    ColumnLayout {
+                                        anchors.fill: parent
+                                        anchors.margins: 10
+                                        spacing: 5
+
+                                        // Title
+                                        Text {
+                                            text: model.name
+                                            color: Theme.textDark
+                                            font.family: Theme.headingThreeFamily
+                                            font.pixelSize: Theme.headingThreeSize
+                                            font.weight: Theme.headingThreeWeight
+                                            Layout.fillWidth: true
+                                            elide: Text.ElideRight
+                                        }
+
+                                        RowLayout {
+                                            Layout.fillWidth: true
+                                            spacing: 8
+
+                                            Rectangle {
+                                                color: Qt.rgba(215 / 255, 65 / 255, 65 / 255, 0.15)
+                                                border.color: "#d74141"
+                                                radius: 12
+                                                Layout.preferredWidth: timeText.width + 16
+                                                Layout.preferredHeight: 24
+
+                                                Text {
+                                                    id: timeText
+                                                    text: model.time ? model.time : ""
+                                                    color: "#d74141"
+                                                    font.pixelSize: 12
+                                                    anchors.centerIn: parent
+                                                }
+                                            }
+
+                                            Rectangle {
+                                                color: Qt.rgba(138 / 255, 43 / 255, 226 / 255, 0.15)
+                                                border.color: "#8a2be2"
+                                                radius: 12
+                                                Layout.preferredWidth: typeText.width + 16
+                                                Layout.preferredHeight: 24
+
+                                                Text {
+                                                    id: typeText
+                                                    text: model.file_type ? model.file_type : ""
+                                                    color: "#8a2be2"
+                                                    font.pixelSize: 12
+                                                    anchors.centerIn: parent
+                                                }
                                             }
                                         }
                                     }
