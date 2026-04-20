@@ -180,7 +180,7 @@ PanelWindow {
                                         id: thumb
                                         anchors.fill: parent
                                         anchors.margins: 10
-                                        source: model.file_type && model.file_type.indexOf("image") !== -1 ? "file://" + model.path + "?m=" + Date.now() : (model.icon ? "image://icon/" + model.icon : "image://icon/text-x-generic")
+                                        source: model.thumb ? "file://" + model.thumb + "?m=" + Date.now() : (model.file_type && model.file_type.indexOf("image") !== -1 ? "file://" + model.path + "?m=" + Date.now() : (model.icon ? "image://icon/" + model.icon : "image://icon/text-x-generic"))
                                         onStatusChanged: {
                                             if (status === Image.Error) {
                                                 source = "image://icon/text-x-generic";
