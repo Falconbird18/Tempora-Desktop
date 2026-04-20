@@ -51,23 +51,26 @@ PanelWindow {
         appLauncher.visible = false;
     }
 
-    Rectangle {
+    ColumnLayout {
         anchors.fill: parent
-        color: Qt.alpha(Theme.primaryBackground, Theme.primaryAlpha)
-        radius: Theme.primaryRadius
+        anchors.margins: Theme.spacingSixteen
+        spacing: Theme.spacingSixteen
 
-        focus: true
-        Keys.onEscapePressed: appLauncher.visible = false
-        onActiveFocusChanged: {
-            if (!activeFocus && appLauncher.visible) {
-                appLauncher.visible = false;
+        RowLayout {
+            Layout.fillWidth: true
+
+            Rectangle {
+                anchors.fill: parent
+                color: Qt.alpha(Theme.primaryBackground, Theme.primaryAlpha)
+                radius: Theme.primaryRadius
+                // border.color: Theme.primaryBorderColor
             }
-        }
 
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 15
-            spacing: 15
+            Components.IconButton {
+                icon: "magnifying-glass-duotone.svg"
+                size: 32
+                isButton: false
+            }
 
             TextField {
                 id: searchInput
@@ -75,13 +78,14 @@ PanelWindow {
                 Layout.fillWidth: true
                 placeholderText: "Type to search..."
                 color: Theme.textDark
-                font.family: Theme.headingTwoFamily !== undefined ? Theme.headingTwoFamily : "Open Sans"
-                font.pixelSize: Theme.headingTwoSize !== undefined ? Theme.headingTwoSize : 45
-                font.weight: Theme.headingTwoWeight !== undefined ? Theme.headingTwoWeight : 300
+                font.family: Theme.paragraphTwoFamily
+                font.pixelSize: Theme.paragraphTwoSize
+                font.weight: Theme.paragraphTwoWeight
                 background: Rectangle {
-                    color: Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha)
-                    radius: Theme.secondaryRadius
+                    color: "transparent"
                 }
+                topPadding: Theme.spacingEight
+                bottomPadding: Theme.spacingEight
                 onTextChanged: {
                     appModel.clear();
                     var term = text.toLowerCase();
@@ -97,152 +101,155 @@ PanelWindow {
                     }
                 }
             }
+        }
 
-            ColumnLayout {
+        ColumnLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            visible: searchInput.text.length === 0
+            spacing: 15
+
+            RowLayout {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
-                visible: searchInput.text.length === 0
-                spacing: 15
 
-                RowLayout {
+                Text {
+                    text: "Recent projects"
+                    color: Theme.textDark
+                    font.family: Theme.headingTwoFamily !== undefined ? Theme.headingTwoFamily : "Open Sans"
+                    font.pixelSize: 36
+                    font.weight: Theme.headingTwoWeight !== undefined ? Theme.headingTwoWeight : 300
                     Layout.fillWidth: true
-
-                    Text {
-                        text: "Recent projects"
-                        color: Theme.textDark
-                        font.family: Theme.headingTwoFamily !== undefined ? Theme.headingTwoFamily : "Open Sans"
-                        font.pixelSize: 36
-                        font.weight: Theme.headingTwoWeight !== undefined ? Theme.headingTwoWeight : 300
-                        Layout.fillWidth: true
-                    }
-
-                    Components.IconButton {
-                        icon: "arrow-right-duotone.svg"
-                        size: 32
-                    }
                 }
 
-                ListView {
-                    id: projectList
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    orientation: ListView.Horizontal
-                    spacing: 15
-                    clip: true
-                    model: ListModel {
-                        id: projectModel
-                    }
+                Components.IconButton {
+                    icon: "arrow-right-duotone.svg"
+                    size: 32
+                }
+            }
 
-                    delegate: Rectangle {
-                        width: 220
-                        height: ListView.view.height
-                        color: "transparent"
+            ListView {
+                id: projectList
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                orientation: ListView.Horizontal
+                spacing: 15
+                clip: true
+                model: ListModel {
+                    id: projectModel
+                }
 
-                        Rectangle {
+                delegate: Rectangle {
+                    width: 220
+                    height: ListView.view.height
+                    color: "transparent"
+
+                    Rectangle {
+                        anchors.fill: parent
+                        color: Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha)
+                        radius: Theme.secondaryRadius
+                        border.color: projMouse.containsMouse ? "#d74141" : "transparent"
+                        border.width: 1
+
+                        MouseArea {
+                            id: projMouse
                             anchors.fill: parent
-                            color: Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha)
-                            radius: Theme.secondaryRadius
-                            border.color: projMouse.containsMouse ? "#d74141" : "transparent"
-                            border.width: 1
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: launchApp("xdg-open '" + model.path + "'")
+                        }
 
-                            MouseArea {
-                                id: projMouse
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: launchApp("xdg-open '" + model.path + "'")
-                            }
+                        ColumnLayout {
+                            anchors.fill: parent
+                            spacing: 0
 
-                            ColumnLayout {
-                                anchors.fill: parent
-                                spacing: 0
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: parent.height * 0.65
 
-                                Item {
-                                    Layout.fillWidth: true
-                                    Layout.preferredHeight: parent.height * 0.65
-
-                                    Image {
-                                        id: thumb
-                                        anchors.fill: parent
-                                        anchors.margins: 10
-                                        source: model.file_type && model.file_type.indexOf("image") !== -1 ? "file://" + model.path : (model.icon ? "image://icon/" + model.icon : "image://icon/text-x-generic")
-                                        onStatusChanged: {
-                                            if (status === Image.Error) {
-                                                source = "image://icon/text-x-generic";
-                                            }
+                                Image {
+                                    id: thumb
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    source: model.file_type && model.file_type.indexOf("image") !== -1 ? "file://" + model.path + "?m=" + Date.now() : (model.icon ? "image://icon/" + model.icon : "image://icon/text-x-generic")
+                                    onStatusChanged: {
+                                        if (status === Image.Error) {
+                                            source = "image://icon/text-x-generic";
                                         }
-                                        fillMode: Image.PreserveAspectCrop
-                                        clip: true
                                     }
-
-                                    Image {
-                                        source: model.icon ? "image://icon/" + model.icon : ""
-                                        onStatusChanged: {
-                                            if (status === Image.Error) {
-                                                source = "image://icon/application-x-executable";
-                                            }
-                                        }
-                                        width: 24
-                                        height: 24
-                                        anchors.top: parent.top
-                                        anchors.left: parent.left
-                                        anchors.margins: 15
-                                    }
+                                    fillMode: Image.PreserveAspectCrop
+                                    clip: true
+                                    asynchronous: true
+                                    cache: false
+                                    sourceSize: Qt.size(300, 300)
                                 }
 
-                                Item {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
+                                Image {
+                                    source: model.icon ? "image://icon/" + model.icon : ""
+                                    onStatusChanged: {
+                                        if (status === Image.Error) {
+                                            source = "image://icon/application-x-executable";
+                                        }
+                                    }
+                                    width: 24
+                                    height: 24
+                                    anchors.top: parent.top
+                                    anchors.left: parent.left
+                                    anchors.margins: 15
+                                }
+                            }
 
-                                    ColumnLayout {
-                                        anchors.fill: parent
-                                        anchors.margins: 10
-                                        spacing: 5
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
 
-                                        Text {
-                                            text: model.name
-                                            color: Theme.textDark
-                                            font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
-                                            font.pixelSize: 20
-                                            font.weight: Theme.paragraphOneWeight !== undefined ? Theme.paragraphOneWeight : 400
-                                            Layout.fillWidth: true
-                                            elide: Text.ElideRight
+                                ColumnLayout {
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    spacing: 5
+
+                                    Text {
+                                        text: model.name
+                                        color: Theme.textDark
+                                        font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
+                                        font.pixelSize: 20
+                                        font.weight: Theme.paragraphOneWeight !== undefined ? Theme.paragraphOneWeight : 400
+                                        Layout.fillWidth: true
+                                        elide: Text.ElideRight
+                                    }
+
+                                    RowLayout {
+                                        Layout.fillWidth: true
+                                        spacing: 8
+
+                                        Rectangle {
+                                            color: Qt.rgba(215 / 255, 65 / 255, 65 / 255, 0.15)
+                                            border.color: "#d74141"
+                                            radius: 12
+                                            Layout.preferredWidth: timeText.width + 16
+                                            Layout.preferredHeight: 24
+
+                                            Text {
+                                                id: timeText
+                                                text: model.time ? model.time : ""
+                                                color: "#d74141"
+                                                font.pixelSize: 12
+                                                anchors.centerIn: parent
+                                            }
                                         }
 
-                                        RowLayout {
-                                            Layout.fillWidth: true
-                                            spacing: 8
+                                        Rectangle {
+                                            color: Qt.rgba(138 / 255, 43 / 255, 226 / 255, 0.15)
+                                            border.color: "#8a2be2"
+                                            radius: 12
+                                            Layout.preferredWidth: typeText.width + 16
+                                            Layout.preferredHeight: 24
 
-                                            Rectangle {
-                                                color: Qt.rgba(215 / 255, 65 / 255, 65 / 255, 0.15)
-                                                border.color: "#d74141"
-                                                radius: 12
-                                                Layout.preferredWidth: timeText.width + 16
-                                                Layout.preferredHeight: 24
-
-                                                Text {
-                                                    id: timeText
-                                                    text: model.time ? model.time : ""
-                                                    color: "#d74141"
-                                                    font.pixelSize: 12
-                                                    anchors.centerIn: parent
-                                                }
-                                            }
-
-                                            Rectangle {
-                                                color: Qt.rgba(138 / 255, 43 / 255, 226 / 255, 0.15)
-                                                border.color: "#8a2be2"
-                                                radius: 12
-                                                Layout.preferredWidth: typeText.width + 16
-                                                Layout.preferredHeight: 24
-
-                                                Text {
-                                                    id: typeText
-                                                    text: model.file_type ? model.file_type : ""
-                                                    color: "#8a2be2"
-                                                    font.pixelSize: 12
-                                                    anchors.centerIn: parent
-                                                }
+                                            Text {
+                                                id: typeText
+                                                text: model.file_type ? model.file_type : ""
+                                                color: "#8a2be2"
+                                                font.pixelSize: 12
+                                                anchors.centerIn: parent
                                             }
                                         }
                                     }
@@ -252,53 +259,55 @@ PanelWindow {
                     }
                 }
             }
+        }
 
-            ListView {
-                id: list
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                visible: searchInput.text.length > 0
-                model: ListModel {
-                    id: appModel
+        ListView {
+            id: list
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            visible: searchInput.text.length > 0
+            model: ListModel {
+                id: appModel
+            }
+            clip: true
+            spacing: 4
+
+            delegate: ItemDelegate {
+                id: del
+                width: ListView.view.width
+                height: 48
+
+                background: Rectangle {
+                    color: del.hovered ? Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha) : "transparent"
+                    radius: Theme.secondaryRadius
                 }
-                clip: true
-                spacing: 4
 
-                delegate: ItemDelegate {
-                    id: del
-                    width: ListView.view.width
-                    height: 48
+                contentItem: Row {
+                    spacing: 12
+                    Image {
+                        source: model.icon ? (model.icon.startsWith("/") ? "file://" + model.icon : "image://icon/" + model.icon) : ""
+                        sourceSize: Qt.size(28, 28)
+                        anchors.verticalCenter: parent.verticalCenter
 
-                    background: Rectangle {
-                        color: del.hovered ? Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha) : "transparent"
-                        radius: Theme.secondaryRadius
-                    }
-
-                    contentItem: Row {
-                        spacing: 12
-                        Image {
-                            source: model.icon ? (model.icon.startsWith("/") ? "file://" + model.icon : "image://icon/" + model.icon) : ""
-                            sourceSize: Qt.size(28, 28)
-                            anchors.verticalCenter: parent.verticalCenter
-
-                            onStatusChanged: {
-                                if (status === Image.Error) {
-                                    source = "image://icon/application-x-executable";
-                                }
+                        onStatusChanged: {
+                            if (status === Image.Error) {
+                                source = "image://icon/application-x-executable";
                             }
                         }
-                        Text {
-                            text: model.name
-                            color: Theme.textDark
-                            font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
-                            font.pixelSize: Theme.paragraphOneSize !== undefined ? Theme.paragraphOneSize : 16
-                            font.weight: Theme.paragraphOneWeight !== undefined ? Theme.paragraphOneWeight : 400
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
+                        asynchronous: true
+                        cache: false
                     }
-
-                    onClicked: launchApp(model.exec)
+                    Text {
+                        text: model.name
+                        color: Theme.textDark
+                        font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
+                        font.pixelSize: Theme.paragraphOneSize !== undefined ? Theme.paragraphOneSize : 16
+                        font.weight: Theme.paragraphOneWeight !== undefined ? Theme.paragraphOneWeight : 400
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
                 }
+
+                onClicked: launchApp(model.exec)
             }
         }
     }

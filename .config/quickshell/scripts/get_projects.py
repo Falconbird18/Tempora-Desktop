@@ -1,28 +1,22 @@
 #!/usr/bin/env python3
+import datetime
 import json
+import mimetypes
 import os
 import xml.etree.ElementTree as ET
 from urllib.parse import unquote
-import datetime
-import mimetypes
 
 XBEL_PATH = os.path.expanduser("~/.local/share/recently-used.xbel")
 CONFIG_PATH = os.path.expanduser("~/.config/quickshell/projects.json")
 
-def format_time(iso_str):
-    if not iso_str:
-        return "Unknown time"
+
+def format_mtime(mtime):
     try:
-        # Example format: 2024-04-19T23:07:36Z
-        if iso_str.endswith('Z'):
-            iso_str = iso_str[:-1]
-        # Remove fractional seconds if present
-        if '.' in iso_str:
-            iso_str = iso_str.split('.')[0]
-        dt = datetime.datetime.fromisoformat(iso_str)
+        dt = datetime.datetime.fromtimestamp(mtime)
         return dt.strftime("%-I:%M %p")
     except Exception:
-        return iso_str
+        return "Unknown time"
+
 
 def get_file_type(path):
     ext = os.path.splitext(path)[1].lower()
@@ -31,15 +25,16 @@ def get_file_type(path):
     ext_name = ext[1:].upper()
     mime = mimetypes.guess_type(path)[0]
     if mime:
-        if mime.startswith('image/'):
+        if mime.startswith("image/"):
             return f"{ext_name} image"
-        elif mime.startswith('video/'):
+        elif mime.startswith("video/"):
             return f"{ext_name} video"
-        elif mime.startswith('text/'):
+        elif mime.startswith("text/"):
             return f"{ext_name} document"
-        elif mime == 'application/pdf':
+        elif mime == "application/pdf":
             return "PDF document"
     return f"{ext_name} file"
+
 
 def get_manual_projects():
     if os.path.exists(CONFIG_PATH):
@@ -55,9 +50,10 @@ def get_manual_projects():
                     if "file_type" not in p:
                         p["file_type"] = "Project"
                 return projects
-        except Exception as e:
+        except Exception:
             pass
     return []
+
 
 def get_recent_files(limit=15):
     recent_files = []
@@ -71,19 +67,45 @@ def get_recent_files(limit=15):
             href = bookmark.get("href")
             if not href or not href.startswith("file://"):
                 continue
+
             path = unquote(href[7:])
             if not os.path.exists(path):
                 continue
-            modified = bookmark.get("modified", "")
+
+            file_mtime = os.path.getmtime(path)
+
+            # Extract the bookmark's modified time
+            modified_str = bookmark.get("modified", "")
+            xbel_modified_ts = 0
+            if modified_str:
+                try:
+                    iso_str = modified_str
+                    if iso_str.endswith("Z"):
+                        iso_str = iso_str[:-1]
+                    if "." in iso_str:
+                        iso_str = iso_str.split(".")[0]
+                    xbel_modified_ts = datetime.datetime.fromisoformat(
+                        iso_str
+                    ).timestamp()
+                except Exception:
+                    pass
+
+            # Core logic: if the app logged this file (xbel_modified_ts) significantly
+            # later than the file's actual modification time, it means it was merely OPENED,
+            # not EDITED. We allow a 2-minute (120s) buffer for delayed disk writes.
+            if xbel_modified_ts > 0 and (xbel_modified_ts - file_mtime > 120):
+                continue
+
             app_name = "Unknown"
             for elem in bookmark.iter():
                 if elem.tag.endswith("application"):
                     app_name = elem.get("name", app_name)
-            
-            # Map known app desktop files to their icon names
+
             app_icon = app_name
+            # Fallback KDE desktop portals which aren't actual app icons
             if "org.freedesktop.impl.portal.desktop" in app_name:
                 app_icon = "text-x-generic"
+
             if app_name.lower() == "org.inkscape.inkscape":
                 app_icon = "org.inkscape.Inkscape"
             elif app_name.lower() == "org.kde.kdenlive":
@@ -91,41 +113,52 @@ def get_recent_files(limit=15):
             elif "gimp" in app_name.lower():
                 app_icon = "gimp"
 
-            bookmarks.append({
-                "name": os.path.basename(path),
-                "path": path,
-                "app": app_name,
-                "icon": app_icon,
-                "pinned": False,
-                "time": format_time(modified),
-                "file_type": get_file_type(path),
-                "modified_raw": modified,
-            })
-        bookmarks.sort(key=lambda x: x.get("modified_raw", ""), reverse=True)
+            bookmarks.append(
+                {
+                    "name": os.path.basename(path),
+                    "path": path,
+                    "app": app_name,
+                    "icon": app_icon,
+                    "pinned": False,
+                    "time": format_mtime(file_mtime),  # Proper disk edit timestamp
+                    "file_type": get_file_type(path),
+                    "mtime": file_mtime,  # Used for sorting accurately
+                }
+            )
+
+        # Sort by actual edit time, most recent first
+        bookmarks.sort(key=lambda x: x.get("mtime", 0), reverse=True)
+
         for b in bookmarks[:limit]:
-            if "modified_raw" in b:
-                del b["modified_raw"]
+            if "mtime" in b:
+                del b["mtime"]  # clean up payload
             recent_files.append(b)
-    except Exception as e:
+    except Exception:
         pass
     return recent_files
+
 
 def main():
     projects = []
     seen_paths = set()
+
     manual_projects = get_manual_projects()
     for p in manual_projects:
         path = p.get("path", "")
         if path and os.path.exists(path):
             projects.append(p)
             seen_paths.add(path)
+
     recent_files = get_recent_files(limit=20)
     for r in recent_files:
         path = r["path"]
         if path not in seen_paths:
             projects.append(r)
             seen_paths.add(path)
+
+    # Output must be on a single line for QML's SplitParser
     print(json.dumps(projects, separators=(",", ":")))
+
 
 if __name__ == "__main__":
     main()

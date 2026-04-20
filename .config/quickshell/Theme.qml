@@ -16,21 +16,23 @@ QtObject {
     property real tertiaryAlpha: 0.5
 
     // Geometry
-    property real primaryRadius: 16.0
-    property real secondaryRadius: 8.0
+    property real primaryRadius: 32.0
+    property real secondaryRadius: 16.0
     property real innerRadius: 8.0
     property real borderWidth: 2.0
 
     // Height
     property real normalHeight: 32
 
+    // Borders
+    property color primaryBorderColor: "#ffffff"
+    property real primaryBorderWidth: 2.0
+
     // Spacing
-    property real paddingFour: 4.0
-    property real mediumEight: 8.0
-    property real mediumSixteen: 16.0
-    property real mediumThirtyTwo: 32.0
-    property real padding: 12.0
-    property real spacing: 8.0
+    property real spacingFour: 4.0
+    property real spacingEight: 8.0
+    property real spacingSixteen: 16.0
+    property real spacingThirtyTwo: 32.0
 
     // Fonts
     property string headingOneFamily: "Baskervville"
@@ -48,10 +50,9 @@ QtObject {
     property string paragraphOneFamily: "Open Sans"
     property real paragraphOneSize: 16.0
     property int paragraphOneWeight: 400
-    property string paragraphTwoFamily: "Open Sans"
-    property real paragraphTwoSize: 16.0
+    property string paragraphTwoFamily: "Baskervville"
+    property real paragraphTwoSize: 18.0
     property int paragraphTwoWeight: 400
-    property string paragraphFont: "Open Sans"
 
     // Extra properties
     property color bgDark: "#1E1E2E"
