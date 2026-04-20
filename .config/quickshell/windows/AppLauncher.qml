@@ -40,6 +40,7 @@ PanelWindow {
         if (visible) {
             searchInput.forceActiveFocus();
             searchInput.text = "";
+            projectsProc.running = true;
         }
     }
 
@@ -66,7 +67,7 @@ PanelWindow {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 15
-            spacing: 10
+            spacing: 15
 
             TextField {
                 id: searchInput
@@ -97,10 +98,166 @@ PanelWindow {
                 }
             }
 
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                visible: searchInput.text.length === 0
+                spacing: 15
+
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    Text {
+                        text: "Recent projects"
+                        color: Theme.textDark
+                        font.family: Theme.headingTwoFamily !== undefined ? Theme.headingTwoFamily : "Open Sans"
+                        font.pixelSize: 36
+                        font.weight: Theme.headingTwoWeight !== undefined ? Theme.headingTwoWeight : 300
+                        Layout.fillWidth: true
+                    }
+
+                    Components.IconButton {
+                        icon: "arrow-right-duotone.svg"
+                        size: 32
+                    }
+                }
+
+                ListView {
+                    id: projectList
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    orientation: ListView.Horizontal
+                    spacing: 15
+                    clip: true
+                    model: ListModel {
+                        id: projectModel
+                    }
+
+                    delegate: Rectangle {
+                        width: 220
+                        height: ListView.view.height
+                        color: "transparent"
+
+                        Rectangle {
+                            anchors.fill: parent
+                            color: Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha)
+                            radius: Theme.secondaryRadius
+                            border.color: projMouse.containsMouse ? "#d74141" : "transparent"
+                            border.width: 1
+
+                            MouseArea {
+                                id: projMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: launchApp("xdg-open '" + model.path + "'")
+                            }
+
+                            ColumnLayout {
+                                anchors.fill: parent
+                                spacing: 0
+
+                                Item {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: parent.height * 0.65
+
+                                    Image {
+                                        id: thumb
+                                        anchors.fill: parent
+                                        anchors.margins: 10
+                                        source: model.file_type && model.file_type.indexOf("image") !== -1 ? "file://" + model.path : (model.icon ? "image://icon/" + model.icon : "image://icon/text-x-generic")
+                                        onStatusChanged: {
+                                            if (status === Image.Error) {
+                                                source = "image://icon/text-x-generic";
+                                            }
+                                        }
+                                        fillMode: Image.PreserveAspectCrop
+                                        clip: true
+                                    }
+
+                                    Image {
+                                        source: model.icon ? "image://icon/" + model.icon : ""
+                                        onStatusChanged: {
+                                            if (status === Image.Error) {
+                                                source = "image://icon/application-x-executable";
+                                            }
+                                        }
+                                        width: 24
+                                        height: 24
+                                        anchors.top: parent.top
+                                        anchors.left: parent.left
+                                        anchors.margins: 15
+                                    }
+                                }
+
+                                Item {
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+
+                                    ColumnLayout {
+                                        anchors.fill: parent
+                                        anchors.margins: 10
+                                        spacing: 5
+
+                                        Text {
+                                            text: model.name
+                                            color: Theme.textDark
+                                            font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
+                                            font.pixelSize: 20
+                                            font.weight: Theme.paragraphOneWeight !== undefined ? Theme.paragraphOneWeight : 400
+                                            Layout.fillWidth: true
+                                            elide: Text.ElideRight
+                                        }
+
+                                        RowLayout {
+                                            Layout.fillWidth: true
+                                            spacing: 8
+
+                                            Rectangle {
+                                                color: Qt.rgba(215 / 255, 65 / 255, 65 / 255, 0.15)
+                                                border.color: "#d74141"
+                                                radius: 12
+                                                Layout.preferredWidth: timeText.width + 16
+                                                Layout.preferredHeight: 24
+
+                                                Text {
+                                                    id: timeText
+                                                    text: model.time ? model.time : ""
+                                                    color: "#d74141"
+                                                    font.pixelSize: 12
+                                                    anchors.centerIn: parent
+                                                }
+                                            }
+
+                                            Rectangle {
+                                                color: Qt.rgba(138 / 255, 43 / 255, 226 / 255, 0.15)
+                                                border.color: "#8a2be2"
+                                                radius: 12
+                                                Layout.preferredWidth: typeText.width + 16
+                                                Layout.preferredHeight: 24
+
+                                                Text {
+                                                    id: typeText
+                                                    text: model.file_type ? model.file_type : ""
+                                                    color: "#8a2be2"
+                                                    font.pixelSize: 12
+                                                    anchors.centerIn: parent
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             ListView {
                 id: list
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                visible: searchInput.text.length > 0
                 model: ListModel {
                     id: appModel
                 }
@@ -156,6 +313,25 @@ PanelWindow {
                 appLauncher.allApps = arr;
                 for (var i = 0; i < arr.length; i++)
                     appModel.append(arr[i]);
+            }
+        }
+    }
+
+    Process {
+        id: projectsProc
+        command: ["python3", Quickshell.shellDir + "/scripts/get_projects.py"]
+        running: true
+        stdout: SplitParser {
+            onRead: data => {
+                try {
+                    var arr = JSON.parse(data);
+                    projectModel.clear();
+                    for (var i = 0; i < arr.length; i++) {
+                        projectModel.append(arr[i]);
+                    }
+                } catch (e) {
+                    console.log("Error parsing projects JSON:", e);
+                }
             }
         }
     }

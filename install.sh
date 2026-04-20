@@ -107,7 +107,7 @@ fi
 
 # Helpful packages list (adjusted for Arch default, apt users will get best-effort)
 COMMON_PACKAGES=(libnotify jq git unzip)
-ARCH_PACKAGES=(hyprland wofi fish starship hyprpicker hyprlock hypridle wl-clipboard brightnessctl bluez-utils cliphist sddm swww grim slurp playerctl polkit-gnome polkit-kde-agent xdg-desktop-portal-hyprland xdg-desktop-portal-kde cmake )
+ARCH_PACKAGES=(hyprland wofi fish starship hyprpicker hyprlock hypridle wl-clipboard brightnessctl bluez-utils cliphist sddm swww grim slurp playerctl polkit-gnome polkit-kde-agent xdg-desktop-portal-hyprland xdg-desktop-portal-kde cmake archlinux-xdg-menu)
 AUR_PACKAGES=(ttf-google-fonts-typewolf)
 DEBIAN_PACKAGES=(wl-clipboard brightnessctl bluez-utils xdg-desktop-portal-webkit webkit2gtk-dev swww unzip playerctl polkit-gnome polkit-gnome-authentication-agent-1 fonts-open-sans)
 

@@ -144,21 +144,16 @@ PanelWindow {
                     Layout.fillWidth: true
                 }
 
-                Image {
-                    source: "image://icon/preferences-system"
-                    Layout.preferredWidth: 24
-                    Layout.preferredHeight: 24
-                    Layout.alignment: Qt.AlignVCenter
+                Components.IconButton {
+                    icon: "gear-duotone.svg"
+                    size: 32
+                    isButton: true
 
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            console.log("Settings icon clicked! settingsWindowRef:", quickSettings.settingsWindowRef);
-                            if (quickSettings.settingsWindowRef) {
-                                quickSettings.settingsWindowRef.toggle();
-                                quickSettings.visible = false;
-                            }
+                    onClicked: {
+                        console.log("Settings icon clicked! settingsWindowRef:", quickSettings.settingsWindowRef);
+                        if (quickSettings.settingsWindowRef) {
+                            quickSettings.settingsWindowRef.toggle();
+                            quickSettings.visible = false;
                         }
                     }
                 }
@@ -166,7 +161,7 @@ PanelWindow {
 
             Rectangle {
                 Layout.fillWidth: true
-                height: 1
+                Layout.preferredHeight: 1
                 color: "#4c566a"
             }
 
@@ -241,7 +236,7 @@ PanelWindow {
 
             Rectangle {
                 Layout.fillWidth: true
-                height: 1
+                Layout.preferredHeight: 1
                 color: "#4c566a"
             }
 
