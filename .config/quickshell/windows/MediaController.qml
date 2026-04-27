@@ -68,7 +68,7 @@ PanelWindow {
         Row {
             anchors.fill: parent
             anchors.margins: 10
-            spacing: 15
+            spacing: Theme.spacingSixteen
 
             // Album Art
             Rectangle {
@@ -99,7 +99,7 @@ PanelWindow {
             Column {
                 width: parent.width - 125
                 height: parent.height
-                spacing: 8
+                spacing: Theme.spacingEight
                 anchors.verticalCenter: parent.verticalCenter
 
                 Item {
@@ -108,22 +108,24 @@ PanelWindow {
 
                     Column {
                         anchors.fill: parent
-                        spacing: 2
+                        spacing: Theme.spacingTwo
 
                         Text {
                             text: mediaController.player && mediaController.player.trackTitle ? mediaController.player.trackTitle : "No Media Playing"
                             color: Theme.textDark
-                            font.family: Theme.headingOneFamily
-                            font.pointSize: Theme.headingOneSize
-                            font.weight: Theme.headingOneWeight
+                            font.family: Theme.paragraphTwoFamily
+                            font.pointSize: Theme.paragraphTwoSize
+                            font.weight: Theme.paragraphTwoWeight
                             elide: Text.ElideRight
                             width: parent.width
                         }
 
                         Text {
                             text: mediaController.player && mediaController.player.trackArtist ? mediaController.player.trackArtist : "Unknown Artist"
-                            color: Qt.alpha(Theme.textDark, 0.7)
-                            font.pointSize: 9
+                            color: Qt.alpha(Theme.textDark, Theme.secondaryTextAlpha)
+                            font.family: Theme.paragraphThreeFamily
+                            font.pointSize: Theme.paragraphThreeSize
+                            font.weight: Theme.paragraphThreeWeight
                             elide: Text.ElideRight
                             width: parent.width
                         }
@@ -131,29 +133,29 @@ PanelWindow {
                 }
 
                 Row {
-                    spacing: 10
+                    spacing: Theme.spacingEight
                     anchors.horizontalCenter: parent.horizontalCenter
 
-                    Components.Button {
-                        text: "⏮"
-                        width: 30
-                        height: 30
+                    Components.IconButton {
+                        icon: "skip-back-duotone.svg"
+                        size: Theme.iconSize
+                        isButton: true
                         onClicked: if (mediaController.player)
                             mediaController.player.previous()
                     }
 
-                    Components.Button {
-                        text: mediaController.player && mediaController.player.isPlaying ? "⏸" : "▶"
-                        width: 40
-                        height: 30
+                    Components.IconButton {
+                        icon: mediaController.player && mediaController.player.isPlaying ? "pause-duotone.svg" : "play-duotone.svg"
+                        size: Theme.iconSize
+                        isButton: true
                         onClicked: if (mediaController.player)
                             mediaController.player.togglePlaying()
                     }
 
-                    Components.Button {
-                        text: "⏭"
-                        width: 30
-                        height: 30
+                    Components.IconButton {
+                        icon: "skip-forward-duotone.svg"
+                        size: Theme.iconSize
+                        isButton: true
                         onClicked: if (mediaController.player)
                             mediaController.player.next()
                     }

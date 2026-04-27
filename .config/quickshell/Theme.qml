@@ -14,6 +14,7 @@ QtObject {
     property real primaryAlpha: 0.5
     property real secondaryAlpha: 0.8
     property real tertiaryAlpha: 0.5
+    property real secondaryTextAlpha: 0.7
 
     // Geometry
     property real primaryRadius: 32.0
@@ -28,6 +29,7 @@ QtObject {
     property real primaryBorderWidth: 1
 
     // Spacing
+    property real spacingTwo: 2.0
     property real spacingFour: 4.0
     property real spacingEight: 8.0
     property real spacingSixteen: 16.0
@@ -52,6 +54,12 @@ QtObject {
     property string paragraphTwoFamily: "Baskervville"
     property real paragraphTwoSize: 18.0
     property int paragraphTwoWeight: 400
+    property string paragraphThreeFamily: "Open Sans"
+    property real paragraphThreeSize: 10
+    property int paragraphThreeWeight: 400
+
+    // Icons
+    property real iconSize: 32
 
     // Extra properties
     property color bgDark: "#1E1E2E"

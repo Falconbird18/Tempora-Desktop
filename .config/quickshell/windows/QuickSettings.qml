@@ -94,7 +94,7 @@ PanelWindow {
 
     Process {
         id: toggleDnd
-        command: ["dunstctl", "set-paused", "toggle"]
+        command: ["true"]
     }
 
     Process {
