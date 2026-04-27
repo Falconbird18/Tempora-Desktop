@@ -32,14 +32,12 @@ PanelWindow {
             height: parent.height
             spacing: 10
 
-            Components.Button {
-                text: "Menu"
-                width: 80
-                anchors.verticalCenter: parent.verticalCenter
-                onClicked: {
-                    if (topBar.launcherRef) {
-                        topBar.launcherRef.toggle();
-                    }
+            Components.IconButton {
+                icon: "diamonds-four-duotone.svg"
+                size: Theme.iconSize
+                isButton: true
+                onClicked: if (topBar.launcherRef) {
+                    topBar.launcherRef.toggle();
                 }
             }
 
