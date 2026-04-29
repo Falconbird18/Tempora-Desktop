@@ -13,6 +13,11 @@ Item {
     // Toggle whether this acts as a button or just an image
     property bool isButton: true
 
+    // Support for multiple states
+    property var icons: ({})
+    property string currentState: "default"
+    property string iconBase: ""
+
     signal clicked
 
     implicitWidth: size
@@ -22,8 +27,15 @@ Item {
         id: img
         anchors.fill: parent
 
-        // Use Helpers to resolve the icon path
-        source: Helpers.iconOrFallback(root.icon, "", root.fallbackIcon)
+        // Resolve the icon based on state and iconBase
+        source: {
+            var iconName = root.icons[root.currentState] || root.icon;
+            if (root.iconBase && iconName) {
+                return root.iconBase + "/" + iconName + ".svg";
+            } else {
+                return Helpers.iconOrFallback(iconName, "", root.fallbackIcon);
+            }
+        }
         sourceSize.width: root.size
         sourceSize.height: root.size
         fillMode: Image.PreserveAspectFit

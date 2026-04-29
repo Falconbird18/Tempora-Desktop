@@ -2,9 +2,9 @@ pragma Singleton
 import QtQuick
 
 QtObject {
-    // Colors (Catppuccin Mocha palette)
     property color primary: "#7D13CE"
     property color secondary: "#CE1313"
+    property color yellow: "#ceb813"
     property color primaryBackground: "#D0B1E7"
     property color secondaryBackground: "#D0B1E7"
     property color tertiaryBackground: "#CE1313"

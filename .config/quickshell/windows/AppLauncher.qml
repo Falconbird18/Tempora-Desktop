@@ -287,6 +287,7 @@ PanelWindow {
             radius: Theme.primaryRadius
             border.color: Theme.primaryBorderColor
             border.width: Theme.primaryBorderWidth
+            clip: true
 
             ListView {
                 anchors.fill: parent
