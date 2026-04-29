@@ -10,6 +10,9 @@ Rectangle {
     width: workspacesRow.width + 16
 
     property int activeWorkspace: Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 1
+    onActiveWorkspaceChanged: {
+        Helpers.reloadTheme();
+    }
     property int workspaceCount: {
         let max = 5;
         if (Hyprland.workspaces && Hyprland.workspaces.values) {

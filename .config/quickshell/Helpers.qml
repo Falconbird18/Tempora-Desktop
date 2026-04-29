@@ -1,5 +1,7 @@
 pragma Singleton
 import QtQuick 2.0
+import Quickshell.Io
+import "."
 
 QtObject {
     /*
@@ -264,5 +266,41 @@ QtObject {
             console.log("Helpers.widthPercent error:", e);
         }
         return 0;
+    }
+
+    property Process themeReloadProcess: Process {
+        id: reloadProc
+        property string jsonBuffer: ""
+        command: ["sh", "-c", "cat '" + Qt.resolvedUrl("theme.json").toString().replace("file://", "") + "' 2>/dev/null || echo '{}'"]
+        stdout: SplitParser {
+            onRead: data => {
+                reloadProc.jsonBuffer += data;
+            }
+        }
+        onExited: {
+            let str = reloadProc.jsonBuffer.trim();
+            reloadProc.jsonBuffer = "";
+            if (str !== "" && str !== "{}") {
+                try {
+                    let parsed = JSON.parse(str);
+                    for (let key in parsed) {
+                        if (typeof Theme !== "undefined" && Theme.hasOwnProperty(key)) {
+                            Theme[key] = parsed[key];
+                        }
+                    }
+                } catch (e) {
+                    console.log("Failed to parse theme.json: " + e);
+                }
+            }
+        }
+    }
+
+    function reloadTheme() {
+        try {
+            reloadProc.jsonBuffer = "";
+            reloadProc.running = true;
+        } catch (err) {
+            console.log("Error in reloadTheme:", err);
+        }
     }
 }
