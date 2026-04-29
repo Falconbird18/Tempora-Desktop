@@ -14,6 +14,7 @@ QtObject {
     property real primaryAlpha: 0.5
     property real secondaryAlpha: 0.8
     property real tertiaryAlpha: 0.5
+    property real paleAlpha: 0.15
     property real secondaryTextAlpha: 0.7
 
     // Geometry
@@ -34,6 +35,8 @@ QtObject {
     property real spacingEight: 8.0
     property real spacingSixteen: 16.0
     property real spacingThirtyTwo: 32.0
+    property real spacingFortyEight: 48.0
+    property real spacingSixtyFour: 64.0
 
     // Fonts
     property string headingOneFamily: "Baskervville"

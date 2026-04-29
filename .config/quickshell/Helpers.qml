@@ -157,4 +157,112 @@ QtObject {
         }
         return "speaker-high-duotone.svg";
     }
+
+    /*
+     * Screen / geometry helpers
+     *
+     * These functions determine screen width/height. They accept an optional
+     * `win` (Window/Item) parameter for multi-monitor setups.
+     *
+     * If `win` is provided, the helpers will read the screen of the window to
+     * detect the dimensions of the current monitor it's on (useful for multi-monitor
+     * setups with different sized screens).
+     *
+     * Otherwise they attempt several fallbacks (global Screen object, primary screen).
+     *
+     * Use examples:
+     *  import "Helpers.qml" as Helpers
+     *  margins { top: Helpers.heightPercent(25) }   // 25% of detected screen height
+     *  margins { top: Helpers.heightPercent(25, appLauncher) }  // for multi-monitor accuracy
+     */
+
+    function screenSize(win) {
+        try {
+            // 1) If a window-like object is provided, use its screen property to get
+            //    the dimensions of the current monitor it's displayed on.
+            if (win && typeof win.screen !== "undefined") {
+                var scr = win.screen;
+                if (scr && typeof scr.width === "number" && typeof scr.height === "number") {
+                    return {
+                        width: scr.width,
+                        height: scr.height
+                    };
+                }
+            }
+
+            // 2) Try the global Screen object if available (common in QtQuick.Window)
+            if (typeof Screen !== "undefined" && typeof Screen.width === "number" && typeof Screen.height === "number") {
+                return {
+                    width: Screen.width,
+                    height: Screen.height
+                };
+            }
+
+            // 3) Try Qt.primaryScreen / Qt.application.primaryScreen (some Qt versions)
+            if (typeof Qt !== "undefined" && Qt.primaryScreen && typeof Qt.primaryScreen.width === "number" && typeof Qt.primaryScreen.height === "number") {
+                return {
+                    width: Qt.primaryScreen.width,
+                    height: Qt.primaryScreen.height
+                };
+            }
+            if (typeof Qt !== "undefined" && Qt.application && Qt.application.primaryScreen && typeof Qt.application.primaryScreen.width === "number") {
+                return {
+                    width: Qt.application.primaryScreen.width,
+                    height: Qt.application.primaryScreen.height
+                };
+            }
+
+            // 4) Try Qt.application.activeWindow (available in some Qt builds)
+            if (typeof Qt !== "undefined" && Qt.application && Qt.application.activeWindow) {
+                var aw = Qt.application.activeWindow;
+                if (aw && typeof aw.width === "number" && typeof aw.height === "number") {
+                    return {
+                        width: aw.width,
+                        height: aw.height
+                    };
+                }
+            }
+        } catch (e) {
+            console.log("Helpers.screenSize: error determining screenSize:", e);
+        }
+        // Fallback
+        return {
+            width: 0,
+            height: 0
+        };
+    }
+
+    function screenWidth(win) {
+        return screenSize(win).width;
+    }
+
+    function screenHeight(win) {
+        return screenSize(win).height;
+    }
+
+    // Compute n% of the screen height/width (0-100). Returns integer pixels.
+    // If percent is out of range, it's clamped.
+    // Optional: pass a window object to get accurate dimensions for that window's current monitor.
+    // Example: heightPercent(25, appLauncher)  // for multi-monitor setups
+    function heightPercent(percent, win) {
+        try {
+            var p = Math.max(0, Math.min(100, Number(percent) || 0));
+            var h = screenHeight(win);
+            return Math.round(h * (p / 100));
+        } catch (e) {
+            console.log("Helpers.heightPercent error:", e);
+        }
+        return 0;
+    }
+
+    function widthPercent(percent, win) {
+        try {
+            var p = Math.max(0, Math.min(100, Number(percent) || 0));
+            var w = screenWidth(win);
+            return Math.round(w * (p / 100));
+        } catch (e) {
+            console.log("Helpers.widthPercent error:", e);
+        }
+        return 0;
+    }
 }

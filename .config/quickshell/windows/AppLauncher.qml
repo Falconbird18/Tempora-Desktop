@@ -9,8 +9,8 @@ import "../"
 
 PanelWindow {
     id: appLauncher
-    implicitWidth: 700
-    implicitHeight: 500
+    implicitWidth: Theme.spacingSixtyFour * 12
+    implicitHeight: Theme.spacingSixtyFour * 8
     color: "transparent"
     visible: false
 
@@ -21,7 +21,7 @@ PanelWindow {
         top: true
     }
     margins {
-        top: 250
+        top: Helpers.heightPercent(38.2, appLauncher) // Golden ratio for vertical placement
     }
 
     property var allApps: []
@@ -53,11 +53,12 @@ PanelWindow {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: Theme.spacingSixteen
         spacing: Theme.spacingSixteen
 
         RowLayout {
             Layout.fillWidth: true
+            height: Theme.spacingSixtyFour
+            spacing: Theme.spacingSixteen
 
             Rectangle {
                 anchors.fill: parent
@@ -69,7 +70,7 @@ PanelWindow {
 
             Components.IconButton {
                 icon: "magnifying-glass-duotone.svg"
-                size: 32
+                size: Theme.iconSize
                 isButton: false
             }
 
@@ -85,8 +86,6 @@ PanelWindow {
                 background: Rectangle {
                     color: "transparent"
                 }
-                topPadding: Theme.spacingEight
-                bottomPadding: Theme.spacingEight
                 onTextChanged: {
                     appModel.clear();
                     var term = text.toLowerCase();
@@ -115,8 +114,8 @@ PanelWindow {
 
             ColumnLayout {
                 anchors.fill: parent
-                anchors.margins: Theme.spacingSixteen // This emulates CSS padding
-                spacing: 15
+                anchors.margins: Theme.spacingSixteen
+                spacing: Theme.spacingSixteen
 
                 RowLayout {
                     Layout.fillWidth: true
@@ -133,7 +132,7 @@ PanelWindow {
 
                     Components.IconButton {
                         icon: "arrow-right-duotone.svg"
-                        size: 32
+                        size: Theme.iconSize
                     }
                 }
 
@@ -142,14 +141,14 @@ PanelWindow {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     orientation: ListView.Horizontal
-                    spacing: 15
+                    spacing: Theme.spacingSixteen
                     clip: true
                     model: ListModel {
                         id: projectModel
                     }
 
                     delegate: Rectangle {
-                        width: 220
+                        width: (ListView.view.width - (Theme.spacingSixteen * 2)) / 3
                         height: ListView.view.height
                         color: "transparent"
 
@@ -158,7 +157,7 @@ PanelWindow {
                             color: projMouse.containsMouse ? Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha) : "transparent"
                             radius: Theme.secondaryRadius
                             border.color: projMouse.containsMouse ? Theme.secondary : "transparent"
-                            border.width: 1
+                            border.width: Theme.primaryBorderWidth
 
                             MouseArea {
                                 id: projMouse
@@ -179,7 +178,7 @@ PanelWindow {
                                     Image {
                                         id: thumb
                                         anchors.fill: parent
-                                        anchors.margins: 10
+                                        anchors.margins: Theme.spacingSixteen
                                         source: model.thumb ? "file://" + model.thumb + "?m=" + Date.now() : (model.file_type && model.file_type.indexOf("image") !== -1 ? "file://" + model.path + "?m=" + Date.now() : (model.icon ? "image://icon/" + model.icon : "image://icon/text-x-generic"))
                                         onStatusChanged: {
                                             if (status === Image.Error) {
@@ -200,11 +199,11 @@ PanelWindow {
                                                 source = "image://icon/application-x-executable";
                                             }
                                         }
-                                        width: 24
-                                        height: 24
+                                        width: Theme.iconSize
+                                        height: Theme.iconSize
                                         anchors.top: parent.top
                                         anchors.left: parent.left
-                                        anchors.margins: 15
+                                        anchors.margins: Theme.spacingSixteen
                                     }
                                 }
 
@@ -214,8 +213,8 @@ PanelWindow {
 
                                     ColumnLayout {
                                         anchors.fill: parent
-                                        anchors.margins: 10
-                                        spacing: 5
+                                        anchors.margins: Theme.spacingSixteen
+                                        spacing: Theme.spacingEight
 
                                         // Title
                                         Text {
@@ -230,36 +229,42 @@ PanelWindow {
 
                                         RowLayout {
                                             Layout.fillWidth: true
-                                            spacing: 8
+                                            spacing: Theme.spacingEight
 
                                             Rectangle {
-                                                color: Qt.rgba(215 / 255, 65 / 255, 65 / 255, 0.15)
-                                                border.color: "#d74141"
-                                                radius: 12
-                                                Layout.preferredWidth: timeText.width + 16
-                                                Layout.preferredHeight: 24
+                                                color: Qt.alpha(Theme.secondary, Theme.paleAlpha)
+                                                border.color: Theme.primary
+                                                border.width: Theme.primaryBorderWidth
+                                                radius: Theme.secondaryRadius
+                                                Layout.preferredWidth: timeText.width + Theme.spacingSixteen
+                                                Layout.preferredHeight: Theme.spacingThirtyTwo
 
                                                 Text {
                                                     id: timeText
                                                     text: model.time ? model.time : ""
-                                                    color: "#d74141"
-                                                    font.pixelSize: 12
+                                                    color: Theme.textDark
+                                                    font.family: Theme.paragraphOneFamily
+                                                    font.pixelSize: Theme.paragraphOneSize
+                                                    font.weight: Theme.paragraphOneWeight
                                                     anchors.centerIn: parent
                                                 }
                                             }
 
                                             Rectangle {
-                                                color: Qt.rgba(138 / 255, 43 / 255, 226 / 255, 0.15)
-                                                border.color: "#8a2be2"
-                                                radius: 12
-                                                Layout.preferredWidth: typeText.width + 16
-                                                Layout.preferredHeight: 24
+                                                color: Qt.alpha(Theme.primary, Theme.paleAlpha)
+                                                border.color: Theme.primary
+                                                border.width: Theme.primaryBorderWidth
+                                                radius: Theme.secondaryRadius
+                                                Layout.preferredWidth: typeText.width + Theme.spacingSixteen
+                                                Layout.preferredHeight: Theme.spacingThirtyTwo
 
                                                 Text {
                                                     id: typeText
                                                     text: model.file_type ? model.file_type : ""
-                                                    color: "#8a2be2"
-                                                    font.pixelSize: 12
+                                                    color: Theme.textDark
+                                                    font.family: Theme.paragraphOneFamily
+                                                    font.pixelSize: Theme.paragraphOneSize
+                                                    font.weight: Theme.paragraphOneWeight
                                                     anchors.centerIn: parent
                                                 }
                                             }
@@ -273,53 +278,66 @@ PanelWindow {
             }
         }
 
-        ListView {
+        Rectangle {
             id: list
             Layout.fillWidth: true
             Layout.fillHeight: true
             visible: searchInput.text.length > 0
-            model: ListModel {
-                id: appModel
-            }
-            clip: true
-            spacing: 4
+            color: Qt.alpha(Theme.primaryBackground, Theme.primaryAlpha)
+            radius: Theme.primaryRadius
+            border.color: Theme.primaryBorderColor
+            border.width: Theme.primaryBorderWidth
 
-            delegate: ItemDelegate {
-                id: del
-                width: ListView.view.width
-                height: 48
-
-                background: Rectangle {
-                    color: del.hovered ? Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha) : "transparent"
-                    radius: Theme.secondaryRadius
+            ListView {
+                anchors.fill: parent
+                model: ListModel {
+                    id: appModel
                 }
+                clip: true
+                spacing: Theme.spacingEight
 
-                contentItem: Row {
-                    spacing: 12
-                    Image {
-                        source: model.icon ? (model.icon.startsWith("/") ? "file://" + model.icon : "image://icon/" + model.icon) : ""
-                        sourceSize: Qt.size(28, 28)
-                        anchors.verticalCenter: parent.verticalCenter
+                delegate: ItemDelegate {
+                    id: del
+                    width: ListView.view.width
+                    implicitHeight: Theme.spacingSixtyFour
 
-                        onStatusChanged: {
-                            if (status === Image.Error) {
-                                source = "image://icon/application-x-executable";
+                    background: Rectangle {
+                        anchors.fill: parent
+                        color: del.hovered ? Qt.alpha(Theme.secondaryBackground, Theme.secondaryAlpha) : "transparent"
+                        radius: Theme.secondaryRadius
+                    }
+
+                    contentItem: Row {
+                        anchors.fill: parent
+                        anchors.margins: Theme.spacingSixteen
+                        spacing: Theme.spacingSixteen
+
+                        Image {
+                            source: model.icon ? (model.icon.startsWith("/") ? "file://" + model.icon : "image://icon/" + model.icon) : ""
+                            sourceSize: Qt.size(Theme.iconSize, Theme.iconSize)
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            onStatusChanged: {
+                                if (status === Image.Error) {
+                                    source = "image://icon/application-x-executable";
+                                }
                             }
+                            asynchronous: true
+                            cache: false
                         }
-                        asynchronous: true
-                        cache: false
+                        Text {
+                            text: model.name
+                            color: Theme.textDark
+                            font.family: Theme.paragraphOneFamily
+                            font.pixelSize: Theme.paragraphOneSize
+                            font.weight: Theme.paragraphOneWeight
+                            anchors.verticalCenter: parent.verticalCenter
+                            elide: Text.ElideRight
+                        }
                     }
-                    Text {
-                        text: model.name
-                        color: Theme.textDark
-                        font.family: Theme.paragraphOneFamily !== undefined ? Theme.paragraphOneFamily : "Open Sans"
-                        font.pixelSize: Theme.paragraphOneSize !== undefined ? Theme.paragraphOneSize : 16
-                        font.weight: Theme.paragraphOneWeight !== undefined ? Theme.paragraphOneWeight : 400
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                }
 
-                onClicked: launchApp(model.exec)
+                    onClicked: launchApp(model.exec)
+                }
             }
         }
     }
